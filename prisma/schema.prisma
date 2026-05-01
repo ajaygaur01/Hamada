@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,10 +7,348 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  customer
+  admin
+}
+
+enum PaymentMethod {
+  upi
+  razorpay
+  bank_transfer
+}
+
+enum PaymentStatus {
+  pending
+  verified
+  paid
+  failed
+  refunded
+}
+
+enum OrderStatus {
+  pending
+  confirmed
+  processing
+  dispatched
+  delivered
+  cancelled
+}
+
+enum GstinVerificationStatus {
+  pending
+  verified
+  failed
+}
+
+enum EmailType {
+  sample_confirmation
+  bulk_confirmation
+  dispatched
+  gstin_verified
+  welcome
+}
+
+enum EmailStatus {
+  sent
+  failed
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid()) @db.Uuid
+  email           String   @unique @db.VarChar
+  password_hash   String?  @db.VarChar
+  full_name       String?  @db.VarChar
+  phone           String?  @db.VarChar
+  role            Role     @default(customer)
+  is_verified     Boolean  @default(false)
+  gstin           String?  @db.VarChar
+  gstin_verified  Boolean  @default(false)
+  company_name    String?  @db.VarChar
+  company_address String?  @db.Text
+  created_at      DateTime @default(now()) @db.Timestamp(6)
+  updated_at      DateTime @updatedAt @db.Timestamp(6)
+
+  addresses           Address[]
+  bulk_orders         BulkOrder[]
+  cart                Cart[]
+  gstin_verifications GstinVerification[]
+  invoices            Invoice[]
+
+  @@map("users")
+}
+
+model Address {
+  id            String   @id @default(uuid()) @db.Uuid
+  user_id       String   @db.Uuid
+  full_name     String   @db.VarChar
+  phone         String   @db.VarChar
+  address_line1 String   @db.Text
+  address_line2 String?  @db.Text
+  city          String   @db.VarChar
+  state         String   @db.VarChar
+  pincode       String   @db.VarChar
+  is_default    Boolean  @default(false)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  bulk_orders BulkOrder[]
+
+  @@map("addresses")
+}
+
+model Category {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String   @db.VarChar
+  slug          String   @unique @db.VarChar
+  description   String?  @db.Text
+  display_order Int?
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                   String   @id @default(uuid()) @db.Uuid
+  category_id          String   @db.Uuid
+  name                 String   @db.VarChar
+  slug                 String   @unique @db.VarChar
+  grade                String?  @db.VarChar
+  short_description    String   @db.VarChar
+  full_description     String   @db.Text
+  origin               String?  @db.VarChar
+  tasting_profile      String?  @db.Text
+  use_cases            String[]
+  storage_instructions String?  @db.Text
+  shelf_life           String?  @db.VarChar
+  brewing_guide        String?  @db.Text
+  is_active            Boolean  @default(true)
+  is_featured          Boolean  @default(false)
+  created_at           DateTime @default(now()) @db.Timestamp(6)
+  updated_at           DateTime @updatedAt @db.Timestamp(6)
+
+  category         Category         @relation(fields: [category_id], references: [id])
+  variants         ProductVariant[]
+  images           ProductImage[]
+  sample_orders    SampleOrder[]
+  bulk_order_items BulkOrderItem[]
+  cart             Cart[]
+
+  @@index([slug])
+  @@index([category_id])
+  @@index([is_active])
+  @@map("products")
+}
+
+model ProductVariant {
+  id                String   @id @default(uuid()) @db.Uuid
+  product_id        String   @db.Uuid
+  size              String   @db.VarChar
+  unit              String   @db.VarChar
+  sample_price      Decimal  @db.Decimal
+  bulk_price        Decimal  @db.Decimal
+  stock_quantity    Int
+  min_bulk_quantity Int
+  is_active         Boolean  @default(true)
+  created_at        DateTime @default(now()) @db.Timestamp(6)
+
+  product          Product         @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  sample_orders    SampleOrder[]
+  bulk_order_items BulkOrderItem[]
+  cart             Cart[]
+
+  @@map("product_variants")
+}
+
+model ProductImage {
+  id            String   @id @default(uuid()) @db.Uuid
+  product_id    String   @db.Uuid
+  image_url     String   @db.VarChar
+  alt_text      String?  @db.VarChar
+  display_order Int?
+  is_primary    Boolean  @default(false)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model SampleOrder {
+  id                  String        @id @default(uuid()) @db.Uuid
+  order_number        String        @unique @db.VarChar
+  customer_name       String        @db.VarChar
+  business_name       String?       @db.VarChar
+  email               String        @db.VarChar
+  phone               String        @db.VarChar
+  delivery_city       String        @db.VarChar
+  pincode             String        @db.VarChar
+  product_id          String        @db.Uuid
+  variant_id          String        @db.Uuid
+  sample_size         String        @db.VarChar
+  amount              Decimal       @db.Decimal
+  payment_method      PaymentMethod
+  upi_transaction_id  String?       @db.VarChar
+  razorpay_order_id   String?       @db.VarChar
+  razorpay_payment_id String?       @db.VarChar
+  payment_status      PaymentStatus
+  order_status        OrderStatus
+  tracking_link       String?       @db.VarChar
+  dispatched_at       DateTime?     @db.Timestamp(6)
+  notes               String?       @db.Text
+  created_at          DateTime      @default(now()) @db.Timestamp(6)
+  updated_at          DateTime      @updatedAt @db.Timestamp(6)
+
+  product Product        @relation(fields: [product_id], references: [id])
+  variant ProductVariant @relation(fields: [variant_id], references: [id])
+
+  @@index([order_number])
+  @@index([email])
+  @@index([payment_status])
+  @@index([order_status])
+  @@map("sample_orders")
+}
+
+model BulkOrder {
+  id                  String        @id @default(uuid()) @db.Uuid
+  order_number        String        @unique @db.VarChar
+  user_id             String        @db.Uuid
+  address_id          String        @db.Uuid
+  subtotal            Decimal       @db.Decimal
+  cgst_amount         Decimal       @db.Decimal
+  sgst_amount         Decimal       @db.Decimal
+  igst_amount         Decimal       @db.Decimal
+  total_amount        Decimal       @db.Decimal
+  payment_method      PaymentMethod
+  razorpay_order_id   String?       @db.VarChar
+  razorpay_payment_id String?       @db.VarChar
+  payment_status      PaymentStatus
+  order_status        OrderStatus
+  tracking_link       String?       @db.VarChar
+  invoice_number      String?       @unique @db.VarChar
+  invoice_url         String?       @db.VarChar
+  notes               String?       @db.Text
+  dispatched_at       DateTime?     @db.Timestamp(6)
+  created_at          DateTime      @default(now()) @db.Timestamp(6)
+  updated_at          DateTime      @updatedAt @db.Timestamp(6)
+
+  user    User            @relation(fields: [user_id], references: [id])
+  address Address         @relation(fields: [address_id], references: [id])
+  items   BulkOrderItem[]
+  invoice Invoice?
+
+  @@index([order_number])
+  @@index([user_id])
+  @@index([payment_status])
+  @@index([order_status])
+  @@map("bulk_orders")
+}
+
+model BulkOrderItem {
+  id            String   @id @default(uuid()) @db.Uuid
+  bulk_order_id String   @db.Uuid
+  product_id    String   @db.Uuid
+  variant_id    String   @db.Uuid
+  product_name  String   @db.VarChar
+  variant_size  String   @db.VarChar
+  quantity      Int
+  unit_price    Decimal  @db.Decimal
+  total_price   Decimal  @db.Decimal
+  hsn_code      String   @db.VarChar
+  gst_rate      Decimal  @db.Decimal
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  bulk_order BulkOrder      @relation(fields: [bulk_order_id], references: [id], onDelete: Cascade)
+  product    Product        @relation(fields: [product_id], references: [id])
+  variant    ProductVariant @relation(fields: [variant_id], references: [id])
+
+  @@index([bulk_order_id])
+  @@map("bulk_order_items")
+}
+
+model Invoice {
+  id             String   @id @default(uuid()) @db.Uuid
+  invoice_number String   @unique @db.VarChar
+  bulk_order_id  String   @unique @db.Uuid
+  user_id        String   @db.Uuid
+  buyer_name     String   @db.VarChar
+  buyer_company  String   @db.VarChar
+  buyer_gstin    String   @db.VarChar
+  buyer_address  String   @db.Text
+  seller_name    String   @db.VarChar
+  seller_gstin   String   @db.VarChar
+  seller_address String   @db.Text
+  subtotal       Decimal  @db.Decimal
+  cgst_amount    Decimal  @db.Decimal
+  sgst_amount    Decimal  @db.Decimal
+  igst_amount    Decimal  @db.Decimal
+  total_amount   Decimal  @db.Decimal
+  invoice_date   DateTime @db.Timestamp(6)
+  pdf_url        String?  @db.VarChar
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+
+  bulk_order BulkOrder @relation(fields: [bulk_order_id], references: [id])
+  user       User      @relation(fields: [user_id], references: [id])
+
+  @@map("invoices")
+}
+
+model Cart {
+  id         String   @id @default(uuid()) @db.Uuid
+  user_id    String   @db.Uuid
+  product_id String   @db.Uuid
+  variant_id String   @db.Uuid
+  quantity   Int
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  user    User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("cart")
+}
+
+model GstinVerification {
+  id                  String                  @id @default(uuid()) @db.Uuid
+  user_id             String                  @db.Uuid
+  gstin               String                  @db.VarChar
+  company_name        String                  @db.VarChar
+  company_address     String                  @db.Text
+  verification_status GstinVerificationStatus
+  api_response        Json?
+  verified_at         DateTime?               @db.Timestamp(6)
+  created_at          DateTime                @default(now()) @db.Timestamp(6)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("gstin_verifications")
+}
+
+model EmailLog {
+  id              String      @id @default(uuid()) @db.Uuid
+  recipient_email String      @db.VarChar
+  email_type      EmailType
+  order_id        String?     @db.VarChar
+  status          EmailStatus
+  created_at      DateTime    @default(now()) @db.Timestamp(6)
+
+  @@map("email_logs")
+}
+
+model AnalyticsEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  event_type String   @db.VarChar
+  user_id    String?  @db.Uuid
+  product_id String?  @db.Uuid
+  order_id   String?  @db.VarChar
+  metadata   Json?
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([event_type])
+  @@index([created_at])
+  @@map("analytics_events")
 }
