@@ -10,6 +10,7 @@ export default async function AccountPage() {
         username: authUser?.username ?? "",
         email: authUser?.email ?? "",
         phone: authUser?.phone ?? "",
+        gstin_verified: authUser?.gstin_verified ?? false,
       }}
     />
   );

@@ -32,6 +32,7 @@ export async function POST(request: Request) {
         role: true,
         full_name: true,
         password_hash: true,
+        gstin_verified: true,
       },
     });
 
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
       role: user.role,
       username: user.full_name ?? "",
       phone: user.phone,
+      gstin_verified: user.gstin_verified,
     });
 
     const response = NextResponse.json({
@@ -59,6 +61,7 @@ export async function POST(request: Request) {
         phone: user.phone,
         role: user.role,
         username: user.full_name,
+        gstin_verified: user.gstin_verified,
       },
     });
 

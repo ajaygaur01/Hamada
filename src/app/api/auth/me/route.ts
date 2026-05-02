@@ -23,6 +23,7 @@ export async function GET() {
         phone: true,
         role: true,
         full_name: true,
+        gstin_verified: true,
       },
     });
 
@@ -37,6 +38,7 @@ export async function GET() {
         phone: user.phone,
         role: user.role,
         username: user.full_name,
+        gstin_verified: user.gstin_verified,
       },
     });
   } catch {
