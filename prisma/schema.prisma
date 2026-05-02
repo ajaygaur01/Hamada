@@ -74,6 +74,7 @@ model User {
   cart                Cart[]
   gstin_verifications GstinVerification[]
   invoices            Invoice[]
+  wishlists           Wishlist[]
 
   @@map("users")
 }
@@ -135,11 +136,27 @@ model Product {
   sample_orders    SampleOrder[]
   bulk_order_items BulkOrderItem[]
   cart             Cart[]
+  wishlists        Wishlist[]
 
   @@index([slug])
   @@index([category_id])
   @@index([is_active])
   @@map("products")
+}
+
+model Wishlist {
+  id         String   @id @default(uuid()) @db.Uuid
+  user_id    String   @db.Uuid
+  product_id String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, product_id])
+  @@index([user_id])
+  @@index([product_id])
+  @@map("wishlists")
 }
 
 model ProductVariant {
