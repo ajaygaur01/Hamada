@@ -13,9 +13,10 @@ interface Variant {
 
 interface OrderFormProps {
   variants: Variant[];
+  productSlug: string;
 }
 
-export default function OrderForm({ variants }: OrderFormProps) {
+export default function OrderForm({ variants, productSlug }: OrderFormProps) {
   // Split variants into sample sizes and bulk sizes
   const sampleVariants = variants.filter(v => {
     const num = parseInt(v.size);
@@ -33,8 +34,6 @@ export default function OrderForm({ variants }: OrderFormProps) {
   const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
   const [selectedBulkIdx, setSelectedBulkIdx] = useState(0);
   const [bulkQuantity, setBulkQuantity] = useState(1);
-
-  const selectedBulk = bulkSizes[selectedBulkIdx];
 
   return (
     <div className="space-y-6">
@@ -67,16 +66,19 @@ export default function OrderForm({ variants }: OrderFormProps) {
           ))}
         </div>
 
-        <button className="w-full bg-zinc-900 text-white font-medium py-3 rounded text-sm hover:bg-zinc-800 transition-colors">
+        <Link
+          href={`/sample-order?product=${encodeURIComponent(productSlug)}&variant=${encodeURIComponent(sampleSizes[selectedSampleIdx]?.id ?? "")}`}
+          className="block w-full bg-zinc-900 text-white font-medium py-3 rounded text-sm hover:bg-zinc-800 transition-colors text-center"
+        >
           Order Sample
-        </button>
+        </Link>
       </div>
 
       {/* Bulk Order Card */}
       <div className="border border-zinc-200 rounded-lg p-6 bg-white">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-base font-bold text-zinc-900">Place a Bulk Order</h3>
-          <Link href="/login" className="text-[10px] text-zinc-400 flex items-center gap-1 hover:text-zinc-600 transition-colors">
+          <Link href="/?auth=login" className="text-[10px] text-zinc-400 flex items-center gap-1 hover:text-zinc-600 transition-colors">
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
@@ -124,7 +126,7 @@ export default function OrderForm({ variants }: OrderFormProps) {
         </div>
 
         <Link 
-          href="/login"
+          href="/?auth=login"
           className="block w-full bg-zinc-200 text-zinc-700 font-medium py-3 rounded text-sm text-center hover:bg-zinc-300 transition-colors"
         >
           <span className="flex items-center justify-center gap-2">

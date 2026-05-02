@@ -74,6 +74,7 @@ export default async function ProductDetailPage({ params }: Props) {
           {/* Right Column: Product Info + Order Form */}
           <div className="space-y-10">
             <ProductInfo
+              productId={product.id}
               categoryTag={categoryTag || "TEA"}
               grade={product.grade}
               name={product.name}
@@ -85,7 +86,7 @@ export default async function ProductDetailPage({ params }: Props) {
               shelfLife={product.shelf_life}
             />
 
-            <OrderForm variants={variants} />
+            <OrderForm variants={variants} productSlug={product.slug} />
           </div>
         </div>
       </div>

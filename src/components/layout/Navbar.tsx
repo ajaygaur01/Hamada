@@ -1,12 +1,18 @@
-import Link from 'next/link';
+"use client";
+
+import Link from "next/link";
+import { UserCircle2 } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function Navbar() {
+  const { user, openAuthModal, logout } = useAuth();
+
   return (
     <nav className="w-full border-b border-zinc-200 bg-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo Placeholder */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="shrink-0 flex items-center">
             <Link href="/" className="bg-zinc-100 text-zinc-800 px-4 py-2 text-xs font-bold tracking-widest uppercase rounded">
               Logo Placeholder
             </Link>
@@ -23,10 +29,45 @@ export default function Navbar() {
 
           {/* Right side actions */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/login" className="text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors">
-              Login
-            </Link>
-            <Link href="/sample" className="bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded hover:bg-zinc-800 transition-colors">
+            {user ? (
+              <>
+                <span className="text-sm font-medium text-zinc-700">
+                  Hi, {user.username ?? "User"}
+                </span>
+                <Link
+                  href="/account"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                >
+                  <UserCircle2 className="h-4 w-4" />
+                  Account
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => void logout()}
+                  className="text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => openAuthModal("login")}
+                  className="text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                >
+                  Login
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openAuthModal("signup")}
+                  className="text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                >
+                  Signup
+                </button>
+              </>
+            )}
+            <Link href="/sample-order" className="bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded hover:bg-zinc-800 transition-colors">
               Order a Sample
             </Link>
           </div>
