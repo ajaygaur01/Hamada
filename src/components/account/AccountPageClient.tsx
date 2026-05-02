@@ -7,6 +7,7 @@ type UserProfile = {
   username: string;
   email: string;
   phone: string;
+  gstin_verified: boolean;
 };
 
 type SampleOrder = {
@@ -130,7 +131,17 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
   return (
     <div className="min-h-screen bg-zinc-50">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 md:px-6">
-        <h1 className="text-2xl font-semibold text-zinc-900">My Account</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-semibold text-zinc-900">My Account</h1>
+          {initialUser.gstin_verified && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-1 flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              <span className="text-xs font-semibold text-amber-800 uppercase tracking-wider">Verified Buyer</span>
+            </div>
+          )}
+        </div>
         <p className="mt-1 text-sm text-zinc-600">
           Manage profile details, wishlist, and your previous orders.
         </p>
@@ -261,6 +272,11 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
                         <p className="mt-1 text-zinc-600">
                           Payment: {order.paymentStatus} | Status: {order.orderStatus}
                         </p>
+                        <div className="mt-3">
+                          <Link href="/bulk-order/cart" className="inline-block rounded-md bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-800 hover:bg-zinc-200 transition">
+                            Reorder
+                          </Link>
+                        </div>
                       </div>
                     ))}
                   </div>

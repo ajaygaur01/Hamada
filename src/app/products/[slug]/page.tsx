@@ -6,6 +6,7 @@ import ImageGallery from "@/components/product-details/ImageGallery";
 import ProductInfo from "@/components/product-details/ProductInfo";
 import OrderForm from "@/components/product-details/OrderForm";
 import BrewingGuide from "@/components/product-details/BrewingGuide";
+import ReviewsSection from "@/components/product-details/ReviewsSection";
 
 const prisma = new PrismaClient();
 
@@ -38,6 +39,14 @@ export default async function ProductDetailPage({ params }: Props) {
         where: { is_active: true },
         orderBy: { sample_price: "asc" },
       },
+      reviews: {
+        include: {
+          user: {
+            select: { full_name: true },
+          },
+        },
+        orderBy: { created_at: "desc" },
+      },
     },
   });
 
@@ -57,6 +66,22 @@ export default async function ProductDetailPage({ params }: Props) {
     bulkPrice: Number(v.bulk_price),
     minBulkQuantity: v.min_bulk_quantity,
   }));
+
+  // Format reviews for client component
+  const formattedReviews = product.reviews.map((r) => {
+    let name = "Anonymous";
+    if (r.user.full_name) {
+      const parts = r.user.full_name.split(" ");
+      name = parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0]}.` : parts[0];
+    }
+    return {
+      id: r.id,
+      rating: r.rating,
+      reviewText: r.review_text,
+      createdAt: r.created_at.toISOString(),
+      user: { name },
+    };
+  });
 
   return (
     <div className="bg-white min-h-screen">
@@ -93,6 +118,11 @@ export default async function ProductDetailPage({ params }: Props) {
 
       {/* Brewing Guide */}
       <BrewingGuide />
+
+      {/* Reviews Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <ReviewsSection productId={product.id} initialReviews={formattedReviews} />
+      </div>
     </div>
   );
 }

@@ -31,9 +31,16 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-6">
             {user ? (
               <>
-                <span className="text-sm font-medium text-zinc-700">
-                  Hi, {user.username ?? "User"}
-                </span>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm font-medium text-zinc-700">
+                    Hi, {user.username ?? "User"}
+                  </span>
+                  {user.gstin_verified && (
+                    <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-200 mt-0.5">
+                      Verified Buyer
+                    </span>
+                  )}
+                </div>
                 <Link
                   href="/account"
                   className="inline-flex items-center gap-1 text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"

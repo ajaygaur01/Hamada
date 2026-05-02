@@ -15,8 +15,11 @@ export default async function ProductsPage() {
     where: { is_active: true },
     include: {
       category: true,
+      reviews: {
+        select: { rating: true },
+      },
     },
-    orderBy: { created_at: 'asc' }, // Keep creation order roughly stable
+    orderBy: { created_at: 'asc' },
   });
 
   // Map to the shape expected by the client component
@@ -38,6 +41,10 @@ export default async function ProductsPage() {
       categoryName: derivedTag || "TEA",
       useCases: p.use_cases || [],
       categoryId: p.category_id,
+      reviewCount: p.reviews.length,
+      averageRating: p.reviews.length > 0
+        ? p.reviews.reduce((sum, r) => sum + r.rating, 0) / p.reviews.length
+        : 0,
     };
   });
 
