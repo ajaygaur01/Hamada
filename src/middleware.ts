@@ -5,6 +5,7 @@ import { verifyAuthToken } from "@/lib/auth/jwt";
 
 const PROTECTED_PATHS = [
   "/wholesale",
+  "/bulk-order",
   "/sample-order",
   "/account",
   "/api/users",

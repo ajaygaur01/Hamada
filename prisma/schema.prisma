@@ -75,6 +75,7 @@ model User {
   gstin_verifications GstinVerification[]
   invoices            Invoice[]
   wishlists           Wishlist[]
+  reviews             Review[]
 
   @@map("users")
 }
@@ -137,6 +138,7 @@ model Product {
   bulk_order_items BulkOrderItem[]
   cart             Cart[]
   wishlists        Wishlist[]
+  reviews          Review[]
 
   @@index([slug])
   @@index([category_id])
@@ -368,4 +370,21 @@ model AnalyticsEvent {
   @@index([event_type])
   @@index([created_at])
   @@map("analytics_events")
+}
+
+model Review {
+  id          String   @id @default(uuid()) @db.Uuid
+  user_id     String   @db.Uuid
+  product_id  String   @db.Uuid
+  rating      Int      @db.SmallInt
+  review_text String?  @db.Text
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([product_id])
+  @@index([user_id])
+  @@index([rating])
+  @@map("reviews")
 }
