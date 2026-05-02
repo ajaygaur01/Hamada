@@ -7,6 +7,7 @@ export type AuthTokenPayload = JWTPayload & {
   role: string;
   username: string;
   phone: string | null;
+  gstin_verified: boolean;
 };
 
 function getJwtSecret() {

@@ -9,6 +9,7 @@ export type ServerAuthUser = {
   phone: string | null;
   role: string;
   username: string | null;
+  gstin_verified: boolean;
 };
 
 export async function getServerAuthUser(): Promise<ServerAuthUser | null> {
@@ -28,6 +29,7 @@ export async function getServerAuthUser(): Promise<ServerAuthUser | null> {
         phone: true,
         role: true,
         full_name: true,
+        gstin_verified: true,
       },
     });
 
@@ -41,8 +43,10 @@ export async function getServerAuthUser(): Promise<ServerAuthUser | null> {
       phone: user.phone,
       role: user.role,
       username: user.full_name,
+      gstin_verified: user.gstin_verified,
     };
-  } catch {
+  } catch (error) {
+    console.error("getServerAuthUser Error:", error);
     return null;
   }
 }

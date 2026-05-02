@@ -11,6 +11,8 @@ interface ProductData {
   categoryName: string;
   useCases: string[];
   categoryId: string;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 interface CategoryData {
@@ -135,6 +137,8 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                       categoryName={product.categoryName}
                       useCases={product.useCases}
                       status={getStatus(product.name)}
+                      averageRating={product.averageRating}
+                      reviewCount={product.reviewCount}
                     />
                   ))}
                 </div>
