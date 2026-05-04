@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Yeseva_One, Mulish } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { getServerAuthUser } from "@/lib/auth/server-session";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const yesevaOne = Yeseva_One({
+  weight: "400",
+  variable: "--font-yeseva-one",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mulish = Mulish({
+  variable: "--font-mulish",
   subsets: ["latin"],
 });
 
@@ -32,9 +33,9 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${yesevaOne.variable} ${mulish.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-50">
+      <body className="min-h-full flex flex-col bg-brand-cream font-sans">
         <Suspense fallback={null}>
           <AuthProvider initialUser={authUser}>
             <Navbar />
