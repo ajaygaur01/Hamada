@@ -1,16 +1,31 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { 
+  LayoutDashboard, 
+  Package, 
+  User, 
+  MapPin, 
+  FileText, 
+  LogOut,
+  CheckCircle2,
+  AlertTriangle
+} from "lucide-react";
 
-type UserProfile = {
+import OverviewSection from "./sections/OverviewSection";
+import OrdersSection from "./sections/OrdersSection";
+import ProfileSection from "./sections/ProfileSection";
+import AddressesSection from "./sections/AddressesSection";
+import InvoicesSection from "./sections/InvoicesSection";
+
+export type UserProfile = {
   username: string;
   email: string;
   phone: string;
   gstin_verified: boolean;
 };
 
-type SampleOrder = {
+export type SampleOrder = {
   id: string;
   orderNumber: string;
   productName: string;
@@ -22,7 +37,7 @@ type SampleOrder = {
   createdAt: string;
 };
 
-type BulkOrder = {
+export type BulkOrder = {
   id: string;
   orderNumber: string;
   totalAmount: number;
@@ -36,24 +51,16 @@ type BulkOrder = {
   }[];
 };
 
-type WishlistItem = {
-  id: string;
-  productId: string;
-  slug: string;
-  name: string;
-  shortDescription: string;
-  categoryName: string;
-  useCases: string[];
-  addedAt: string;
-};
+type ActiveSection = "overview" | "orders" | "profile" | "addresses" | "invoices";
 
 export default function AccountPageClient({ initialUser }: { initialUser: UserProfile }) {
+  const [activeSection, setActiveSection] = useState<ActiveSection>("overview");
+  
   const [profile, setProfile] = useState<UserProfile>(initialUser);
   const [ordersLoading, setOrdersLoading] = useState(true);
-  const [wishlistLoading, setWishlistLoading] = useState(true);
   const [sampleOrders, setSampleOrders] = useState<SampleOrder[]>([]);
   const [bulkOrders, setBulkOrders] = useState<BulkOrder[]>([]);
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
+  
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
@@ -75,26 +82,8 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
       }
     }
 
-    async function loadWishlist() {
-      try {
-        const response = await fetch("/api/wishlist", { cache: "no-store" });
-        const data = (await response.json()) as { items?: WishlistItem[] };
-        if (response.ok) {
-          setWishlistItems(data.items ?? []);
-        }
-      } finally {
-        setWishlistLoading(false);
-      }
-    }
-
     void loadOrders();
-    void loadWishlist();
   }, []);
-
-  const allOrdersCount = useMemo(
-    () => sampleOrders.length + bulkOrders.length,
-    [bulkOrders.length, sampleOrders.length],
-  );
 
   async function saveProfile(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -121,170 +110,146 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
     }
   }
 
-  async function removeFromWishlist(productId: string) {
-    const response = await fetch(`/api/wishlist/${productId}`, { method: "DELETE" });
-    if (response.ok) {
-      setWishlistItems((prev) => prev.filter((item) => item.productId !== productId));
-    }
-  }
+  const getInitials = (name: string) => {
+    if (!name) return "U";
+    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  };
+
+  const navItems = [
+    { id: "overview", label: "Overview", icon: LayoutDashboard },
+    { id: "orders", label: "My Orders", icon: Package },
+    { id: "profile", label: "My Profile", icon: User },
+    { id: "addresses", label: "Saved Addresses", icon: MapPin },
+    { id: "invoices", label: "Invoices", icon: FileText },
+  ] as const;
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <div className="mx-auto w-full max-w-6xl px-4 py-10 md:px-6">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-semibold text-zinc-900">My Account</h1>
-          {initialUser.gstin_verified && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-1 flex items-center gap-1.5">
-              <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span className="text-xs font-semibold text-amber-800 uppercase tracking-wider">Verified Buyer</span>
-            </div>
-          )}
-        </div>
-        <p className="mt-1 text-sm text-zinc-600">
-          Manage profile details, wishlist, and your previous orders.
-        </p>
-
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="rounded-xl border border-zinc-200 bg-white p-5">
-            <p className="text-sm text-zinc-500">Wishlist Items</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{wishlistItems.length}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-5">
-            <p className="text-sm text-zinc-500">Total Orders</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{allOrdersCount}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-5">
-            <p className="text-sm text-zinc-500">Sample Orders</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{sampleOrders.length}</p>
-          </div>
-        </div>
-
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <section className="rounded-xl border border-zinc-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-zinc-900">Profile Details</h2>
-            <form className="mt-4 space-y-4" onSubmit={saveProfile}>
-              <input
-                className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
-                value={profile.username}
-                onChange={(event) => setProfile((prev) => ({ ...prev, username: event.target.value }))}
-                placeholder="Username"
-              />
-              <input
-                className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
-                value={profile.email}
-                onChange={(event) => setProfile((prev) => ({ ...prev, email: event.target.value }))}
-                placeholder="Email"
-                type="email"
-              />
-              <input
-                className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
-                value={profile.phone}
-                onChange={(event) => setProfile((prev) => ({ ...prev, phone: event.target.value }))}
-                placeholder="Phone"
-                type="tel"
-              />
-              {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
-              {error ? <p className="text-sm text-red-700">{error}</p> : null}
-              <button
-                type="submit"
-                disabled={savingProfile}
-                className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-60"
-              >
-                {savingProfile ? "Saving..." : "Save Changes"}
-              </button>
-            </form>
-          </section>
-
-          <section className="rounded-xl border border-zinc-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-zinc-900">My Wishlist</h2>
-            {wishlistLoading ? (
-              <p className="mt-4 text-sm text-zinc-600">Loading wishlist...</p>
-            ) : wishlistItems.length === 0 ? (
-              <p className="mt-4 text-sm text-zinc-600">No products in wishlist yet.</p>
-            ) : (
-              <div className="mt-4 space-y-3">
-                {wishlistItems.map((item) => (
-                  <div key={item.id} className="rounded-md border border-zinc-200 p-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <Link href={`/products/${item.slug}`} className="text-sm font-medium text-zinc-900 hover:underline">
-                          {item.name}
-                        </Link>
-                        <p className="mt-1 text-xs text-zinc-600">{item.categoryName}</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => void removeFromWishlist(item.productId)}
-                        className="text-xs text-red-600 hover:underline"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                ))}
+    <div className="min-h-[calc(100vh-64px)] bg-brand-cream md:py-10 pb-20 md:pb-10">
+      <div className="mx-auto w-full max-w-7xl px-0 md:px-6 flex flex-col md:flex-row gap-8">
+        
+        {/* Desktop Sidebar */}
+        <div className="hidden md:block w-72 shrink-0">
+          <div className="bg-white rounded-2xl shadow-sm border border-zinc-100 overflow-hidden sticky top-24">
+            
+            {/* User Info */}
+            <div className="p-6 border-b border-zinc-100 flex flex-col items-center text-center">
+              <div className="w-20 h-20 rounded-full bg-brand-green text-white flex items-center justify-center text-2xl font-bold mb-4 shadow-md">
+                {getInitials(profile.username)}
               </div>
+              <h2 className="font-bold text-zinc-900 text-lg">{profile.username || "User"}</h2>
+              <p className="text-zinc-500 text-sm mb-3">{profile.email}</p>
+              
+              {profile.gstin_verified ? (
+                <div className="flex items-center gap-1.5 bg-[#f0f4ea] text-brand-green px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border border-[#d2e0c2]">
+                  <CheckCircle2 size={14} />
+                  Verified Wholesale Buyer
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border border-amber-200">
+                  <AlertTriangle size={14} />
+                  Unverified Account
+                </div>
+              )}
+            </div>
+
+            {/* Navigation */}
+            <nav className="p-3 space-y-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeSection === item.id;
+                
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveSection(item.id)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                      isActive 
+                        ? "bg-brand-cream text-brand-green border-l-4 border-brand-green shadow-sm" 
+                        : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 border-l-4 border-transparent"
+                    }`}
+                  >
+                    <Icon size={18} className={isActive ? "text-brand-green" : "text-zinc-400"} />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </nav>
+
+            <div className="p-3 border-t border-zinc-100">
+              <form action="/api/auth/logout" method="POST">
+                <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-all border-l-4 border-transparent">
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="flex-1 px-4 md:px-0">
+          <div className="md:bg-white md:rounded-2xl md:shadow-sm md:border md:border-zinc-100 md:p-8 min-h-[600px]">
+            
+            {activeSection === "overview" && (
+              <OverviewSection sampleOrders={sampleOrders} bulkOrders={bulkOrders} />
             )}
-          </section>
+            
+            {activeSection === "orders" && (
+              ordersLoading ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-green"></div>
+                </div>
+              ) : (
+                <OrdersSection sampleOrders={sampleOrders} bulkOrders={bulkOrders} />
+              )
+            )}
+            
+            {activeSection === "profile" && (
+              <ProfileSection 
+                profile={profile}
+                setProfile={setProfile}
+                saveProfile={saveProfile}
+                savingProfile={savingProfile}
+                message={message}
+                error={error}
+              />
+            )}
+            
+            {activeSection === "addresses" && (
+              <AddressesSection />
+            )}
+            
+            {activeSection === "invoices" && (
+              <InvoicesSection />
+            )}
+            
+          </div>
         </div>
 
-        <section className="mt-8 rounded-xl border border-zinc-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-zinc-900">Previous Orders</h2>
-          {ordersLoading ? (
-            <p className="mt-4 text-sm text-zinc-600">Loading orders...</p>
-          ) : (
-            <div className="mt-4 space-y-6">
-              <div>
-                <h3 className="text-sm font-semibold text-zinc-800">Sample Orders</h3>
-                {sampleOrders.length === 0 ? (
-                  <p className="mt-2 text-sm text-zinc-600">No sample orders found.</p>
-                ) : (
-                  <div className="mt-3 space-y-3">
-                    {sampleOrders.map((order) => (
-                      <div key={order.id} className="rounded-md border border-zinc-200 p-3 text-sm">
-                        <p className="font-medium text-zinc-900">{order.orderNumber}</p>
-                        <p className="mt-1 text-zinc-700">
-                          <Link href={`/products/${order.productSlug}`} className="hover:underline">
-                            {order.productName}
-                          </Link>{" "}
-                          ({order.variantSize}) - INR {order.amount.toFixed(2)}
-                        </p>
-                        <p className="mt-1 text-zinc-600">
-                          Payment: {order.paymentStatus} | Status: {order.orderStatus}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-zinc-800">Bulk Orders</h3>
-                {bulkOrders.length === 0 ? (
-                  <p className="mt-2 text-sm text-zinc-600">No bulk orders found.</p>
-                ) : (
-                  <div className="mt-3 space-y-3">
-                    {bulkOrders.map((order) => (
-                      <div key={order.id} className="rounded-md border border-zinc-200 p-3 text-sm">
-                        <p className="font-medium text-zinc-900">{order.orderNumber}</p>
-                        <p className="mt-1 text-zinc-700">Total: INR {order.totalAmount.toFixed(2)}</p>
-                        <p className="mt-1 text-zinc-600">
-                          Payment: {order.paymentStatus} | Status: {order.orderStatus}
-                        </p>
-                        <div className="mt-3">
-                          <Link href="/bulk-order/cart" className="inline-block rounded-md bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-800 hover:bg-zinc-200 transition">
-                            Reorder
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </section>
+        {/* Mobile Bottom Tab Navigation */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 z-50 px-2 py-2 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeSection === item.id;
+            
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className={`flex flex-col items-center justify-center w-16 h-12 rounded-lg transition-colors ${
+                  isActive ? "text-brand-green" : "text-zinc-500"
+                }`}
+              >
+                <div className={`${isActive ? "bg-brand-cream p-1.5 rounded-full" : "p-1.5"}`}>
+                  <Icon size={isActive ? 20 : 22} strokeWidth={isActive ? 2.5 : 2} />
+                </div>
+                <span className="text-[10px] font-medium mt-0.5 whitespace-nowrap hidden sm:block">
+                  {item.id === "addresses" ? "Addresses" : item.label.replace("My ", "")}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
