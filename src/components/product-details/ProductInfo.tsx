@@ -1,4 +1,5 @@
 import WishlistButton from "@/components/wishlist/WishlistButton";
+import { Leaf, Clock, Package } from "lucide-react";
 
 interface ProductInfoProps {
   productId: string;
@@ -26,64 +27,53 @@ export default function ProductInfo({
   shelfLife,
 }: ProductInfoProps) {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      
       {/* Top tags */}
       <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold tracking-widest uppercase text-zinc-400">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold tracking-widest uppercase text-brand-sage">
             {categoryTag}
           </span>
           {grade && (
-            <span className="border border-zinc-200 text-zinc-600 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
-              {grade}
-            </span>
+            <>
+              <span className="w-1 h-1 rounded-full bg-brand-sage" />
+              <span className="text-zinc-600 text-[10px] uppercase tracking-wider font-semibold">
+                {grade}
+              </span>
+            </>
           )}
         </div>
         <WishlistButton productId={productId} />
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl md:text-3xl font-bold text-zinc-900">
-        {name}
-      </h1>
-
-      {/* Short description */}
-      <p className="text-sm text-zinc-600 leading-relaxed">
-        {shortDescription}
-      </p>
-
-      {/* Rating placeholder */}
-      <div className="flex items-center gap-2">
-        <div className="flex">
-          {[1, 2, 3, 4, 5].map(star => (
-            <svg key={star} className="w-4 h-4 text-zinc-300" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-          ))}
-        </div>
-        <span className="text-[10px] text-zinc-400">Star rating placeholder</span>
+      <div className="space-y-4">
+        <h1 className="font-heading text-4xl md:text-5xl text-[#3E4F25] leading-tight">
+          {name}
+        </h1>
+        <p className="text-lg text-[#3E4F25]/80 font-medium leading-relaxed max-w-2xl">
+          {shortDescription}
+        </p>
       </div>
 
       {/* Full description block */}
-      <div className="bg-zinc-50 rounded-lg p-6 border border-zinc-100">
-        <p className="text-sm text-zinc-600 leading-relaxed">
+      <div className="prose prose-zinc prose-p:leading-loose text-[#3E4F25]/80 border-l-2 border-[#d2e0c2] pl-6 my-8">
+        <p>
           {fullDescription}
         </p>
-        <p className="text-[10px] text-zinc-400 mt-4 italic">Description paragraph placeholder</p>
       </div>
 
       {/* Best For */}
       {useCases.length > 0 && (
         <div>
-          <h3 className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-3">
+          <h3 className="text-[10px] font-bold tracking-widest uppercase text-brand-sage mb-3">
             BEST FOR
           </h3>
           <div className="flex flex-wrap gap-2">
             {useCases.map((uc, i) => (
-              <span key={i} className="inline-flex items-center gap-1.5 border border-zinc-200 text-zinc-600 text-xs px-3 py-1.5 rounded-full">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
+              <span key={i} className="inline-flex items-center gap-1.5 bg-[#f0f4ea] text-brand-green text-xs font-semibold px-4 py-2 rounded-full border border-[#d2e0c2]/50">
+                <Leaf size={12} strokeWidth={2.5} />
                 {uc}
               </span>
             ))}
@@ -93,13 +83,13 @@ export default function ProductInfo({
 
       {/* Available Formats */}
       {variantSizes.length > 0 && (
-        <div>
-          <h3 className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-3">
+        <div className="pt-4 border-t border-[#d2e0c2]/50">
+          <h3 className="text-[10px] font-bold tracking-widest uppercase text-brand-sage mb-3">
             AVAILABLE FORMATS
           </h3>
           <div className="flex flex-wrap gap-2">
             {variantSizes.map((size, i) => (
-              <span key={i} className="bg-zinc-100 text-zinc-700 text-xs font-medium px-3 py-1.5 rounded">
+              <span key={i} className="bg-white/50 border border-[#d2e0c2] text-[#3E4F25] text-xs font-semibold px-4 py-2 rounded-lg backdrop-blur-sm shadow-sm">
                 {size}
               </span>
             ))}
@@ -109,31 +99,23 @@ export default function ProductInfo({
 
       {/* Storage & Shelf Life */}
       {(storageInstructions || shelfLife) && (
-        <div className="flex flex-col sm:flex-row gap-8">
+        <div className="flex flex-col sm:flex-row gap-6 pt-4 border-t border-[#d2e0c2]/50">
           {storageInstructions && (
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 mt-0.5">
-                <svg className="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
+            <div className="flex-1 bg-white/40 p-4 rounded-xl border border-[#d2e0c2]/50">
+              <div className="flex items-center gap-2 mb-2">
+                <Package size={14} className="text-brand-sage" />
+                <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage">STORAGE</p>
               </div>
-              <div>
-                <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-1">STORAGE</p>
-                <p className="text-xs text-zinc-700">{storageInstructions}</p>
-              </div>
+              <p className="text-sm text-[#3E4F25]/80 font-medium">{storageInstructions}</p>
             </div>
           )}
           {shelfLife && (
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 mt-0.5">
-                <svg className="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <div className="flex-1 bg-white/40 p-4 rounded-xl border border-[#d2e0c2]/50">
+              <div className="flex items-center gap-2 mb-2">
+                <Clock size={14} className="text-brand-sage" />
+                <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage">SHELF LIFE</p>
               </div>
-              <div>
-                <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-1">SHELF LIFE</p>
-                <p className="text-xs text-zinc-700">{shelfLife}</p>
-              </div>
+              <p className="text-sm text-[#3E4F25]/80 font-medium">{shelfLife}</p>
             </div>
           )}
         </div>

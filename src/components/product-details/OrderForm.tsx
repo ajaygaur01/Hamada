@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Package, Truck, Lock, ShieldCheck } from "lucide-react";
 
 interface Variant {
   id: string;
@@ -36,115 +37,148 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
     : `/bulk-order/checkout`;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150 fill-mode-both">
+      
       {/* Sample Order Card */}
-      <div className="border border-zinc-200 rounded-lg p-6 bg-white">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-base font-bold text-zinc-900">Order a Sample</h3>
-          <span className="text-[10px] text-zinc-400 flex items-center gap-1">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            No account needed
-          </span>
+      <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-[#d2e0c2] relative overflow-hidden">
+        {/* Soft decorative background element */}
+        <div className="absolute -right-10 -top-10 text-[#f0f4ea] pointer-events-none">
+          <Package size={120} strokeWidth={1} />
         </div>
 
-        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-3">SELECT SIZE</p>
-        <div className="flex gap-2 mb-6">
-          {sampleSizes.map((v, idx) => (
-            <button
-              key={v.id}
-              onClick={() => setSelectedSampleIdx(idx)}
-              className={`px-4 py-2 text-xs font-medium rounded transition-colors ${
-                selectedSampleIdx === idx ? "bg-zinc-900 text-white" : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
-              }`}
+        <div className="relative z-10">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="font-heading text-2xl text-[#3E4F25] mb-1">Order a Sample</h3>
+              <p className="text-sm text-brand-sage">Test with your team and menu. No account needed.</p>
+            </div>
+            <div className="bg-[#f0f4ea] text-brand-green p-2 rounded-full">
+              <Truck size={20} strokeWidth={1.5} />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage mb-2">SELECT SIZE</p>
+              <div className="flex flex-wrap gap-2">
+                {sampleSizes.map((v, idx) => (
+                  <button
+                    key={v.id}
+                    onClick={() => setSelectedSampleIdx(idx)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
+                      selectedSampleIdx === idx 
+                        ? "bg-[#3E4F25] border-[#3E4F25] text-white shadow-sm" 
+                        : "bg-white border-[#d2e0c2] text-[#3E4F25] hover:border-brand-green hover:text-brand-green"
+                    }`}
+                  >
+                    {v.size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {sampleSizes[selectedSampleIdx] && (
+              <div className="pt-4 pb-2">
+                <div className="flex items-end gap-2">
+                  <span className="text-3xl font-bold text-[#3E4F25]">
+                    ₹{sampleSizes[selectedSampleIdx].samplePrice.toLocaleString()}
+                  </span>
+                  <span className="text-sm text-brand-sage font-medium mb-1.5">/ sample pack</span>
+                </div>
+              </div>
+            )}
+
+            <Link
+              href={`/sample-order?product=${encodeURIComponent(productSlug)}&variant=${encodeURIComponent(sampleSizes[selectedSampleIdx]?.id ?? "")}`}
+              className="flex items-center justify-center w-full bg-brand-green text-white font-medium py-3.5 rounded-xl hover:bg-[#3f5226] transition-colors shadow-sm"
             >
-              {v.size}
-            </button>
-          ))}
+              Order Sample
+            </Link>
+          </div>
         </div>
-
-        <Link
-          href={`/sample-order?product=${encodeURIComponent(productSlug)}&variant=${encodeURIComponent(sampleSizes[selectedSampleIdx]?.id ?? "")}`}
-          className="block w-full bg-zinc-900 text-white font-medium py-3 rounded text-sm hover:bg-zinc-800 transition-colors text-center"
-        >
-          Order Sample
-        </Link>
       </div>
 
       {/* Bulk Order Card */}
-      <div className="border border-zinc-200 rounded-lg p-6 bg-white">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-base font-bold text-zinc-900">Place a Bulk Order</h3>
-          <span className="text-[10px] text-zinc-400 flex items-center gap-1">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            Wholesale access
-          </span>
-        </div>
-
-        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-3">SELECT SIZE</p>
-        <div className="flex gap-2 mb-6">
-          {bulkSizes.map((v, idx) => (
-            <button
-              key={v.id}
-              onClick={() => {
-                setSelectedBulkIdx(idx);
-                setBulkQuantity(v.minBulkQuantity || 1);
-              }}
-              className={`px-4 py-2 text-xs font-medium rounded transition-colors ${
-                selectedBulkIdx === idx ? "bg-zinc-900 text-white" : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
-              }`}
-            >
-              {v.size}
-            </button>
-          ))}
-        </div>
-
-        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-3">QUANTITY</p>
-        <div className="flex items-center gap-4 mb-2">
-          <div className="flex items-center border border-zinc-200 rounded">
-            <button
-              onClick={() => setBulkQuantity(Math.max(minQty, bulkQuantity - 1))}
-              className="px-3 py-2 text-zinc-500 hover:text-zinc-900 transition-colors text-sm"
-            >
-              −
-            </button>
-            <span className="px-4 py-2 text-sm font-medium text-zinc-900 border-x border-zinc-200 min-w-[40px] text-center">
-              {bulkQuantity}
-            </span>
-            <button
-              onClick={() => setBulkQuantity(bulkQuantity + 1)}
-              className="px-3 py-2 text-zinc-500 hover:text-zinc-900 transition-colors text-sm"
-            >
-              +
-            </button>
+      <div className="bg-brand-cream/50 rounded-2xl p-6 md:p-8 border border-[#d2e0c2] relative">
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h3 className="font-heading text-2xl text-[#3E4F25] mb-1">Place a Bulk Order</h3>
+            <p className="text-sm text-brand-sage">For verified wholesale buyers.</p>
           </div>
-          <span className="text-xs text-zinc-400">units</span>
+          <div className="bg-white text-brand-sage p-2 rounded-full border border-[#d2e0c2]">
+            <Lock size={20} strokeWidth={1.5} />
+          </div>
         </div>
 
-        {minQty > 1 && (
-          <p className="text-[10px] text-zinc-400 mb-4">Minimum order: {minQty} units</p>
-        )}
+        <div className="space-y-5">
+          <div>
+            <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage mb-2">SELECT SIZE</p>
+            <div className="flex flex-wrap gap-2">
+              {bulkSizes.map((v, idx) => (
+                <button
+                  key={v.id}
+                  onClick={() => {
+                    setSelectedBulkIdx(idx);
+                    setBulkQuantity(v.minBulkQuantity || 1);
+                  }}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
+                    selectedBulkIdx === idx 
+                      ? "bg-white border-[#3E4F25] text-[#3E4F25] shadow-sm" 
+                      : "bg-white/50 border-[#d2e0c2] text-[#3E4F25]/70 hover:border-[#3E4F25] hover:text-[#3E4F25]"
+                  }`}
+                >
+                  {v.size}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        {selectedBulkVariant && (
-          <p className="text-xs text-zinc-500 mb-6">
-            ₹{selectedBulkVariant.bulkPrice}/unit · Total:{" "}
-            <span className="font-semibold text-zinc-900">
-              ₹{(selectedBulkVariant.bulkPrice * bulkQuantity).toFixed(2)}
-            </span>
-            <span className="text-zinc-400"> + 5% GST</span>
-          </p>
-        )}
+          <div>
+            <div className="flex justify-between items-end mb-2">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage">QUANTITY</p>
+              {minQty > 1 && (
+                <p className="text-[10px] font-medium text-brand-sage">Minimum: {minQty} units</p>
+              )}
+            </div>
+            <div className="flex items-center gap-4 bg-white border border-[#d2e0c2] rounded-lg p-1 w-fit shadow-sm">
+              <button
+                onClick={() => setBulkQuantity(Math.max(minQty, bulkQuantity - 1))}
+                className="w-10 h-10 flex items-center justify-center text-[#3E4F25] hover:bg-[#f0f4ea] rounded-md transition-colors"
+              >
+                −
+              </button>
+              <span className="w-12 text-center text-sm font-bold text-[#3E4F25]">
+                {bulkQuantity}
+              </span>
+              <button
+                onClick={() => setBulkQuantity(bulkQuantity + 1)}
+                className="w-10 h-10 flex items-center justify-center text-[#3E4F25] hover:bg-[#f0f4ea] rounded-md transition-colors"
+              >
+                +
+              </button>
+            </div>
+          </div>
 
-        <Link
-          href={bulkCheckoutUrl}
-          className="block w-full bg-zinc-900 text-white font-medium py-3 rounded text-sm text-center hover:bg-zinc-800 transition-colors"
-        >
-          Start Bulk Order
-        </Link>
+          {selectedBulkVariant && (
+            <div className="pt-2">
+              <p className="text-sm text-[#3E4F25] font-medium">
+                Bulk pricing available upon verification.
+              </p>
+            </div>
+          )}
+
+          <div className="pt-2">
+            <Link
+              href={bulkCheckoutUrl}
+              className="flex items-center justify-center gap-2 w-full bg-[#3E4F25] text-white font-medium py-3.5 rounded-xl hover:bg-[#2c381a] transition-colors shadow-sm"
+            >
+              <ShieldCheck size={18} />
+              Login to Verify & Order
+            </Link>
+          </div>
+        </div>
       </div>
+      
     </div>
   );
 }
