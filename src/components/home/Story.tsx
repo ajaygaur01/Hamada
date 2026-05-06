@@ -5,7 +5,7 @@ export default function Story() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Image Placeholder */}
           <div className="bg-zinc-100 aspect-square rounded-lg flex items-center justify-center border border-zinc-200">
-            <span className="text-zinc-400 text-sm font-medium tracking-widest uppercase">Image Placeholder</span>
+            <img src="team.avif" alt="" />
           </div>
           
           {/* Content */}

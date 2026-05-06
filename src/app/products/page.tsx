@@ -15,6 +15,11 @@ export default async function ProductsPage() {
     where: { is_active: true },
     include: {
       category: true,
+      variants: {
+        where: { is_active: true },
+        orderBy: { sample_price: 'asc' },
+        take: 1
+      },
       reviews: {
         select: { rating: true },
       },
@@ -29,9 +34,6 @@ export default async function ProductsPage() {
   }));
 
   const products = productsDb.map((p) => {
-    // Generate a simple category name prefix for the visual tag (e.g. "Premium Japanese Teas" -> "MATCHA" / "SENCHA")
-    // Note: The wireframe just has "MATCHA", "SENCHA", "GYOKURO", "HOJICHA"
-    // Since we don't have sub-categories, we'll try to extract the first word from the product name to act as the category tag.
     const derivedTag = p.name.split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '');
 
     return {
@@ -42,6 +44,7 @@ export default async function ProductsPage() {
       useCases: p.use_cases || [],
       categoryId: p.category_id,
       reviewCount: p.reviews.length,
+      startingPrice: p.variants.length > 0 ? Number(p.variants[0].sample_price) : undefined,
       averageRating: p.reviews.length > 0
         ? p.reviews.reduce((sum, r) => sum + r.rating, 0) / p.reviews.length
         : 0,
@@ -49,7 +52,7 @@ export default async function ProductsPage() {
   });
 
   return (
-    <div className="flex flex-col bg-zinc-50 min-h-screen">
+    <div className="flex flex-col bg-brand-cream min-h-screen">
       <PageHeader />
       <ProductGrid products={products} categories={categories} />
       <CTASection />

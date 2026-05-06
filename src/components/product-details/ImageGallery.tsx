@@ -1,39 +1,41 @@
 "use client";
 
 import { useState } from "react";
+import { Image as ImageIcon } from "lucide-react";
 
 export default function ImageGallery() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const thumbnails = [0, 1, 2, 3, 4];
+  const thumbnails = [0, 1, 2, 3];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate-in fade-in duration-700">
       {/* Main Image */}
-      <div className="bg-zinc-100 aspect-square rounded-lg flex items-center justify-center border border-zinc-200">
-        <div className="text-center">
-          <svg className="w-12 h-12 text-zinc-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <span className="text-zinc-400 text-[10px] font-medium tracking-widest uppercase">Image Placeholder</span>
+      <div className="relative bg-zinc-100 aspect-[4/5] sm:aspect-square w-full rounded-2xl overflow-hidden shadow-sm">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+          <ImageIcon className="w-16 h-16 text-zinc-300 mb-4" strokeWidth={1} />
+          <span className="text-zinc-400 text-[10px] font-bold tracking-widest uppercase">
+            Full-Width Natural Image
+          </span>
+          <p className="text-zinc-400 text-[10px] mt-2 max-w-[200px]">
+            No white boxes. No floating cutouts.
+          </p>
         </div>
       </div>
 
       {/* Thumbnails */}
-      <div className="flex space-x-3">
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
         {thumbnails.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setSelectedIndex(idx)}
-            className={`w-16 h-16 rounded border flex items-center justify-center transition-all ${
+            className={`relative shrink-0 w-20 h-24 sm:w-24 sm:h-24 rounded-xl overflow-hidden transition-all duration-300 ${
               selectedIndex === idx 
-                ? "border-zinc-900 ring-1 ring-zinc-900" 
-                : "border-zinc-200 hover:border-zinc-400"
+                ? "ring-2 ring-brand-green ring-offset-2 ring-offset-brand-cream opacity-100" 
+                : "opacity-60 hover:opacity-100"
             }`}
           >
-            <div className="bg-zinc-100 w-full h-full rounded flex items-center justify-center">
-              <svg className="w-5 h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+            <div className="absolute inset-0 bg-zinc-200 flex items-center justify-center">
+              <ImageIcon className="w-6 h-6 text-zinc-400" strokeWidth={1.5} />
             </div>
           </button>
         ))}

@@ -84,12 +84,12 @@ export default async function ProductDetailPage({ params }: Props) {
   });
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-brand-cream min-h-screen">
       {/* Breadcrumb */}
       <Breadcrumb productName={product.name} />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column: Image Gallery */}
           <div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { CheckCircle2, Building2, ShieldCheck, Loader2 } from "lucide-react";
 
 // Regex for 15-digit GSTIN
 const GSTIN_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
@@ -89,67 +90,102 @@ function VerifyGstinInner() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="bg-zinc-900 p-6 text-center">
-          <h1 className="text-2xl font-bold text-white tracking-tight">GST Verification</h1>
-          <p className="text-zinc-400 text-sm mt-2">Required for wholesale access</p>
+    <div className="min-h-[calc(100vh-64px)] bg-brand-cream flex flex-col items-center justify-center p-4 md:p-8 relative">
+      
+      {/* Decorative subtle element */}
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-sage/10 to-transparent pointer-events-none" />
+
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-[#d2e0c2] overflow-hidden relative z-10">
+        
+        {/* Header Section */}
+        <div className="px-8 pt-10 pb-6 text-center border-b border-zinc-100">
+          <div className="mx-auto w-12 h-12 bg-brand-cream rounded-full flex items-center justify-center text-brand-green mb-4">
+            <ShieldCheck size={24} strokeWidth={1.5} />
+          </div>
+          <h1 className="font-heading text-3xl text-[#3E4F25] mb-2">Wholesale Verification</h1>
+          <p className="font-sans text-zinc-500 text-sm max-w-sm mx-auto leading-relaxed">
+            Please verify your business GSTIN to access bulk pricing and exclusive wholesale formats.
+          </p>
         </div>
 
         <div className="p-8">
           {!verifiedData ? (
             <form onSubmit={handleVerify} className="space-y-6">
-              <div>
-                <label htmlFor="gstin" className="block text-sm font-medium text-zinc-700 mb-1">
-                  Enter 15-digit GSTIN
+              <div className="space-y-2">
+                <label htmlFor="gstin" className="block text-sm font-medium text-[#3E4F25]">
+                  Business GSTIN
                 </label>
-                <input
-                  id="gstin"
-                  type="text"
-                  value={gstin}
-                  onChange={(e) => setGstin(e.target.value.toUpperCase())}
-                  placeholder="e.g. 22AAAAA0000A1Z5"
-                  className={`w-full uppercase rounded-lg border ${
-                    gstin.length > 0 && !isValidFormat ? "border-red-500" : "border-zinc-300"
-                  } px-4 py-3 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900 transition-shadow`}
-                  maxLength={15}
-                  required
-                />
-                {gstin.length > 0 && !isValidFormat && (
-                  <p className="text-xs text-red-500 mt-2">Invalid GSTIN format.</p>
-                )}
+                <div className="relative">
+                  <input
+                    id="gstin"
+                    type="text"
+                    value={gstin}
+                    onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                    placeholder="e.g. 29ABCDE1234F1Z5"
+                    className={`w-full uppercase rounded-lg border ${
+                      gstin.length > 0 && !isValidFormat ? "border-red-400 focus:border-red-500 focus:ring-red-500" : "border-zinc-300 focus:border-brand-green focus:ring-brand-green"
+                    } px-4 py-3.5 text-sm text-[#3E4F25] outline-none focus:ring-1 transition-all bg-zinc-50/50`}
+                    maxLength={15}
+                    required
+                  />
+                  {gstin.length > 0 && !isValidFormat && (
+                    <p className="text-xs text-red-500 mt-2 font-medium">Please enter a valid 15-digit GSTIN.</p>
+                  )}
+                </div>
               </div>
 
-              {error && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg">{error}</div>}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-100 text-red-700 text-sm rounded-lg flex items-start gap-2">
+                  <div className="mt-0.5"><ShieldCheck size={16} /></div>
+                  <p>{error}</p>
+                </div>
+              )}
 
               <button
                 type="submit"
                 disabled={!isValidFormat || loading}
-                className="w-full rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-400 disabled:opacity-70"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-brand-green px-4 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#3f5226] disabled:cursor-not-allowed disabled:bg-brand-sage disabled:opacity-60"
               >
-                {loading ? "Verifying..." : "Verify GSTIN"}
+                {loading && <Loader2 size={16} className="animate-spin" />}
+                {loading ? "Verifying with GST Portal..." : "Verify GSTIN"}
               </button>
             </form>
           ) : (
-            <div className="space-y-6">
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-green-800 font-medium text-sm flex items-center gap-2 mb-3">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  GSTIN Verified Successfully
-                </p>
-                <div className="space-y-1 text-sm text-zinc-700">
-                  <p><strong>Company:</strong> {verifiedData.companyName}</p>
-                  <p><strong>Address:</strong> {verifiedData.companyAddress}</p>
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className="p-6 bg-[#f0f4ea] border border-[#d2e0c2] rounded-xl text-center relative overflow-hidden">
+                <div className="absolute -right-4 -top-4 text-brand-green/10">
+                  <Building2 size={100} />
+                </div>
+                
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-green shadow-sm mb-3">
+                    <CheckCircle2 size={24} />
+                  </div>
+                  <h3 className="text-[#3E4F25] font-bold text-lg mb-1">GSTIN Verified</h3>
+                  <p className="text-sm text-brand-sage mb-6">Business details fetched successfully.</p>
+                  
+                  <div className="w-full bg-white/60 backdrop-blur-sm rounded-lg p-4 text-left border border-[#d2e0c2] space-y-3">
+                    <div>
+                      <p className="text-[11px] text-[#3E4F25]/60 uppercase font-bold tracking-wider mb-0.5">Registered Company Name</p>
+                      <p className="font-medium text-[#3E4F25] text-sm leading-tight">{verifiedData.companyName}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-[#3E4F25]/60 uppercase font-bold tracking-wider mb-0.5">Registered Address</p>
+                      <p className="text-sm text-[#3E4F25]/80 leading-relaxed">{verifiedData.companyAddress}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {error && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg">{error}</div>}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-100 text-red-700 text-sm rounded-lg">
+                  <p>{error}</p>
+                </div>
+              )}
 
-              <div className="pt-4 border-t border-zinc-100">
-                <p className="text-sm text-center text-zinc-600 mb-4">Is this your business?</p>
-                <div className="flex gap-3">
+              <div className="pt-4">
+                <p className="text-sm text-center text-[#3E4F25]/70 mb-4 font-medium">Please confirm this is your business.</p>
+                <div className="flex flex-col-reverse sm:flex-row gap-3">
                   <button
                     type="button"
                     onClick={() => {
@@ -157,22 +193,30 @@ function VerifyGstinInner() {
                       setGstin("");
                     }}
                     disabled={confirming}
-                    className="flex-1 rounded-lg border border-zinc-300 px-4 py-3 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition disabled:opacity-50"
+                    className="flex-1 rounded-lg border border-zinc-200 px-4 py-3.5 text-sm font-medium text-[#3E4F25] hover:bg-zinc-50 transition-colors disabled:opacity-50"
                   >
-                    No, try again
+                    No, try another
                   </button>
                   <button
                     type="button"
                     onClick={handleConfirm}
                     disabled={confirming}
-                    className="flex-1 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white hover:bg-zinc-800 transition disabled:opacity-70 disabled:cursor-wait"
+                    className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-brand-green px-4 py-3.5 text-sm font-medium text-white hover:bg-[#3f5226] transition-colors disabled:opacity-70 disabled:cursor-wait"
                   >
-                    {confirming ? "Saving..." : "Yes, Confirm"}
+                    {confirming && <Loader2 size={16} className="animate-spin" />}
+                    {confirming ? "Confirming..." : "Yes, Confirm"}
                   </button>
                 </div>
               </div>
             </div>
           )}
+        </div>
+        
+        {/* Footer text */}
+        <div className="px-8 pb-8 text-center">
+          <p className="text-xs text-zinc-400 font-sans">
+            Your GST details are verified securely via government portals.
+          </p>
         </div>
       </div>
     </div>
