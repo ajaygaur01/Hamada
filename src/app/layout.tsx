@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Yeseva_One, Mulish } from "next/font/google";
+import { Yeseva_One } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/components/auth/AuthProvider";
@@ -10,11 +10,6 @@ import "./globals.css";
 const yesevaOne = Yeseva_One({
   weight: "400",
   variable: "--font-yeseva-one",
-  subsets: ["latin"],
-});
-
-const mulish = Mulish({
-  variable: "--font-mulish",
   subsets: ["latin"],
 });
 
@@ -33,7 +28,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${yesevaOne.variable} ${mulish.variable} h-full antialiased`}
+      className={`${yesevaOne.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-cream font-sans">
         <Suspense fallback={null}>
