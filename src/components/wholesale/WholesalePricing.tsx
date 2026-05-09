@@ -88,7 +88,7 @@ export default function WholesalePricing() {
 
             <Link
               href="/contact"
-              className="block w-full text-center bg-zinc-900 text-white font-medium py-3 rounded text-sm hover:bg-zinc-800 transition-colors"
+              className="block w-full text-center bg-[#D04636] text-white font-medium py-3 rounded text-sm hover:bg-[#B83C2D] transition-colors"
             >
               Get Started
             </Link>

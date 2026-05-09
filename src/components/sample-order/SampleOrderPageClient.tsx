@@ -475,7 +475,7 @@ export default function SampleOrderPageClient({
               type="button"
               onClick={handleOnlinePayment}
               disabled={isSubmitting || !selectedProduct || !selectedVariant || !payableAmount}
-              className="w-full rounded-md bg-zinc-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-md bg-[#D04636] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#B83C2D] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? "Processing..." : "Pay & Place Sample Order"}
             </button>

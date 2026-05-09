@@ -21,7 +21,7 @@ export default function WholesaleCTA() {
             </p>
             <Link
               href="/products"
-              className="inline-block bg-white text-zinc-900 font-medium px-6 py-3 rounded text-sm text-center hover:bg-zinc-100 transition-colors"
+              className="inline-block bg-white text-zinc-900 font-medium px-6 py-3 rounded text-sm text-center hover:bg-white border border-[#D04636] text-[#D04636] transition-colors"
             >
               Order Samples
             </Link>
@@ -43,7 +43,7 @@ export default function WholesaleCTA() {
             </p>
             <Link
               href="/contact"
-              className="inline-block bg-zinc-900 text-white font-medium px-6 py-3 rounded text-sm text-center hover:bg-zinc-800 transition-colors"
+              className="inline-block bg-[#D04636] text-white font-medium px-6 py-3 rounded text-sm text-center hover:bg-[#B83C2D] transition-colors"
             >
               Contact Us
             </Link>
