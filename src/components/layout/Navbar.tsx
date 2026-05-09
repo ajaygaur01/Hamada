@@ -1,92 +1,131 @@
 "use client";
 
 import Link from "next/link";
-import { UserCircle2 } from "lucide-react";
+import Image from "next/image";
+import { UserCircle2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function Navbar() {
   const { user, openAuthModal, logout } = useAuth();
 
   return (
-    <nav className="w-full border-b border-zinc-200 bg-white sticky top-0 z-50">
+    <nav className="w-full sticky top-0 z-50 
+                    bg-[#4E3D33]/95 backdrop-blur-md 
+                    border-b border-[#3e3028]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo Placeholder */}
-          <div className="shrink-0 flex items-center">
-            <Link href="/" className="bg-zinc-100 text-zinc-800 px-4 py-2 text-xs font-bold tracking-widest uppercase rounded">
-              Logo Placeholder
+        <div className="flex justify-between items-center h-18 py-4">
+
+          {/* Logo */}
+          <div className="shrink-0">
+            <Link
+              href="/"
+              aria-label="Kaori by Chiran home"
+            >
+              <Image
+                src="/logo.avif"
+                alt="Kaori by Chiran logo"
+                width={112}
+                height={32}
+                className="h-8 w-auto object-contain"
+                priority
+              />
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/products" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors">Products</Link>
-            <Link href="/how-it-works" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors">How It Works</Link>
-            <Link href="/about" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors">About</Link>
-            <Link href="/wholesale" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors">Wholesale</Link>
-            <Link href="/contact" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors">Contact</Link>
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-8">
+            {[
+              { href: "/products", label: "Products" },
+              { href: "/how-it-works", label: "How It Works" },
+              { href: "/about", label: "About" },
+              { href: "/wholesale", label: "Wholesale" },
+              { href: "/contact", label: "Contact" },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-[#E7DDC1]/80 
+                           hover:text-white transition-colors 
+                           tracking-wide"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          {/* Right side actions */}
-          <div className="hidden md:flex items-center space-x-6">
+          {/* Right Side */}
+          <div className="hidden md:flex items-center gap-5">
             {user ? (
               <>
-                <div className="flex flex-col items-end">
-                  <span className="text-sm font-medium text-zinc-700">
-                    Hi, {user.username ?? "User"}
-                  </span>
-                  {user.gstin_verified && (
-                    <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-200 mt-0.5">
-                      Verified Buyer
+                {/* Verified badge */}
+                {user.gstin_verified && (
+                  <div className="flex items-center gap-1.5 
+                                  bg-[#E7DDC1]/10 border border-[#E7DDC1]/20
+                                  px-2.5 py-1 rounded-full">
+                    <ShieldCheck size={11} className="text-[#E7DDC1]" />
+                    <span className="text-[10px] font-bold tracking-wider 
+                                     uppercase text-[#E7DDC1]">
+                      Verified
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
+
+                {/* User greeting */}
+                <span className="text-sm font-medium text-[#E7DDC1]/80">
+                  Hi, {user.username ?? "User"}
+                </span>
+
+                {/* Account link */}
                 <Link
                   href="/account"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                  className="inline-flex items-center gap-1.5 
+                             text-sm font-medium text-[#E7DDC1] 
+                             hover:text-white transition-colors"
                 >
-                  <UserCircle2 className="h-4 w-4" />
+                  <UserCircle2 size={16} />
                   Account
                 </Link>
+
+                {/* Logout */}
                 <button
                   type="button"
                   onClick={() => void logout()}
-                  className="text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                  className="text-sm font-medium text-[#E7DDC1]/60 
+                             hover:text-white transition-colors"
                 >
                   Logout
                 </button>
               </>
             ) : (
               <>
+                {/* Login */}
                 <button
                   type="button"
                   onClick={() => openAuthModal("login")}
-                  className="text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                  className="text-sm font-medium text-[#E7DDC1]/80 
+                             hover:text-white transition-colors"
                 >
                   Login
                 </button>
-                <button
-                  type="button"
-                  onClick={() => openAuthModal("signup")}
-                  className="text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
-                >
-                  Signup
-                </button>
               </>
             )}
-            <Link href="/sample-order" className="bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded hover:bg-zinc-800 transition-colors">
-              Order a Sample
-            </Link>
+
+
           </div>
-          
-          {/* Mobile menu button (placeholder for actual implementation) */}
-          <div className="md:hidden flex items-center">
-            <button className="text-zinc-500 hover:text-zinc-900 focus:outline-none">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+
+          {/* Mobile Hamburger */}
+          <div className="md:hidden flex items-center gap-3">
+
+            <button className="text-[#E7DDC1] hover:text-white 
+                               focus:outline-none transition-colors">
+              <svg className="h-5 w-5" fill="none" 
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" 
+                      strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
+
         </div>
       </div>
     </nav>

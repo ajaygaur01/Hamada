@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -8,9 +9,19 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="md:col-span-1">
-            <div className="bg-zinc-100 text-zinc-800 px-4 py-2 text-xs font-bold tracking-widest uppercase rounded inline-block mb-6">
-              Logo Placeholder
-            </div>
+            <Link
+              href="/"
+              className="mb-6 inline-flex items-center rounded-md bg-white border border-[#D04636] text-[#D04636] px-3 py-2 transition-colors hover:bg-[#fdebea]"
+              aria-label="Kaori by Chiran home"
+            >
+              <Image
+                src="/logo.avif"
+                alt="Kaori by Chiran logo"
+                width={120}
+                height={36}
+                className="h-9 w-auto object-contain"
+              />
+            </Link>
             <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
               Premium B2B wholesale Japanese tea, directly sourced from Kagoshima, Japan to your business.
             </p>
