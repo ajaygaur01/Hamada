@@ -169,7 +169,7 @@ export default function BulkOrderCheckoutClient({
             <button
               onClick={handlePayment}
               disabled={loading}
-              className="w-full rounded-xl bg-zinc-900 px-6 py-4 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-xl bg-[#D04636] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#B83C2D] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Processing..." : `Pay ₹${total.toFixed(2)}`}
             </button>

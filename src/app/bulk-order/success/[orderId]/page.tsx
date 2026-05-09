@@ -47,7 +47,7 @@ export default async function BulkOrderSuccessPage({
         )}
 
         <div className="space-y-3">
-          <button className="w-full rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-zinc-800">
+          <button className="w-full rounded-lg bg-[#D04636] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#B83C2D]">
             Download Invoice
           </button>
           <Link href="/account" className="block w-full rounded-lg border border-zinc-300 px-4 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50">

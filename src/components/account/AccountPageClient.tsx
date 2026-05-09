@@ -51,6 +51,27 @@ export type BulkOrder = {
   }[];
 };
 
+export type Address = {
+  id: string;
+  fullName: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  isDefault: boolean;
+};
+
+export type Invoice = {
+  id: string;
+  invoiceNumber: string;
+  orderNumber: string;
+  date: string;
+  amount: number;
+  pdfUrl: string | null;
+};
+
 type ActiveSection = "overview" | "orders" | "profile" | "addresses" | "invoices";
 
 export default function AccountPageClient({ initialUser }: { initialUser: UserProfile }) {
@@ -60,29 +81,41 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [sampleOrders, setSampleOrders] = useState<SampleOrder[]>([]);
   const [bulkOrders, setBulkOrders] = useState<BulkOrder[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
 
   useEffect(() => {
-    async function loadOrders() {
+    async function loadData() {
       try {
-        const response = await fetch("/api/account/orders", { cache: "no-store" });
-        const data = (await response.json()) as {
-          sampleOrders?: SampleOrder[];
-          bulkOrders?: BulkOrder[];
-        };
-        if (response.ok) {
+        const [ordersRes, addressesRes, invoicesRes] = await Promise.all([
+          fetch("/api/account/orders", { cache: "no-store" }),
+          fetch("/api/account/addresses", { cache: "no-store" }),
+          fetch("/api/account/invoices", { cache: "no-store" })
+        ]);
+
+        if (ordersRes.ok) {
+          const data = await ordersRes.json() as { sampleOrders?: SampleOrder[]; bulkOrders?: BulkOrder[]; };
           setSampleOrders(data.sampleOrders ?? []);
           setBulkOrders(data.bulkOrders ?? []);
+        }
+        if (addressesRes.ok) {
+          const data = await addressesRes.json() as { addresses?: Address[]; };
+          setAddresses(data.addresses ?? []);
+        }
+        if (invoicesRes.ok) {
+          const data = await invoicesRes.json() as { invoices?: Invoice[]; };
+          setInvoices(data.invoices ?? []);
         }
       } finally {
         setOrdersLoading(false);
       }
     }
 
-    void loadOrders();
+    void loadData();
   }, []);
 
   async function saveProfile(event: React.FormEvent<HTMLFormElement>) {
@@ -216,11 +249,11 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
             )}
             
             {activeSection === "addresses" && (
-              <AddressesSection />
+              <AddressesSection addresses={addresses} setAddresses={setAddresses} />
             )}
             
             {activeSection === "invoices" && (
-              <InvoicesSection />
+              <InvoicesSection invoices={invoices} />
             )}
             
           </div>
