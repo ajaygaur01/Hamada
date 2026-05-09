@@ -86,8 +86,8 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                 onClick={() => setActiveUseCase(null)}
                 className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   activeUseCase === null 
-                    ? "bg-brand-green text-white" 
-                    : "bg-transparent text-[#3E4F25]/70 hover:bg-[#d2e0c2]/50"
+                    ? "bg-[#D04636] text-white" 
+                    : "bg-transparent text-zinc-600 hover:bg-zinc-100"
                 }`}
               >
                 All Teas
@@ -98,8 +98,8 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                   onClick={() => setActiveUseCase(uc)}
                   className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
                     activeUseCase === uc 
-                      ? "bg-brand-green text-white" 
-                      : "bg-transparent border border-[#d2e0c2] text-[#3E4F25]/70 hover:border-brand-green hover:text-brand-green"
+                      ? "bg-[#D04636] text-white" 
+                      : "bg-transparent border border-zinc-300 text-zinc-600 hover:border-[#D04636] hover:text-[#D04636]"
                   }`}
                 >
                   {uc}

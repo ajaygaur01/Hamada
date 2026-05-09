@@ -12,14 +12,14 @@ export default function CTASection() {
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link 
-            href="/sample" 
-            className="w-full sm:w-auto bg-white text-zinc-900 font-medium px-8 py-3 rounded text-sm hover:bg-white border border-[#D04636] text-[#D04636] transition-colors"
+            href="/products" 
+            className="w-full sm:w-auto bg-[#D04636] text-white font-medium px-8 py-3 rounded text-sm hover:bg-[#B83C2D] transition-colors"
           >
             Order a Sample
           </Link>
           <Link 
             href="/contact" 
-            className="w-full sm:w-auto border border-[#5d7340] text-white font-medium px-8 py-3 rounded text-sm hover:bg-[#4a5f2f] transition-colors"
+            className="w-full sm:w-auto border border-[#E7DDC1]/40 text-white font-medium px-8 py-3 rounded text-sm hover:bg-white/10 transition-colors"
           >
             Contact Us
           </Link>

@@ -41,8 +41,8 @@ export default function ProductCard({
           <div className="absolute bottom-3 left-3">
             <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-sm ${
               status === "Sample Available"
-                ? "bg-[#4c632e]/90 text-white"
-                : "bg-[#635233]/90 text-white"
+                ? "bg-[#D04636]/90 text-white"
+                : "bg-[#4E3D33]/90 text-white"
             }`}>
               {status}
             </span>
@@ -126,7 +126,7 @@ export default function ProductCard({
               </span>
             )}
 
-            <div className="flex items-center gap-1.5 rounded-full bg-[#4c632e] px-3 py-1.5 text-white text-[11px] font-semibold group-hover:bg-[#3e4f25] transition-colors">
+            <div className="flex items-center gap-1.5 rounded-full bg-[#D04636] px-3 py-1.5 text-white text-[11px] font-semibold group-hover:bg-[#B83C2D] transition-colors">
               View
               <ArrowRight size={11} />
             </div>
