@@ -73,10 +73,10 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
   };
 
   return (
-    <div className="bg-brand-cream pb-24">
+    <div className="bg-white pb-24">
       
       {/* Search & Filter Header */}
-      <div className="sticky top-16 z-40 bg-brand-cream/90 backdrop-blur-md border-b border-[#d2e0c2] py-4">
+      <div className="sticky top-16 z-40 bg-white/90 backdrop-blur-md border-b border-[#d2e0c2] py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
             

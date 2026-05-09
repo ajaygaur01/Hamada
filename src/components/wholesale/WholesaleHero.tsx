@@ -16,13 +16,13 @@ export default function WholesaleHero() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/contact"
-            className="w-full sm:w-auto bg-white text-zinc-900 font-medium px-8 py-3.5 rounded text-sm hover:bg-zinc-100 transition-colors"
+            className="w-full sm:w-auto bg-white text-zinc-900 font-medium px-8 py-3.5 rounded text-sm hover:bg-white border border-[#D04636] text-[#D04636] transition-colors"
           >
             Email Contact
           </Link>
           <Link
             href="/contact"
-            className="w-full sm:w-auto border border-zinc-700 text-white font-medium px-8 py-3.5 rounded text-sm hover:bg-zinc-800 transition-colors"
+            className="w-full sm:w-auto border border-zinc-700 text-white font-medium px-8 py-3.5 rounded text-sm hover:bg-[#B83C2D] transition-colors"
           >
             Contact Us
           </Link>
