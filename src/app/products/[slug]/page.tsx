@@ -84,7 +84,7 @@ export default async function ProductDetailPage({ params }: Props) {
   });
 
   return (
-    <div className="bg-brand-cream min-h-screen">
+    <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
       <Breadcrumb productName={product.name} />
 

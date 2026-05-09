@@ -144,7 +144,7 @@ function VerifyGstinInner() {
               <button
                 type="submit"
                 disabled={!isValidFormat || loading}
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-brand-green px-4 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#3f5226] disabled:cursor-not-allowed disabled:bg-brand-sage disabled:opacity-60"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#D04636] px-4 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#B83C2D] disabled:cursor-not-allowed disabled:bg-brand-sage disabled:opacity-60"
               >
                 {loading && <Loader2 size={16} className="animate-spin" />}
                 {loading ? "Verifying with GST Portal..." : "Verify GSTIN"}
@@ -201,7 +201,7 @@ function VerifyGstinInner() {
                     type="button"
                     onClick={handleConfirm}
                     disabled={confirming}
-                    className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-brand-green px-4 py-3.5 text-sm font-medium text-white hover:bg-[#3f5226] transition-colors disabled:opacity-70 disabled:cursor-wait"
+                    className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-[#D04636] px-4 py-3.5 text-sm font-medium text-white hover:bg-[#B83C2D] transition-colors disabled:opacity-70 disabled:cursor-wait"
                   >
                     {confirming && <Loader2 size={16} className="animate-spin" />}
                     {confirming ? "Confirming..." : "Yes, Confirm"}

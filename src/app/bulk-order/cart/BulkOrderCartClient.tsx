@@ -224,7 +224,7 @@ export default function BulkOrderCartClient({
           <button
             onClick={handleCheckout}
             disabled={cart.length === 0 || loading}
-            className="w-full rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-lg bg-[#D04636] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#B83C2D] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Proceed to Payment"}
           </button>
