@@ -20,6 +20,10 @@ export default async function ProductsPage() {
         orderBy: { sample_price: 'asc' },
         take: 1
       },
+      images: {
+        where: { is_primary: true },
+        take: 1,
+      },
       reviews: {
         select: { rating: true },
       },
@@ -43,6 +47,7 @@ export default async function ProductsPage() {
       categoryName: derivedTag || "TEA",
       useCases: p.use_cases || [],
       categoryId: p.category_id,
+      imageUrl: p.images[0]?.image_url || null,
       reviewCount: p.reviews.length,
       startingPrice: p.variants.length > 0 ? Number(p.variants[0].sample_price) : undefined,
       averageRating: p.reviews.length > 0

@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import prisma from '@/lib/prisma';
 
-const DUMMY_PRODUCT_IMAGE =
-  "https://imgs.search.brave.com/gQdAjE-qYlp5B-yAhkkCBsnD8kqeE5IlpTKZrsXK5ns/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRpYS5pc3RvY2twaG90by5jb20vaWQvMTE4NTcxNTc5NS9waG90by9jdXAtb2YtdGVhLXdpdGgtbGVtb24tYW5kLWEtY3VwLW9mLWNvZmZlZS1vbi1hLXdvb2Rlbi1zdXJmYWNlLXRoZS1jaG9pY2UtYmV0d2Vlbi1jb2ZmZWUtYW5kLmpwZz9zPTYxMng2MTImdz0wJms9MjAmYz1uMHlmZkNGYmNCWmt2WFd4Q3VlOHdwWHdNd2Z5dThqTjBWYkluc19nbnpzPQ";
+
 
 export default async function Teas() {
   // Fetch featured products with their review stats
@@ -60,17 +59,21 @@ export default async function Teas() {
               ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
               : 0;
             const category = product.name.split(' ')[0].toUpperCase();
-            const imageSrc = DUMMY_PRODUCT_IMAGE;
+            const imageSrc = product.images[0]?.image_url || null;
 
             return (
               <div key={product.id} className="group overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className="relative aspect-4/3 overflow-hidden bg-zinc-100">
-                  <img
-                    src={imageSrc}
-                    alt={product.name}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
+                  {imageSrc ? (
+                    <img
+                      src={imageSrc}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center text-zinc-300 text-xs uppercase tracking-widest">Product Image</div>
+                  )}
                 </div>
 
                 <div className="px-4 pb-5 pt-4">

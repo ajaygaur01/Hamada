@@ -11,6 +11,7 @@ interface ProductData {
   categoryName: string;
   useCases: string[];
   categoryId: string;
+  imageUrl: string | null;
   startingPrice?: number;
   averageRating?: number;
   reviewCount?: number;
@@ -148,6 +149,7 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                       name={product.name}
                       categoryName={product.categoryName}
                       useCases={product.useCases}
+                      imageUrl={product.imageUrl}
                       status={getStatus(product.name)}
                       startingPrice={product.startingPrice}
                       averageRating={product.averageRating}
@@ -175,6 +177,7 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                       name={product.name}
                       categoryName={product.categoryName}
                       useCases={product.useCases}
+                      imageUrl={product.imageUrl}
                       status={getStatus(product.name)}
                       startingPrice={product.startingPrice}
                       averageRating={product.averageRating}

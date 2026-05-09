@@ -8,6 +8,7 @@ interface ProductCardProps {
   name: string;
   categoryName: string;
   useCases: string[];
+  imageUrl?: string | null;
   status: "Sample Available" | "On Request";
   startingPrice?: number;
   averageRating?: number;
@@ -15,7 +16,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({
-  id, slug, name, categoryName, useCases, 
+  id, slug, name, categoryName, useCases, imageUrl,
   status, startingPrice, averageRating, reviewCount
 }: ProductCardProps) {
   return (
@@ -32,11 +33,15 @@ export default function ProductCard({
       >
         {/* Image */}
         <div className="relative w-full aspect-[3/2] bg-gradient-to-br from-[#f5f0e8] to-[#ede4d0] overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#9aa958]/60">
-              Product Image
-            </span>
-          </div>
+          {imageUrl ? (
+            <img src={imageUrl} alt={name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#9aa958]/60">
+                Product Image
+              </span>
+            </div>
+          )}
           {/* Status badge over image */}
           <div className="absolute bottom-3 left-3">
             <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-sm ${

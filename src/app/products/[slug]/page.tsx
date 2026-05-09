@@ -39,6 +39,9 @@ export default async function ProductDetailPage({ params }: Props) {
         where: { is_active: true },
         orderBy: { sample_price: "asc" },
       },
+      images: {
+        orderBy: { display_order: "asc" },
+      },
       reviews: {
         include: {
           user: {
@@ -93,7 +96,7 @@ export default async function ProductDetailPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column: Image Gallery */}
           <div>
-            <ImageGallery />
+            <ImageGallery images={product.images.map(img => ({ url: img.image_url, alt: img.alt_text || product.name, isPrimary: img.is_primary }))} />
           </div>
 
           {/* Right Column: Product Info + Order Form */}
