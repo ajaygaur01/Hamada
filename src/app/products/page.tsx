@@ -52,7 +52,7 @@ export default async function ProductsPage() {
   });
 
   return (
-    <div className="flex flex-col bg-brand-cream min-h-screen">
+    <div className="flex flex-col bg-white min-h-screen">
       <PageHeader />
       <ProductGrid products={products} categories={categories} />
       <CTASection />
