@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function HemasStory() {
   return (
     <section className="bg-zinc-50 py-24 border-y border-zinc-100">
@@ -36,11 +38,14 @@ export default function HemasStory() {
             </div>
           </div>
 
-          {/* Image Placeholder - Right Side */}
-          <div className="bg-zinc-100 aspect-[4/3] rounded-lg flex items-center justify-center border border-zinc-200">
-            <span className="text-zinc-400 text-[10px] font-medium tracking-widest uppercase">
-              Image Placeholder
-            </span>
+          <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-zinc-200 shadow-sm">
+            <Image
+              src="/about2.avif"
+              alt="Hema's Story"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
           </div>
         </div>
       </div>

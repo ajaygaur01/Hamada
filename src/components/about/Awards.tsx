@@ -8,7 +8,7 @@ const certifications = [
 ];
 
 function CertIcon({ type }: { type: string }) {
-  const cls = "w-6 h-6 text-zinc-500";
+  const cls = "w-6 h-6 text-[#E7DDC1]";
   switch (type) {
     case "shield":
       return (
@@ -53,15 +53,15 @@ function CertIcon({ type }: { type: string }) {
 
 export default function Awards() {
   return (
-    <section className="bg-zinc-50 py-24">
+    <section className="bg-[#4E3D33] py-24">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-3">
+        <p className="text-[10px] font-bold tracking-widest uppercase text-[#E7DDC1]/80 mb-3">
           RECOGNITION
         </p>
-        <h2 className="text-2xl font-bold text-zinc-900 mb-4">
+        <h2 className="text-2xl font-bold text-white mb-4">
           Awards and Certifications
         </h2>
-        <p className="text-sm text-zinc-500 mb-16 max-w-xl mx-auto">
+        <p className="text-sm text-[#E7DDC1]/70 mb-16 max-w-xl mx-auto">
           Our quality standards are verified by leading international food safety, testing
           industry and food safety bodies.
         </p>
@@ -69,10 +69,10 @@ export default function Awards() {
         <div className="grid grid-cols-3 md:grid-cols-6 gap-8">
           {certifications.map((cert, idx) => (
             <div key={idx} className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-white border border-zinc-200 flex items-center justify-center mb-3 shadow-sm">
+              <div className="w-16 h-16 rounded-full bg-[#3e3028] border border-[#3e3028] flex items-center justify-center mb-3 shadow-sm">
                 <CertIcon type={cert.icon} />
               </div>
-              <span className="text-[10px] text-zinc-500 font-medium">{cert.label}</span>
+              <span className="text-[10px] text-[#E7DDC1]/80 font-medium">{cert.label}</span>
             </div>
           ))}
         </div>
