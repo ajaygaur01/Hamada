@@ -1,22 +1,28 @@
+import Image from "next/image";
+
 export default function Story() {
   return (
-    <section className="bg-white py-24 sm:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Image Placeholder */}
-          <div className="bg-zinc-100 aspect-square rounded-lg flex items-center justify-center border border-zinc-200">
-            <img src="team.avif" alt="" />
+    <section className="bg-white py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 shadow-sm">
+            <Image
+              src="/team.avif"
+              alt="Hamada team standing together"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
           </div>
-          
-          {/* Content */}
-          <div>
-            <div className="inline-block bg-zinc-50 border border-zinc-200 text-zinc-500 text-xs font-bold tracking-widest uppercase px-3 py-1 rounded mb-6">
+
+          <div className="max-w-xl">
+            <div className="mb-5 inline-block rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-zinc-500">
               Our Story
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 mb-6 leading-tight">
+            <h2 className="mb-5 text-3xl font-bold leading-tight text-zinc-900 md:text-4xl">
               40 Years of Japanese Tea Craftsmanship
             </h2>
-            <div className="space-y-4 text-zinc-600 leading-relaxed">
+            <div className="space-y-4 text-[15px] leading-relaxed text-zinc-600 sm:text-base">
               <p>
                 Founded in 1975 in the heart of Kagoshima, Japan, Hamada Tea Co. has dedicated over four decades to perfecting the art of tea cultivation and processing.
               </p>

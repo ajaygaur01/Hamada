@@ -114,7 +114,7 @@ function AuthModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded p-1 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-800"
+            className="rounded p-1 text-zinc-500 transition hover:bg-white border border-[#D04636] text-[#D04636] hover:text-zinc-800"
             aria-label="Close auth modal"
           >
             X
@@ -191,7 +191,7 @@ function AuthModal({
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-500"
+            className="w-full rounded-lg bg-[#D04636] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#B83C2D] disabled:cursor-not-allowed disabled:bg-zinc-500"
           >
             {submitting
               ? mode === "login"

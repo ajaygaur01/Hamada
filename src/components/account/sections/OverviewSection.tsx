@@ -27,7 +27,7 @@ export default function OverviewSection({ sampleOrders, bulkOrders }: OverviewSe
         <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-2">
           <div className="bg-white rounded-xl p-5 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-brand-cream text-brand-green rounded-lg">
+              <div className="p-2 bg-[#4E3D33] text-[#E7DDC1] rounded-lg">
                 <Box size={20} />
               </div>
               <p className="text-sm font-medium text-zinc-500">Total Orders</p>
@@ -37,7 +37,7 @@ export default function OverviewSection({ sampleOrders, bulkOrders }: OverviewSe
           
           <div className="bg-white rounded-xl p-5 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-brand-cream text-brand-green rounded-lg">
+              <div className="p-2 bg-[#4E3D33] text-[#E7DDC1] rounded-lg">
                 <Package size={20} />
               </div>
               <p className="text-sm font-medium text-zinc-500">Sample Orders</p>
@@ -47,7 +47,7 @@ export default function OverviewSection({ sampleOrders, bulkOrders }: OverviewSe
 
           <div className="bg-white rounded-xl p-5 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-brand-cream text-brand-green rounded-lg">
+              <div className="p-2 bg-[#4E3D33] text-[#E7DDC1] rounded-lg">
                 <ShoppingBag size={20} />
               </div>
               <p className="text-sm font-medium text-zinc-500">Bulk Orders</p>
@@ -57,7 +57,7 @@ export default function OverviewSection({ sampleOrders, bulkOrders }: OverviewSe
 
           <div className="bg-white rounded-xl p-5 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-brand-cream text-brand-green rounded-lg">
+              <div className="p-2 bg-[#4E3D33] text-[#E7DDC1] rounded-lg">
                 <IndianRupee size={20} />
               </div>
               <p className="text-sm font-medium text-zinc-500">Total Spent</p>
@@ -119,7 +119,7 @@ export default function OverviewSection({ sampleOrders, bulkOrders }: OverviewSe
 
       {/* Quick Actions */}
       <div className="flex gap-4">
-        <Link href="/products" className="flex-1 bg-brand-green text-white text-center py-3 rounded-lg font-medium hover:bg-[#3f5226] transition-colors">
+        <Link href="/products" className="flex-1 bg-[#D04636] text-white text-center py-3 rounded-lg font-medium hover:bg-[#B83C2D] transition-colors">
           Browse Products
         </Link>
         <Link href="/contact" className="flex-1 bg-white border border-zinc-200 text-zinc-700 text-center py-3 rounded-lg font-medium hover:bg-zinc-50 transition-colors">
