@@ -106,7 +106,7 @@ export default function AddressesSection() {
             </div>
             <div className="flex justify-end gap-3 pt-4">
               <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900">Cancel</button>
-              <button type="submit" className="px-6 py-2 bg-brand-green text-white rounded-md text-sm font-medium hover:bg-[#3f5226]">Save Address</button>
+              <button type="submit" className="px-6 py-2 bg-[#D04636] text-white rounded-md text-sm font-medium hover:bg-[#B83C2D]">Save Address</button>
             </div>
           </form>
         </div>

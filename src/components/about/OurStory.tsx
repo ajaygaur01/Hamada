@@ -1,13 +1,18 @@
+import Image from "next/image";
+
 export default function OurStory() {
   return (
     <section className="bg-white py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Image Placeholder */}
-          <div className="bg-zinc-100 aspect-[4/3] rounded-lg flex items-center justify-center border border-zinc-200">
-            <span className="text-zinc-400 text-[10px] font-medium tracking-widest uppercase">
-              Image Placeholder
-            </span>
+          <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-zinc-200 shadow-sm">
+            <Image
+              src="/about1.avif"
+              alt="Hamada Tea Co. Farm"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
           </div>
 
           {/* Content */}

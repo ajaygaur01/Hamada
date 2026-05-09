@@ -124,20 +124,20 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
   ] as const;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-brand-cream md:py-10 pb-20 md:pb-10">
+    <div className="min-h-[calc(100vh-64px)] bg-white md:py-10 pb-20 md:pb-10">
       <div className="mx-auto w-full max-w-7xl px-0 md:px-6 flex flex-col md:flex-row gap-8">
         
         {/* Desktop Sidebar */}
         <div className="hidden md:block w-72 shrink-0">
-          <div className="bg-white rounded-2xl shadow-sm border border-zinc-100 overflow-hidden sticky top-24">
+          <div className="bg-[#4E3D33] rounded-2xl shadow-sm border border-[#3e3028] overflow-hidden sticky top-24">
             
             {/* User Info */}
-            <div className="p-6 border-b border-zinc-100 flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-full bg-brand-green text-white flex items-center justify-center text-2xl font-bold mb-4 shadow-md">
+            <div className="p-6 border-b border-[#3e3028] flex flex-col items-center text-center">
+              <div className="w-20 h-20 rounded-full bg-[#3e3028] text-white flex items-center justify-center text-2xl font-bold mb-4 shadow-md">
                 {getInitials(profile.username)}
               </div>
-              <h2 className="font-bold text-zinc-900 text-lg">{profile.username || "User"}</h2>
-              <p className="text-zinc-500 text-sm mb-3">{profile.email}</p>
+              <h2 className="font-bold text-white text-lg">{profile.username || "User"}</h2>
+              <p className="text-[#E7DDC1]/80 text-sm mb-3">{profile.email}</p>
               
               {profile.gstin_verified ? (
                 <div className="flex items-center gap-1.5 bg-[#f0f4ea] text-brand-green px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border border-[#d2e0c2]">
@@ -164,20 +164,20 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
                     onClick={() => setActiveSection(item.id)}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                       isActive 
-                        ? "bg-brand-cream text-brand-green border-l-4 border-brand-green shadow-sm" 
-                        : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 border-l-4 border-transparent"
+                        ? "bg-[#D04636] text-white shadow-sm" 
+                        : "text-[#E7DDC1]/80 hover:bg-[#3e3028] hover:text-white"
                     }`}
                   >
-                    <Icon size={18} className={isActive ? "text-brand-green" : "text-zinc-400"} />
+                    <Icon size={18} className={isActive ? "text-white" : "text-[#E7DDC1]/60"} />
                     {item.label}
                   </button>
                 );
               })}
             </nav>
 
-            <div className="p-3 border-t border-zinc-100">
+            <div className="p-3 border-t border-[#3e3028]">
               <form action="/api/auth/logout" method="POST">
-                <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-all border-l-4 border-transparent">
+                <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-400 hover:bg-[#3e3028] hover:text-red-300 transition-all border-l-4 border-transparent">
                   <LogOut size={18} />
                   Logout
                 </button>
@@ -227,7 +227,7 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
         </div>
 
         {/* Mobile Bottom Tab Navigation */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 z-50 px-2 py-2 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#4E3D33] border-t border-[#3e3028] z-50 px-2 py-2 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
@@ -237,10 +237,10 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
                 className={`flex flex-col items-center justify-center w-16 h-12 rounded-lg transition-colors ${
-                  isActive ? "text-brand-green" : "text-zinc-500"
+                  isActive ? "text-[#D04636]" : "text-[#E7DDC1]/60"
                 }`}
               >
-                <div className={`${isActive ? "bg-brand-cream p-1.5 rounded-full" : "p-1.5"}`}>
+                <div className={`${isActive ? "bg-[#3e3028] p-1.5 rounded-full" : "p-1.5"}`}>
                   <Icon size={isActive ? 20 : 22} strokeWidth={isActive ? 2.5 : 2} />
                 </div>
                 <span className="text-[10px] font-medium mt-0.5 whitespace-nowrap hidden sm:block">

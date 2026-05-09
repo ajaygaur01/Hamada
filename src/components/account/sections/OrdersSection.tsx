@@ -74,7 +74,7 @@ export default function OrdersSection({ sampleOrders, bulkOrders }: OrdersSectio
           </div>
           <h3 className="text-lg font-bold text-zinc-900 mb-2">No orders yet</h3>
           <p className="text-zinc-500 max-w-sm mb-6">You haven't placed any {activeTab !== 'all' ? activeTab : ''} orders. Browse our catalog to get started.</p>
-          <Link href="/products" className="bg-brand-green text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#3f5226] transition-colors">
+          <Link href="/products" className="bg-[#D04636] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#B83C2D] transition-colors">
             Browse Products
           </Link>
         </div>
@@ -106,16 +106,16 @@ export default function OrdersSection({ sampleOrders, bulkOrders }: OrdersSectio
                     
                     <div className="flex flex-wrap items-center gap-2">
                       {order.orderStatus.toLowerCase() === 'dispatched' && (
-                        <button className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-100 text-zinc-700 rounded-md text-sm font-medium hover:bg-zinc-200 transition-colors">
+                        <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#D04636] text-[#D04636] text-zinc-700 rounded-md text-sm font-medium hover:bg-[#fdebea] transition-colors">
                           <Truck size={16} /> Track
                         </button>
                       )}
                       {isBulk && (
-                        <button className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-100 text-zinc-700 rounded-md text-sm font-medium hover:bg-zinc-200 transition-colors">
+                        <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#D04636] text-[#D04636] text-zinc-700 rounded-md text-sm font-medium hover:bg-[#fdebea] transition-colors">
                           <Download size={16} /> Invoice
                         </button>
                       )}
-                      <Link href={isBulk ? "/bulk-order/cart" : `/products/${(order as SampleOrder).productSlug}`} className="px-4 py-1.5 bg-brand-cream text-brand-green rounded-md text-sm font-medium hover:bg-[#d8ccaa] transition-colors">
+                      <Link href={isBulk ? "/bulk-order/cart" : `/products/${(order as SampleOrder).productSlug}`} className="px-4 py-1.5 bg-brand-cream text-[#D04636] rounded-md text-sm font-medium hover:bg-[#d8ccaa] transition-colors">
                         Reorder
                       </Link>
                     </div>
