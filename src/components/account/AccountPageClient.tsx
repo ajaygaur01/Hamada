@@ -9,7 +9,8 @@ import {
   FileText, 
   LogOut,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  Heart
 } from "lucide-react";
 
 import OverviewSection from "./sections/OverviewSection";
@@ -17,6 +18,7 @@ import OrdersSection from "./sections/OrdersSection";
 import ProfileSection from "./sections/ProfileSection";
 import AddressesSection from "./sections/AddressesSection";
 import InvoicesSection from "./sections/InvoicesSection";
+import WishlistSection from "./sections/WishlistSection";
 
 export type UserProfile = {
   username: string;
@@ -72,7 +74,17 @@ export type Invoice = {
   pdfUrl: string | null;
 };
 
-type ActiveSection = "overview" | "orders" | "profile" | "addresses" | "invoices";
+export type WishlistItem = {
+  id: string;
+  productId: string;
+  name: string;
+  slug: string;
+  imageUrl: string | null;
+  price: number | null;
+  addedAt: string;
+};
+
+type ActiveSection = "overview" | "orders" | "profile" | "wishlist" | "addresses" | "invoices";
 
 export default function AccountPageClient({ initialUser }: { initialUser: UserProfile }) {
   const [activeSection, setActiveSection] = useState<ActiveSection>("overview");
@@ -83,6 +95,8 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
   const [bulkOrders, setBulkOrders] = useState<BulkOrder[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
+  const [wishlistLoading, setWishlistLoading] = useState(true);
   
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -91,10 +105,11 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
   useEffect(() => {
     async function loadData() {
       try {
-        const [ordersRes, addressesRes, invoicesRes] = await Promise.all([
+        const [ordersRes, addressesRes, invoicesRes, wishlistRes] = await Promise.all([
           fetch("/api/account/orders", { cache: "no-store" }),
           fetch("/api/account/addresses", { cache: "no-store" }),
-          fetch("/api/account/invoices", { cache: "no-store" })
+          fetch("/api/account/invoices", { cache: "no-store" }),
+          fetch("/api/account/wishlist", { cache: "no-store" })
         ]);
 
         if (ordersRes.ok) {
@@ -110,8 +125,13 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
           const data = await invoicesRes.json() as { invoices?: Invoice[]; };
           setInvoices(data.invoices ?? []);
         }
+        if (wishlistRes.ok) {
+          const data = await wishlistRes.json() as { wishlist?: WishlistItem[]; };
+          setWishlist(data.wishlist ?? []);
+        }
       } finally {
         setOrdersLoading(false);
+        setWishlistLoading(false);
       }
     }
 
@@ -143,6 +163,21 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
     }
   }
 
+  async function handleRemoveWishlist(id: string) {
+    try {
+      const response = await fetch("/api/account/wishlist", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (response.ok) {
+        setWishlist(prev => prev.filter(item => item.id !== id));
+      }
+    } catch (error) {
+      console.error("Failed to remove from wishlist", error);
+    }
+  }
+
   const getInitials = (name: string) => {
     if (!name) return "U";
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
@@ -151,6 +186,7 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
   const navItems = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
     { id: "orders", label: "My Orders", icon: Package },
+    { id: "wishlist", label: "Wishlist", icon: Heart },
     { id: "profile", label: "My Profile", icon: User },
     { id: "addresses", label: "Saved Addresses", icon: MapPin },
     { id: "invoices", label: "Invoices", icon: FileText },
@@ -224,7 +260,12 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
           <div className="md:bg-white md:rounded-2xl md:shadow-sm md:border md:border-zinc-100 md:p-8 min-h-[600px]">
             
             {activeSection === "overview" && (
-              <OverviewSection sampleOrders={sampleOrders} bulkOrders={bulkOrders} />
+              <OverviewSection 
+                sampleOrders={sampleOrders} 
+                bulkOrders={bulkOrders} 
+                wishlistCount={wishlist.length}
+                setActiveSection={setActiveSection}
+              />
             )}
             
             {activeSection === "orders" && (
@@ -245,6 +286,14 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
                 savingProfile={savingProfile}
                 message={message}
                 error={error}
+              />
+            )}
+
+            {activeSection === "wishlist" && (
+              <WishlistSection 
+                wishlist={wishlist} 
+                onRemove={handleRemoveWishlist} 
+                loading={wishlistLoading} 
               />
             )}
             

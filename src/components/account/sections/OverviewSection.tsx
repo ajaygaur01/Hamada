@@ -1,13 +1,20 @@
-import { Package, IndianRupee, ShoppingBag, Box, ChevronRight } from "lucide-react";
+import { Package, IndianRupee, ShoppingBag, Box, ChevronRight, Heart } from "lucide-react";
 import Link from "next/link";
 import type { SampleOrder, BulkOrder } from "../AccountPageClient";
 
 interface OverviewSectionProps {
   sampleOrders: SampleOrder[];
   bulkOrders: BulkOrder[];
+  wishlistCount: number;
+  setActiveSection: (section: "overview" | "orders" | "profile" | "wishlist" | "addresses" | "invoices") => void;
 }
 
-export default function OverviewSection({ sampleOrders, bulkOrders }: OverviewSectionProps) {
+export default function OverviewSection({ 
+  sampleOrders, 
+  bulkOrders, 
+  wishlistCount,
+  setActiveSection
+}: OverviewSectionProps) {
   const totalOrders = sampleOrders.length + bulkOrders.length;
   
   // Combine and sort orders to get recent ones
@@ -64,6 +71,19 @@ export default function OverviewSection({ sampleOrders, bulkOrders }: OverviewSe
             </div>
             <p className="text-2xl font-bold text-zinc-900 ml-12">₹{totalSpent.toLocaleString()}</p>
           </div>
+
+          <button 
+            onClick={() => setActiveSection("wishlist")}
+            className="bg-white rounded-xl p-5 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow text-left"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-[#D04636] text-white rounded-lg">
+                <Heart size={20} />
+              </div>
+              <p className="text-sm font-medium text-zinc-500">Wishlist Items</p>
+            </div>
+            <p className="text-2xl font-bold text-zinc-900 ml-12">{wishlistCount}</p>
+          </button>
         </div>
       </div>
 
