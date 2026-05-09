@@ -102,7 +102,7 @@ export default function InquiryForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-zinc-900 text-white font-medium py-3.5 rounded-lg text-sm hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-[#D04636] text-white font-medium py-3.5 rounded-lg text-sm hover:bg-[#B83C2D] transition-colors flex items-center justify-center gap-2"
         >
           Submit Inquiry
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
