@@ -62,7 +62,7 @@ export default function StepsSection() {
         <div className="text-center">
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 bg-zinc-900 text-white font-medium px-8 py-3.5 rounded text-sm hover:bg-zinc-800 transition-colors"
+            className="inline-flex items-center gap-2 bg-[#D04636] text-white font-medium px-8 py-3.5 rounded text-sm hover:bg-[#B83C2D] transition-colors"
           >
             Browse Our Products
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
