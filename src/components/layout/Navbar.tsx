@@ -10,8 +10,8 @@ export default function Navbar() {
 
   return (
     <nav className="w-full sticky top-0 z-50 
-                    bg-[#4E3D33]/95 backdrop-blur-md 
-                    border-b border-[#3e3028]">
+                    bg-white/95 backdrop-blur-md 
+                    border-b border-zinc-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-18 py-4">
 
@@ -38,14 +38,13 @@ export default function Navbar() {
               { href: "/products", label: "Products" },
               { href: "/how-it-works", label: "How It Works" },
               { href: "/about", label: "About" },
-              { href: "/wholesale", label: "Wholesale" },
               { href: "/contact", label: "Contact" },
             ].map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-[#E7DDC1]/80 
-                           hover:text-white transition-colors 
+                className="text-sm font-medium text-[#D04636] 
+                           hover:text-[#B83C2D] transition-colors 
                            tracking-wide"
               >
                 {link.label}
@@ -60,18 +59,18 @@ export default function Navbar() {
                 {/* Verified badge */}
                 {user.gstin_verified && (
                   <div className="flex items-center gap-1.5 
-                                  bg-[#E7DDC1]/10 border border-[#E7DDC1]/20
+                                  bg-[#D04636]/10 border border-[#D04636]/20
                                   px-2.5 py-1 rounded-full">
-                    <ShieldCheck size={11} className="text-[#E7DDC1]" />
+                    <ShieldCheck size={11} className="text-[#D04636]" />
                     <span className="text-[10px] font-bold tracking-wider 
-                                     uppercase text-[#E7DDC1]">
+                                     uppercase text-[#D04636]">
                       Verified
                     </span>
                   </div>
                 )}
 
                 {/* User greeting */}
-                <span className="text-sm font-medium text-[#E7DDC1]/80">
+                <span className="text-sm font-medium text-[#4E3D33]">
                   Hi, {user.username ?? "User"}
                 </span>
 
@@ -79,8 +78,8 @@ export default function Navbar() {
                 <Link
                   href="/account"
                   className="inline-flex items-center gap-1.5 
-                             text-sm font-medium text-[#E7DDC1] 
-                             hover:text-white transition-colors"
+                             text-sm font-medium text-[#D04636] 
+                             hover:text-[#B83C2D] transition-colors"
                 >
                   <UserCircle2 size={16} />
                   Account
@@ -90,8 +89,8 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => void logout()}
-                  className="text-sm font-medium text-[#E7DDC1]/60 
-                             hover:text-white transition-colors"
+                  className="text-sm font-medium text-[#4E3D33]/60 
+                             hover:text-[#D04636] transition-colors"
                 >
                   Logout
                 </button>
@@ -102,8 +101,8 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => openAuthModal("login")}
-                  className="text-sm font-medium text-[#E7DDC1]/80 
-                             hover:text-white transition-colors"
+                  className="text-sm font-medium text-[#D04636] 
+                             hover:text-[#B83C2D] transition-colors"
                 >
                   Login
                 </button>
@@ -116,7 +115,7 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <div className="md:hidden flex items-center gap-3">
 
-            <button className="text-[#E7DDC1] hover:text-white 
+            <button className="text-[#D04636] hover:text-[#B83C2D] 
                                focus:outline-none transition-colors">
               <svg className="h-5 w-5" fill="none" 
                    viewBox="0 0 24 24" stroke="currentColor">
