@@ -198,15 +198,15 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
         
         {/* Desktop Sidebar */}
         <div className="hidden md:block w-72 shrink-0">
-          <div className="bg-[#4E3D33] rounded-2xl shadow-sm border border-[#3e3028] overflow-hidden sticky top-24">
+          <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden sticky top-24">
             
             {/* User Info */}
-            <div className="p-6 border-b border-[#3e3028] flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-full bg-[#3e3028] text-white flex items-center justify-center text-2xl font-bold mb-4 shadow-md">
+            <div className="p-6 border-b border-zinc-100 flex flex-col items-center text-center">
+              <div className="w-20 h-20 rounded-full bg-zinc-100 text-[#3E4F25] flex items-center justify-center text-2xl font-bold mb-4 shadow-sm border border-zinc-200">
                 {getInitials(profile.username)}
               </div>
-              <h2 className="font-bold text-white text-lg">{profile.username || "User"}</h2>
-              <p className="text-[#E7DDC1]/80 text-sm mb-3">{profile.email}</p>
+              <h2 className="font-bold text-zinc-900 text-lg">{profile.username || "User"}</h2>
+              <p className="text-zinc-500 text-sm mb-3">{profile.email}</p>
               
               {profile.gstin_verified ? (
                 <div className="flex items-center gap-1.5 bg-[#f0f4ea] text-brand-green px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border border-[#d2e0c2]">
@@ -234,19 +234,19 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                       isActive 
                         ? "bg-[#D04636] text-white shadow-sm" 
-                        : "text-[#E7DDC1]/80 hover:bg-[#3e3028] hover:text-white"
+                        : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
                     }`}
                   >
-                    <Icon size={18} className={isActive ? "text-white" : "text-[#E7DDC1]/60"} />
+                    <Icon size={18} className={isActive ? "text-white" : "text-zinc-400"} />
                     {item.label}
                   </button>
                 );
               })}
             </nav>
 
-            <div className="p-3 border-t border-[#3e3028]">
+            <div className="p-3 border-t border-zinc-100">
               <form action="/api/auth/logout" method="POST">
-                <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-400 hover:bg-[#3e3028] hover:text-red-300 transition-all border-l-4 border-transparent">
+                <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 transition-all">
                   <LogOut size={18} />
                   Logout
                 </button>
@@ -309,7 +309,7 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
         </div>
 
         {/* Mobile Bottom Tab Navigation */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#4E3D33] border-t border-[#3e3028] z-50 px-2 py-2 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 z-50 px-2 py-2 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
@@ -319,10 +319,10 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
                 className={`flex flex-col items-center justify-center w-16 h-12 rounded-lg transition-colors ${
-                  isActive ? "text-[#D04636]" : "text-[#E7DDC1]/60"
+                  isActive ? "text-[#D04636]" : "text-zinc-400"
                 }`}
               >
-                <div className={`${isActive ? "bg-[#3e3028] p-1.5 rounded-full" : "p-1.5"}`}>
+                <div className={`${isActive ? "bg-zinc-100 p-1.5 rounded-full" : "p-1.5"}`}>
                   <Icon size={isActive ? 20 : 22} strokeWidth={isActive ? 2.5 : 2} />
                 </div>
                 <span className="text-[10px] font-medium mt-0.5 whitespace-nowrap hidden sm:block">
