@@ -139,25 +139,25 @@ export default function ProfileSection({
 
           <div className="lg:col-span-1">
             {profile.gstin_verified ? (
-              <div className="bg-[#4E3D33] border border-[#3e3028] rounded-xl p-6 shadow-sm flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-[#3e3028] text-[#D04636] rounded-full flex items-center justify-center mb-4 shadow-sm">
+              <div className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-[#f0f4ea] text-brand-green rounded-full flex items-center justify-center mb-4 shadow-sm border border-[#d2e0c2]">
                   <CheckCircle2 size={32} />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">Verified Wholesale Buyer</h3>
-                <p className="text-sm text-[#E7DDC1]/80 mb-6">Your business details are verified.</p>
+                <h3 className="text-lg font-bold text-zinc-900 mb-1">Verified Wholesale Buyer</h3>
+                <p className="text-sm text-zinc-500 mb-6">Your business details are verified.</p>
                 
-                <div className="w-full bg-[#3e3028] rounded-lg p-4 text-left border border-[#3e3028] space-y-3">
+                <div className="w-full bg-zinc-50 rounded-lg p-4 text-left border border-zinc-200 space-y-3">
                   <div>
-                    <p className="text-xs text-[#E7DDC1]/60 uppercase font-semibold tracking-wider">Company</p>
-                    <p className="font-medium text-white text-sm">Kaori B2B Client</p>
+                    <p className="text-xs text-zinc-400 uppercase font-semibold tracking-wider">Company</p>
+                    <p className="font-medium text-zinc-900 text-sm">Kaori B2B Client</p>
                   </div>
                   <div>
-                    <p className="text-xs text-[#E7DDC1]/60 uppercase font-semibold tracking-wider">GSTIN</p>
-                    <p className="font-medium text-white text-sm">29ABCDE1234F1Z5</p>
+                    <p className="text-xs text-zinc-400 uppercase font-semibold tracking-wider">GSTIN</p>
+                    <p className="font-medium text-zinc-900 text-sm">29ABCDE1234F1Z5</p>
                   </div>
                   <div>
-                    <p className="text-xs text-[#E7DDC1]/60 uppercase font-semibold tracking-wider">Verified Since</p>
-                    <p className="font-medium text-white text-sm">Oct 2023</p>
+                    <p className="text-xs text-zinc-400 uppercase font-semibold tracking-wider">Verified Since</p>
+                    <p className="font-medium text-zinc-900 text-sm">Oct 2023</p>
                   </div>
                 </div>
               </div>
