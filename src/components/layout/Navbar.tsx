@@ -38,7 +38,7 @@ export default function Navbar() {
               { href: "/products", label: "Products" },
               { href: "/how-it-works", label: "How It Works" },
               { href: "/about", label: "About" },
-              { href: "/contact", label: "Contact" },
+              { href: "/why-our-matcha", label: "Why Our Matcha" },
             ].map((link) => (
               <Link
                 key={link.href}
