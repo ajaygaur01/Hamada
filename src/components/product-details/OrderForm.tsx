@@ -93,7 +93,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
 
             <Link
               href={`/sample-order?product=${encodeURIComponent(productSlug)}&variant=${encodeURIComponent(sampleSizes[selectedSampleIdx]?.id ?? "")}`}
-              className="flex items-center justify-center w-full bg-[#D04636] text-white font-medium py-3.5 rounded-xl hover:bg-[#B83C2D] transition-colors shadow-sm"
+              className="flex items-center justify-center w-full bg-white text-[#D04636] border border-[#D04636] font-medium py-3.5 rounded-xl hover:bg-[#D04636] hover:text-white transition-colors shadow-sm"
             >
               Order Sample
             </Link>
