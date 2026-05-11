@@ -6,6 +6,13 @@ async function main() {
   console.log('Starting seed...');
 
   // Clear existing data (optional, handle with care in production)
+  await prisma.review.deleteMany();
+  await prisma.wishlist.deleteMany();
+  await prisma.cart.deleteMany();
+  await prisma.bulkOrderItem.deleteMany();
+  await prisma.bulkOrder.deleteMany();
+  await prisma.sampleOrder.deleteMany();
+  await prisma.productImage.deleteMany();
   await prisma.productVariant.deleteMany();
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
@@ -66,6 +73,7 @@ async function main() {
         use_cases: p.use_cases,
         variants: {
           create: [
+            { size: '10g', unit: 'grams', sample_price: 250, bulk_price: 225, stock_quantity: 200, min_bulk_quantity: 10 },
             { size: '30g', unit: 'grams', sample_price: 500, bulk_price: 450, stock_quantity: 100, min_bulk_quantity: 5 },
             { size: '100g', unit: 'grams', sample_price: 1500, bulk_price: 1350, stock_quantity: 100, min_bulk_quantity: 5 },
             { size: '500g', unit: 'grams', sample_price: 7000, bulk_price: 6500, stock_quantity: 50, min_bulk_quantity: 2 },
@@ -98,6 +106,8 @@ async function main() {
         use_cases: p.use_cases,
         variants: {
           create: [
+            { size: '10g', unit: 'grams', sample_price: 150, bulk_price: 135, stock_quantity: 200, min_bulk_quantity: 10 },
+            { size: '30g', unit: 'grams', sample_price: 300, bulk_price: 270, stock_quantity: 200, min_bulk_quantity: 10 },
             { size: '500g', unit: 'grams', sample_price: 2000, bulk_price: 1800, stock_quantity: 100, min_bulk_quantity: 5 },
             { size: '1kg', unit: 'grams', sample_price: 3800, bulk_price: 3400, stock_quantity: 50, min_bulk_quantity: 2 },
           ],
