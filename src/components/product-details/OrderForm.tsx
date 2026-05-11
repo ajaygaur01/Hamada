@@ -19,10 +19,13 @@ interface OrderFormProps {
 
 export default function OrderForm({ variants, productSlug }: OrderFormProps) {
   // Split variants into sample sizes and bulk sizes
-  const sampleVariants = variants.filter(v => parseInt(v.size) <= 100);
+  // Filter samples to only 10gm and 30gm as per user request
+  const sampleVariants = variants.filter(v => 
+    parseInt(v.size) <= 100 && (v.size.toLowerCase().includes("10g") || v.size.toLowerCase().includes("30g") || v.size === "10" || v.size === "30")
+  );
   const bulkVariants = variants.filter(v => parseInt(v.size) > 100);
 
-  const sampleSizes = sampleVariants.length > 0 ? sampleVariants : variants;
+  const sampleSizes = sampleVariants.length > 0 ? sampleVariants : variants.filter(v => parseInt(v.size) <= 100);
   const bulkSizes = bulkVariants.length > 0 ? bulkVariants : variants;
 
   const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
@@ -63,13 +66,13 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
               <div className="flex flex-wrap gap-2">
                 {sampleSizes.map((v, idx) => (
                   <button
-                    key={v.id}
-                    onClick={() => setSelectedSampleIdx(idx)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
-                      selectedSampleIdx === idx 
-                        ? "bg-[#3E4F25] border-[#3E4F25] text-white shadow-sm" 
-                        : "bg-white border-[#d2e0c2] text-[#3E4F25] hover:border-brand-green hover:text-brand-green"
-                    }`}
+                     key={v.id}
+                     onClick={() => setSelectedSampleIdx(idx)}
+                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
+                       selectedSampleIdx === idx 
+                         ? "bg-[#D04636] border-[#D04636] text-white shadow-sm" 
+                         : "bg-white border-[#d2e0c2] text-[#3E4F25] hover:border-[#D04636] hover:text-[#D04636]"
+                     }`}
                   >
                     {v.size}
                   </button>
@@ -123,8 +126,8 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                   }}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
                     selectedBulkIdx === idx 
-                      ? "bg-white border-[#3E4F25] text-[#3E4F25] shadow-sm" 
-                      : "bg-white/50 border-[#d2e0c2] text-[#3E4F25]/70 hover:border-[#3E4F25] hover:text-[#3E4F25]"
+                      ? "bg-white border-[#D04636] text-[#D04636] shadow-sm" 
+                      : "bg-white/50 border-[#d2e0c2] text-[#3E4F25]/70 hover:border-[#D04636] hover:text-[#D04636]"
                   }`}
                 >
                   {v.size}
@@ -170,7 +173,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
           <div className="pt-2">
             <Link
               href={bulkCheckoutUrl}
-              className="flex items-center justify-center gap-2 w-full bg-[#3E4F25] text-white font-medium py-3.5 rounded-xl hover:bg-[#2c381a] transition-colors shadow-sm"
+              className="flex items-center justify-center gap-2 w-full bg-[#D04636] text-white font-medium py-3.5 rounded-xl hover:bg-[#B83C2D] transition-colors shadow-sm"
             >
               <ShieldCheck size={18} />
               Login to Verify & Order
