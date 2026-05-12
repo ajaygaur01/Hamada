@@ -60,3 +60,28 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
   }
 }
+
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const admin = await requireAdmin();
+  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+
+  const { id } = await params;
+
+  try {
+    const body = await req.json();
+    const { role, gstinVerified } = body;
+
+    await prisma.user.update({
+      where: { id },
+      data: {
+        ...(role && { role }),
+        ...(gstinVerified !== undefined && { gstin_verified: gstinVerified }),
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Admin user update error:", error);
+    return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
+  }
+}
