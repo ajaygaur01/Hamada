@@ -11,16 +11,16 @@ export default function WhyOurMatcha() {
   return (
     <main className="min-h-screen bg-white text-gray-800">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#fff8f0] via-[#fff1e6] to-[#ffe8d5] py-20">
+      <section className="bg-[#4E3D33] text-white py-20">
         <div className="container mx-auto px-6 lg:px-12 flex flex-col-reverse lg:flex-row items-center">
           <div className="lg:w-1/2">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#3E4F25] mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#D04636] mb-6 leading-tight">
               Why Our Matcha Sets the Standard for B2B Excellence
             </h1>
-            <p className="text-lg md:text-xl text-gray-700 mb-8">
+            <p className="text-lg md:text-xl text-white mb-8">
               Sourced directly from the mist‑clad tea fields of Kagoshima, our matcha is cultivated, harvested, and stone‑ground by generations of artisans. The result is a vibrant, umami‑rich tea that elevates any menu, retail shelf, or corporate offering.
             </p>
-            <ul className="space-y-4 text-gray-700 mb-8">
+            <ul className="space-y-4 text-white mb-8">
               <li className="flex items-start">
                 <svg className="w-6 h-6 text-[#D04636] flex-shrink-0 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 4.707 7.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"/></svg>
                 <span>100% organic, shade‑grown leaves for unmatched flavor depth.</span>
@@ -54,7 +54,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* Story & Heritage Section */}
-      <section className="py-16 bg-[#F9FAF5]">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-6 lg:px-12 grid md:grid-cols-2 gap-12 items-center">
           <div>
             <Image
@@ -66,7 +66,7 @@ export default function WhyOurMatcha() {
             />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-[#3E4F25] mb-4">
+            <h2 className="text-3xl font-bold text-[#4E3D33] mb-4">
               A Legacy Honored for Over a Century
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
@@ -82,7 +82,7 @@ export default function WhyOurMatcha() {
       {/* Benefits for B2B Clients */}
       <section className="py-16">
         <div className="container mx-auto px-6 lg:px-12 text-center">
-          <h2 className="text-3xl font-bold text-[#3E4F25] mb-8">Why Wholesale Partners Choose Us</h2>
+          <h2 className="text-3xl font-bold text-[#4E3D33] mb-8">Why Wholesale Partners Choose Us</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="p-6 bg-white rounded-xl shadow-sm border border-zinc-200 hover:shadow-md transition-shadow">
               <svg className="w-12 h-12 mx-auto text-[#D04636] mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.61.07-.61 1 .07 1.53 1.02 1.53 1.02.89 1.51 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-2 1.03-2.71-.1-.25-.45-1.28.1-2.66 0 0 .84-.27 2.75 1.03a9.54 9.54 0 015 0c1.9-1.3 2.74-1.03 2.74-1.03.55 1.38.2 2.41.1 2.66.64.71 1.03 1.62 1.03 2.71 0 3.84-2.34 4.68-4.57 4.93.36.31.68.93.68 1.88v2.79c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
