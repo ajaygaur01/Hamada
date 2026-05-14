@@ -32,7 +32,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-zinc-900 tracking-wider mb-4">Quick Links</h3>
             <ul className="space-y-3">
               <li><Link href="/products" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">Products</Link></li>
-              <li><Link href="/how-it-works" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">How It Works</Link></li>
+              <li><Link href="/#how-it-works" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">How It Works</Link></li>
               <li><Link href="/about" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">About Us</Link></li>
             </ul>
           </div>
@@ -42,7 +42,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-zinc-900 tracking-wider mb-4">Support</h3>
             <ul className="space-y-3">
               <li><Link href="/contact" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">Contact</Link></li>
-              <li><Link href="/faq" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">FAQ</Link></li>
+              <li><Link href="/#faq" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">FAQ</Link></li>
               <li><Link href="/shipping" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">Shipping Policy</Link></li>
               <li><Link href="/returns" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">Returns</Link></li>
             </ul>

@@ -33,7 +33,10 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="bg-zinc-50 py-20 border-t border-zinc-100">
+    <section
+      id="faq"
+      className="bg-zinc-50 py-20 border-t border-zinc-100 scroll-mt-20"
+    >
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
