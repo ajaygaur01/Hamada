@@ -1,123 +1,297 @@
-const { PrismaClient } = require('@prisma/client')
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  console.log('Starting seed...');
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
 
-  // Clear existing data (optional, handle with care in production)
+/** Short, reliable placeholder URLs (Picsum can be blocked; placehold.co is compact for VarChar) */
+function stockImageUrl(slug: string, index: number): string {
+  const labels = ["Hero", "Detail", "Lifestyle"];
+  const label = labels[index] ?? String(index + 1);
+  return `https://placehold.co/800x1000/f5f0e8/4C632E/jpg?text=${encodeURIComponent(`${slug.slice(0, 20)}+${label}`)}`;
+}
+
+async function main() {
+  console.log("Starting seed…");
+
   await prisma.review.deleteMany();
   await prisma.wishlist.deleteMany();
   await prisma.cart.deleteMany();
   await prisma.bulkOrderItem.deleteMany();
+  await prisma.invoice.deleteMany();
   await prisma.bulkOrder.deleteMany();
   await prisma.sampleOrder.deleteMany();
+  await prisma.gstinVerification.deleteMany();
+  await prisma.analyticsEvent.deleteMany();
+  await prisma.emailLog.deleteMany();
   await prisma.productImage.deleteMany();
   await prisma.productVariant.deleteMany();
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.user.deleteMany();
 
-  // 1. Create Admin User
   const admin = await prisma.user.create({
     data: {
-      email: 'hema@chirantea.in',
-      role: 'admin',
-      full_name: 'Hema',
+      email: "hema@chirantea.in",
+      role: "admin",
+      full_name: "Hema",
       is_verified: true,
+      gstin_verified: true,
+      company_name: "Kaori by Chiran",
     },
   });
-  console.log(`Created admin user: ${admin.email}`);
+  console.log(`Admin: ${admin.email}`);
 
-  // 2. Create Categories
-  const premiumTeas = await prisma.category.create({
+  const buyers = await Promise.all(
+    [
+      { email: "buyer1@seed.hamada.local", name: "Priya Sharma" },
+      { email: "buyer2@seed.hamada.local", name: "Rahul Verma" },
+      { email: "buyer3@seed.hamada.local", name: "Ananya Iyer" },
+      { email: "buyer4@seed.hamada.local", name: "Vikram Mehta" },
+      { email: "buyer5@seed.hamada.local", name: "Neha Kapoor" },
+    ].map((b, i) =>
+      prisma.user.create({
+        data: {
+          email: b.email,
+          role: "customer",
+          full_name: b.name,
+          is_verified: true,
+          gstin_verified: true,
+          gstin: `29ABCDE1234F${String(i + 1).padStart(2, "0")}Z${i + 1}`,
+          company_name: `${b.name} Foods Pvt Ltd`,
+        },
+      })
+    )
+  );
+  console.log(`Buyers (for reviews): ${buyers.length}`);
+
+  const catPremium = await prisma.category.create({
     data: {
-      name: 'Premium Japanese Teas',
-      slug: 'premium-japanese-teas',
+      name: "Premium Japanese Teas",
+      slug: "premium-japanese-teas",
       display_order: 1,
     },
   });
 
-  const instantTeas = await prisma.category.create({
+  const catInstant = await prisma.category.create({
     data: {
-      name: 'Instant Teas and Ready Formats',
-      slug: 'instant-teas-and-ready-formats',
+      name: "Instant Teas and Ready Formats",
+      slug: "instant-teas-and-ready-formats",
       display_order: 2,
     },
   });
-  console.log('Created categories');
 
-  // 3. Create Products - Premium Japanese Teas
-  const premiumProducts = [
-    { name: 'Matcha - Ceremonial Grade', hsn: '0902', use_cases: ['Cafe Menu', 'Hotel', 'Retail'] },
-    { name: 'Matcha - Premium Grade', hsn: '0902', use_cases: ['Cafe Menu', 'Bakery', 'Retail'] },
-    { name: 'Matcha - Culinary Grade', hsn: '0902', use_cases: ['Bakery', 'Cafe Menu'] },
-    { name: 'Matcha - Ingredient Grade', hsn: '0902', use_cases: ['Bakery', 'Hotel'] },
-    { name: 'Sencha', hsn: '0902', use_cases: ['Cafe Menu', 'Hotel', 'Retail'] },
-    { name: 'Hojicha', hsn: '0902', use_cases: ['Cafe Menu', 'Hotel'] },
-    { name: 'Hojicha Powder', hsn: '0902', use_cases: ['Bakery', 'Cafe Menu'] },
-    { name: 'Genmaicha', hsn: '0902', use_cases: ['Hotel', 'Retail'] },
+  type VariantSeed = {
+    size: string;
+    unit: string;
+    sample_price: number;
+    bulk_price: number;
+    stock_quantity: number;
+    min_bulk_quantity: number;
+  };
+
+  type ProductSeed = {
+    name: string;
+    categoryId: string;
+    grade: string;
+    short_description: string;
+    full_description: string;
+    use_cases: string[];
+    featured?: boolean;
+    variants: VariantSeed[];
+  };
+
+  const premiumProducts: ProductSeed[] = [
+    {
+      name: "Matcha — Ceremonial Grade",
+      categoryId: catPremium.id,
+      grade: "Ceremonial",
+      short_description: "Stone-ground ceremonial matcha for cafes and tea bars.",
+      full_description:
+        "Vibrant jade colour, silky foam, and low bitterness — ideal for usucha and koicha service in hospitality.",
+      use_cases: ["Cafe Menu", "Hotel", "Retail"],
+      featured: true,
+      variants: [
+        { size: "50g", unit: "grams", sample_price: 299, bulk_price: 260, stock_quantity: 120, min_bulk_quantity: 5 },
+        { size: "100g", unit: "grams", sample_price: 549, bulk_price: 480, stock_quantity: 85, min_bulk_quantity: 3 },
+        { size: "500g", unit: "grams", sample_price: 2400, bulk_price: 2100, stock_quantity: 40, min_bulk_quantity: 2 },
+        { size: "1kg", unit: "grams", sample_price: 4500, bulk_price: 4000, stock_quantity: 22, min_bulk_quantity: 1 },
+      ],
+    },
+    {
+      name: "Matcha — Culinary Grade",
+      categoryId: catPremium.id,
+      grade: "Culinary",
+      short_description: "Bold matcha for lattes, baking, and dessert menus.",
+      full_description:
+        "Higher astringency and deep colour — formulated for blended drinks and pastry applications.",
+      use_cases: ["Bakery", "Cafe Menu", "Retail"],
+      featured: true,
+      variants: [
+        { size: "50g", unit: "grams", sample_price: 199, bulk_price: 170, stock_quantity: 200, min_bulk_quantity: 5 },
+        { size: "100g", unit: "grams", sample_price: 349, bulk_price: 300, stock_quantity: 150, min_bulk_quantity: 3 },
+        { size: "500g", unit: "grams", sample_price: 1500, bulk_price: 1320, stock_quantity: 55, min_bulk_quantity: 2 },
+        { size: "1kg", unit: "grams", sample_price: 2800, bulk_price: 2500, stock_quantity: 30, min_bulk_quantity: 1 },
+      ],
+    },
+    {
+      name: "Sencha — Fukamushi",
+      categoryId: catPremium.id,
+      grade: "Premium",
+      short_description: "Deep-steamed sencha with rich umami and mellow sweetness.",
+      full_description:
+        "Classic Kagoshima sencha profile; works beautifully as iced tea for QSR and hotel buffets.",
+      use_cases: ["Cafe Menu", "Hotel"],
+      variants: [
+        { size: "50g", unit: "grams", sample_price: 179, bulk_price: 155, stock_quantity: 95, min_bulk_quantity: 5 },
+        { size: "100g", unit: "grams", sample_price: 319, bulk_price: 280, stock_quantity: 70, min_bulk_quantity: 3 },
+        { size: "500g", unit: "grams", sample_price: 1400, bulk_price: 1220, stock_quantity: 28, min_bulk_quantity: 2 },
+      ],
+    },
+    {
+      name: "Hojicha — Roasted Green Tea",
+      categoryId: catPremium.id,
+      grade: "Premium",
+      short_description: "Low-caffeine roasted tea with caramel and cocoa notes.",
+      full_description:
+        "Comforting roast aroma; popular for evening menus and dessert pairings.",
+      use_cases: ["Cafe Menu", "Retail"],
+      featured: true,
+      variants: [
+        { size: "50g", unit: "grams", sample_price: 159, bulk_price: 135, stock_quantity: 110, min_bulk_quantity: 5 },
+        { size: "100g", unit: "grams", sample_price: 289, bulk_price: 250, stock_quantity: 88, min_bulk_quantity: 3 },
+        { size: "500g", unit: "grams", sample_price: 1200, bulk_price: 1050, stock_quantity: 35, min_bulk_quantity: 2 },
+      ],
+    },
+    {
+      name: "Genmaicha — Brown Rice Tea",
+      categoryId: catPremium.id,
+      grade: "Standard",
+      short_description: "Sencha with toasted rice — nutty, approachable, everyday cup.",
+      full_description:
+        "Balanced and forgiving brew; strong appeal for lunch menus and retail tins.",
+      use_cases: ["Hotel", "Retail", "Cafe Menu"],
+      variants: [
+        { size: "50g", unit: "grams", sample_price: 149, bulk_price: 125, stock_quantity: 140, min_bulk_quantity: 5 },
+        { size: "100g", unit: "grams", sample_price: 269, bulk_price: 235, stock_quantity: 100, min_bulk_quantity: 3 },
+      ],
+    },
   ];
 
-  for (const p of premiumProducts) {
-    await prisma.product.create({
+  const instantProducts: ProductSeed[] = [
+    {
+      name: "Matcha Latte Premix",
+      categoryId: catInstant.id,
+      grade: "Commercial",
+      short_description: "Just-add-milk premix for consistent cafe throughput.",
+      full_description:
+        "Pre-balanced sweetness and matcha solids — reduces training time and waste.",
+      use_cases: ["Cafe Menu", "Hotel"],
+      featured: true,
+      variants: [
+        { size: "500g", unit: "grams", sample_price: 420, bulk_price: 360, stock_quantity: 60, min_bulk_quantity: 2 },
+        { size: "1kg", unit: "grams", sample_price: 780, bulk_price: 680, stock_quantity: 34, min_bulk_quantity: 1 },
+      ],
+    },
+    {
+      name: "Hojicha Latte Premix",
+      categoryId: catInstant.id,
+      grade: "Commercial",
+      short_description: "Roasted latte base with clean finish.",
+      full_description:
+        "Pairs with dairy and oat; ideal for seasonal menus and grab-and-go formats.",
+      use_cases: ["Cafe Menu", "Retail"],
+      variants: [
+        { size: "500g", unit: "grams", sample_price: 390, bulk_price: 340, stock_quantity: 48, min_bulk_quantity: 2 },
+        { size: "1kg", unit: "grams", sample_price: 720, bulk_price: 640, stock_quantity: 25, min_bulk_quantity: 1 },
+      ],
+    },
+  ];
+
+  const allDefs = [...premiumProducts, ...instantProducts];
+
+  const reviewBodies: string[] = [
+    "Consistent colour batch to batch — our baristas noticed immediately. Dispatch was quick.",
+    "We ran side-by-side cuppings with our previous supplier; this won on clarity and sweetness.",
+    "Bulk pricing is transparent and the GST paperwork was painless.",
+    "Sample pack was enough for two weeks of R&D. Moved to 500g for the spring menu.",
+    "Guests comment on the aroma daily. Will reorder before we run out.",
+    "Solid for our bakery line — no clumping in our dry mix process.",
+  ];
+
+  const createdProducts: { id: string; slug: string; name: string }[] = [];
+
+  for (const p of allDefs) {
+    const slug = slugify(p.name);
+    const product = await prisma.product.create({
       data: {
-        category_id: premiumTeas.id,
+        category_id: p.categoryId,
         name: p.name,
-        slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
-        grade: p.name.includes('-') ? p.name.split('-')[1].trim() : 'Premium Grade',
-        short_description: `Premium quality ${p.name}`,
-        full_description: `Experience the authentic taste of ${p.name}, imported directly from Japan.`,
-        storage_instructions: 'Refrigerate at 10-12°C',
-        shelf_life: '18 months',
+        slug,
+        grade: p.grade,
+        short_description: p.short_description,
+        full_description: p.full_description,
         use_cases: p.use_cases,
+        origin: "Kagoshima, Japan",
+        shelf_life: "18–24 months from packing",
+        storage_instructions: "Cool, dry place; refrigerate after opening if advised on pack.",
+        is_active: true,
+        is_featured: p.featured ?? false,
         variants: {
-          create: [
-            { size: '10g', unit: 'grams', sample_price: 250, bulk_price: 225, stock_quantity: 200, min_bulk_quantity: 10 },
-            { size: '30g', unit: 'grams', sample_price: 500, bulk_price: 450, stock_quantity: 100, min_bulk_quantity: 5 },
-            { size: '100g', unit: 'grams', sample_price: 1500, bulk_price: 1350, stock_quantity: 100, min_bulk_quantity: 5 },
-            { size: '500g', unit: 'grams', sample_price: 7000, bulk_price: 6500, stock_quantity: 50, min_bulk_quantity: 2 },
-            { size: '1kg', unit: 'grams', sample_price: 13500, bulk_price: 12500, stock_quantity: 20, min_bulk_quantity: 1 },
-          ],
+          create: p.variants.map((v) => ({
+            size: v.size,
+            unit: v.unit,
+            sample_price: v.sample_price,
+            bulk_price: v.bulk_price,
+            stock_quantity: v.stock_quantity,
+            min_bulk_quantity: v.min_bulk_quantity,
+            is_active: true,
+          })),
+        },
+        images: {
+          create: [0, 1, 2].map((i) => ({
+            image_url: stockImageUrl(slug, i),
+            alt_text: `${p.name} — image ${i + 1}`,
+            display_order: i,
+            is_primary: i === 0,
+          })),
         },
       },
     });
+    createdProducts.push({ id: product.id, slug, name: p.name });
   }
 
-  // 4. Create Products - Instant Teas and Ready Formats
-  const instantProducts = [
-    { name: 'Matcha Latte Premix', hsn: '21012010', use_cases: ['Cafe Menu', 'Hotel', 'Retail'] },
-    { name: 'Hojicha Latte Premix', hsn: '21012010', use_cases: ['Cafe Menu', 'Hotel'] },
-    { name: 'Sencha Green Tea Bags', hsn: '09024090', use_cases: ['Hotel', 'Retail', 'Cafe Menu'] },
-    { name: 'Hojicha Tea Bags', hsn: '09024090', use_cases: ['Hotel', 'Retail'] },
-  ];
+  console.log(`Products + 3 stock images each: ${createdProducts.length}`);
 
-  for (const p of instantProducts) {
-    await prisma.product.create({
-      data: {
-        category_id: instantTeas.id,
-        name: p.name,
-        slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
-        grade: 'Commercial Grade',
-        short_description: `Convenient and authentic ${p.name}`,
-        full_description: `Enjoy the perfect cup of ${p.name} anytime, anywhere.`,
-        storage_instructions: 'Store in a cool, dry place away from direct sunlight',
-        shelf_life: '24 months',
-        use_cases: p.use_cases,
-        variants: {
-          create: [
-            { size: '10g', unit: 'grams', sample_price: 150, bulk_price: 135, stock_quantity: 200, min_bulk_quantity: 10 },
-            { size: '30g', unit: 'grams', sample_price: 300, bulk_price: 270, stock_quantity: 200, min_bulk_quantity: 10 },
-            { size: '500g', unit: 'grams', sample_price: 2000, bulk_price: 1800, stock_quantity: 100, min_bulk_quantity: 5 },
-            { size: '1kg', unit: 'grams', sample_price: 3800, bulk_price: 3400, stock_quantity: 50, min_bulk_quantity: 2 },
-          ],
+  let reviewCount = 0;
+  const shuffledBuyers = [...buyers].sort(() => Math.random() - 0.5);
+
+  for (let i = 0; i < createdProducts.length; i++) {
+    const prod = createdProducts[i];
+    const numReviews = i < 3 ? 3 : i < 5 ? 2 : 1;
+    for (let r = 0; r < numReviews; r++) {
+      const user = shuffledBuyers[(i + r) % shuffledBuyers.length];
+      const rating = 4 + ((i + r) % 2);
+      await prisma.review.create({
+        data: {
+          user_id: user.id,
+          product_id: prod.id,
+          rating,
+          review_text: reviewBodies[(i * 2 + r) % reviewBodies.length],
+          created_at: new Date(Date.UTC(2025, (i + r) % 12, 3 + r, 12, 0, 0)),
         },
-      },
-    });
+      });
+      reviewCount++;
+    }
   }
 
-  console.log('Created products');
-  console.log('Seed completed successfully.');
+  console.log(`Reviews: ${reviewCount}`);
+  console.log("Seed completed.");
 }
 
 main()
