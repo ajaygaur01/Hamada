@@ -200,16 +200,29 @@ export async function PATCH(req: NextRequest) {
       }
     }
 
-    // Update images order/primary
-    if (images) {
-      for (const img of images) {
-        if (img.id) {
-          await prisma.productImage.update({
-            where: { id: img.id },
-            data: { is_primary: img.isPrimary, display_order: img.displayOrder, alt_text: img.altText },
-          });
-        }
-      }
+    // Replace gallery when client sends `images` (ProductForm always sends the full list).
+    // Previously only rows with `id` were updated — new uploads have no id, so nothing was inserted.
+    if (images !== undefined && Array.isArray(images)) {
+      const valid = images.filter(
+        (img: { url?: string }) => typeof img?.url === "string" && img.url.trim().length > 0
+      ) as { url: string; altText?: string; isPrimary?: boolean; displayOrder?: number }[];
+
+      const primaryIdx = valid.findIndex((i) => i.isPrimary);
+      const primaryRow = primaryIdx >= 0 ? primaryIdx : 0;
+
+      await prisma.$transaction(async (tx) => {
+        await tx.productImage.deleteMany({ where: { product_id: id } });
+        if (valid.length === 0) return;
+        await tx.productImage.createMany({
+          data: valid.map((img, idx) => ({
+            product_id: id,
+            image_url: img.url.trim(),
+            alt_text: img.altText?.trim() || null,
+            is_primary: idx === primaryRow,
+            display_order: typeof img.displayOrder === "number" ? img.displayOrder : idx,
+          })),
+        });
+      });
     }
 
     return NextResponse.json({ success: true });
