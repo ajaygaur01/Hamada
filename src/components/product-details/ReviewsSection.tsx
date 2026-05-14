@@ -33,7 +33,7 @@ function StarRow({
           className={
             star <= rating
               ? "fill-amber-400 text-amber-400"
-              : "fill-[#d2c9b5] text-[#d2c9b5]"
+              : "fill-zinc-300 text-zinc-300"
           }
         />
       ))}
@@ -94,7 +94,7 @@ export default function ReviewsSection({
   };
 
   return (
-    <section className="mt-0 py-24 bg-[#f7f3ea]">
+    <section className="mt-0 border-t border-zinc-200 bg-white py-24">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
 
         {/* Header Row */}
@@ -142,7 +142,7 @@ export default function ReviewsSection({
                                      text-right shrink-0">
                       {stars}★
                     </span>
-                    <div className="flex-1 h-1 bg-[#d2c9b5] rounded-full 
+                    <div className="flex-1 h-1 bg-zinc-200 rounded-full 
                                     overflow-hidden">
                       <div
                         className="h-full bg-[#4C632E] rounded-full 
@@ -159,7 +159,7 @@ export default function ReviewsSection({
             )}
 
             {/* Write Review / Auth */}
-            <div className="border-t border-[#d2c9b5] pt-8">
+            <div className="border-t border-zinc-200 pt-8">
               {user ? (
                 canReview ? (
                   <form onSubmit={handleSubmit} className="space-y-5">
@@ -184,7 +184,7 @@ export default function ReviewsSection({
                               className={
                                 (hoverRating || rating) >= star
                                   ? "fill-amber-400 text-amber-400"
-                                  : "fill-[#d2c9b5] text-[#d2c9b5]"
+                                  : "fill-zinc-300 text-zinc-300"
                               }
                             />
                           </button>
@@ -201,8 +201,8 @@ export default function ReviewsSection({
                         value={reviewText}
                         onChange={(e) => setReviewText(e.target.value)}
                         placeholder="How did this tea perform in your menu or business?"
-                        className="w-full rounded-xl border border-[#d2c9b5] 
-                                   bg-white/70 px-4 py-3 text-sm 
+                        className="w-full rounded-xl border border-zinc-200 
+                                   bg-white px-4 py-3 text-sm 
                                    text-[#3E4F25] placeholder-[#3E4F25]/30
                                    focus:ring-1 focus:ring-[#4C632E] 
                                    focus:border-[#4C632E] outline-none 
@@ -282,7 +282,7 @@ export default function ReviewsSection({
                 </p>
               </div>
             ) : (
-              <div className="divide-y divide-[#d2c9b5]">
+              <div className="divide-y divide-zinc-200">
                 {reviews.map((review) => (
                   <div key={review.id} className="py-8 first:pt-0">
                     

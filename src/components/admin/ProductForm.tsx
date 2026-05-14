@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Loader2, UploadCloud, X, Plus, GripVertical, Image as ImageIcon } from "lucide-react";
+import { Save, Loader2, UploadCloud, X, Plus, GripVertical, Image as ImageIcon, Trash2 } from "lucide-react";
 import { useToast } from "./ui/Toast";
 
 type ImageType = { id?: string; url: string; altText: string; isPrimary: boolean; displayOrder: number; file?: File };

@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import AboutHero from "@/components/about/AboutHero";
-import OurStory from "@/components/about/OurStory";
-import HemasStory from "@/components/about/HemasStory";
+import AboutStoryTimeline from "@/components/about/AboutStoryTimeline";
 import Awards from "@/components/about/Awards";
 
 export const metadata: Metadata = {
@@ -14,8 +13,7 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col bg-zinc-50 min-h-screen">
       <AboutHero />
-      <OurStory />
-      <HemasStory />
+      <AboutStoryTimeline />
       <Awards />
     </div>
   );
