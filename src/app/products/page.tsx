@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import PageHeader from "@/components/products/PageHeader";
 import CTASection from "@/components/products/CTASection";
 import ProductGrid from "@/components/products/ProductGrid";
+import { pickHeroImageUrl, productCardImageInclude } from "@/lib/product-images";
 
 const prisma = new PrismaClient();
 
@@ -21,8 +22,7 @@ export default async function ProductsPage() {
         take: 1
       },
       images: {
-        where: { is_primary: true },
-        take: 1,
+        ...productCardImageInclude,
       },
       reviews: {
         select: { rating: true },
@@ -47,7 +47,7 @@ export default async function ProductsPage() {
       categoryName: derivedTag || "TEA",
       useCases: p.use_cases || [],
       categoryId: p.category_id,
-      imageUrl: p.images[0]?.image_url || null,
+      imageUrl: pickHeroImageUrl(p.images),
       reviewCount: p.reviews.length,
       startingPrice: p.variants.length > 0 ? Number(p.variants[0].sample_price) : undefined,
       averageRating: p.reviews.length > 0
