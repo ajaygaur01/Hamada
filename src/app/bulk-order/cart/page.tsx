@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerAuthUser } from "@/lib/auth/server-session";
 import prisma from "@/lib/prisma";
+import { pickHeroImageUrl, productCardImageInclude } from "@/lib/product-images";
 import BulkOrderCartClient from './BulkOrderCartClient';
 
 export default async function BulkOrderCartPage() {
@@ -22,8 +23,7 @@ export default async function BulkOrderCartPage() {
         where: { is_active: true },
       },
       images: {
-        where: { is_primary: true },
-        take: 1,
+        ...productCardImageInclude,
       },
     },
   });
@@ -34,7 +34,7 @@ export default async function BulkOrderCartPage() {
   ).map((p) => ({
     id: p.id,
     name: p.name,
-    image: p.images[0]?.image_url || "/placeholder-tea.jpg",
+    image: pickHeroImageUrl(p.images) || "/placeholder-tea.jpg",
     variants: p.variants
       .filter((v) => ["100g", "500g", "1kg"].includes(v.size))
       .map((v) => ({

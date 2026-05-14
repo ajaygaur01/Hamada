@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { pickHeroImageUrl, productCardImageInclude } from "@/lib/product-images";
 import { getServerAuthUser } from "@/lib/auth/server-session";
 
 export async function GET() {
@@ -15,8 +16,7 @@ export async function GET() {
         product: {
           include: {
             images: {
-              where: { is_primary: true },
-              take: 1,
+              ...productCardImageInclude,
             },
             variants: {
               where: { is_active: true },
@@ -34,7 +34,7 @@ export async function GET() {
       productId: item.product.id,
       name: item.product.name,
       slug: item.product.slug,
-      imageUrl: item.product.images[0]?.image_url || null,
+      imageUrl: pickHeroImageUrl(item.product.images),
       price: item.product.variants[0]?.sample_price ? Number(item.product.variants[0].sample_price) : null,
       addedAt: item.created_at.toISOString(),
     }));
