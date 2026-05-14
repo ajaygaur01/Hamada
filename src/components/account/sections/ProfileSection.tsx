@@ -80,8 +80,8 @@ export default function ProfileSection({
                   <label className="text-sm font-medium text-zinc-700">Company Name</label>
                   <input
                     type="text"
-                    value="Kaori B2B Client" // Placeholder, should come from profile if available
-                    readOnly={profile.gstin_verified}
+                    defaultValue="Kaori B2B Client"
+                    readOnly
                     className={`w-full px-4 py-2.5 rounded-lg border text-sm outline-none transition-all ${
                       profile.gstin_verified 
                         ? 'border-zinc-200 bg-zinc-50 text-zinc-500 cursor-not-allowed' 
@@ -94,8 +94,8 @@ export default function ProfileSection({
                   <label className="text-sm font-medium text-zinc-700">GSTIN</label>
                   <input
                     type="text"
-                    value="29ABCDE1234F1Z5" // Placeholder
-                    readOnly={profile.gstin_verified}
+                    defaultValue="29ABCDE1234F1Z5"
+                    readOnly
                     className={`w-full px-4 py-2.5 rounded-lg border text-sm outline-none transition-all ${
                       profile.gstin_verified 
                         ? 'border-zinc-200 bg-zinc-50 text-zinc-500 cursor-not-allowed' 

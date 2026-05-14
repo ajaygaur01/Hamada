@@ -121,7 +121,7 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
       const payload = {
         ...(isEdit && { id: initialData.id }),
         ...formData,
-        useCases: formData.useCases.split(",").map(s => s.trim()).filter(Boolean),
+        useCases: formData.useCases.split(",").map((s: string) => s.trim()).filter(Boolean),
         variants,
         images: uploadedImages,
       };

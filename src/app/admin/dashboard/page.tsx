@@ -101,7 +101,13 @@ export default function AdminDashboardPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f4f4f5" />
                 <XAxis dataKey="label" tick={{ fontSize: 10, fill: "#a1a1aa" }} interval={4} />
                 <YAxis tick={{ fontSize: 10, fill: "#a1a1aa" }} />
-                <Tooltip formatter={(v: number) => [`₹${v.toLocaleString("en-IN")}`, "Revenue"]} labelStyle={{ fontSize: 11 }} />
+                <Tooltip 
+                  formatter={(value: any) => [
+                    `₹${Number(value).toLocaleString("en-IN")}`, 
+                    "Revenue"
+                  ]} 
+                  labelStyle={{ fontSize: 11 }} 
+                />
                 <Line type="monotone" dataKey="revenue" stroke="#D04636" strokeWidth={2} dot={false} activeDot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>

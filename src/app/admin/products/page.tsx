@@ -150,7 +150,7 @@ export default function AdminProductsPage() {
                 {v.size} — <span className="text-zinc-900 font-bold">₹{v.bulkPrice}</span>
               </div>
               <div className="flex items-center gap-1">
-                {editingStock?.variantId === v.id ? (
+                {editingStock && editingStock.variantId === v.id ? (
                   <div className="flex items-center gap-1">
                     <input 
                       type="number" 

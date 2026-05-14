@@ -6,7 +6,7 @@
 export const productCardImageInclude = {
   orderBy: [{ is_primary: "desc" as const }, { display_order: "asc" as const }],
   take: 8,
-} as const;
+};
 
 /** First non-empty image_url after trim (handles stray blank rows). */
 export function pickHeroImageUrl(images: { image_url: string }[]): string | null {

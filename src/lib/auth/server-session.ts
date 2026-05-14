@@ -45,7 +45,12 @@ export async function getServerAuthUser(): Promise<ServerAuthUser | null> {
       username: user.full_name,
       gstin_verified: user.gstin_verified,
     };
-  } catch (error) {
+  } catch (error: any) {
+    // Re-throw dynamic server usage errors so Next.js knows to make the page dynamic
+    // without logging it as a hard error.
+    if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) {
+      throw error;
+    }
     console.error("getServerAuthUser Error:", error);
     return null;
   }
