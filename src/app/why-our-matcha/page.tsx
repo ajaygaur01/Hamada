@@ -1,107 +1,381 @@
 // src/app/why-our-matcha/page.tsx
+// Enhanced B2B Landing Page — Refined Japanese Craft × Premium Wholesale
 
 import Image from "next/image";
 
 export const metadata = {
   title: "Why Our Matcha – Premium Japanese Tea for B2B",
-  description: "Discover the unparalleled quality, sustainability, and heritage behind our matcha. Perfect for wholesale partners seeking elite Japanese tea.",
+  description:
+    "Discover the unparalleled quality, sustainability, and heritage behind our matcha. Perfect for wholesale partners seeking elite Japanese tea.",
 };
+
+const stats = [
+  { value: "130+", label: "Years of cultivation" },
+  { value: "100%", label: "Organic certified" },
+  { value: "48hr", label: "Farm to dispatch" },
+  { value: "60+", label: "Wholesale partners" },
+];
+
+const benefits = [
+  {
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    title: "Rigorous Quality Assurance",
+    body: "Every batch undergoes triple-stage testing for purity, colour vibrancy, and flavour consistency before it leaves Kagoshima.",
+  },
+  {
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h12M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5H6m0 0v4.5m0-4.5h12m-12 4.5h12" />
+      </svg>
+    ),
+    title: "Scalable Supply Chain",
+    body: "From boutique cafés to national retail chains — custom packaging, private labelling, and MOQs tailored to your growth stage.",
+  },
+  {
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+      </svg>
+    ),
+    title: "Transparent Provenance",
+    body: "Each batch ships with a farm-origin certificate. Share the story of the leaf — your customers will reward you for it.",
+  },
+  {
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.893 13.393l-1.135-1.135a2.252 2.252 0 01-.421-.585l-1.08-2.16a.414.414 0 00-.663-.107.827.827 0 01-.812.21l-1.273-.363a.89.89 0 00-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.211.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 01-1.81 1.025 1.055 1.055 0 01-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.654-.261a2.25 2.25 0 01-1.384-2.46l.007-.042a2.25 2.25 0 01.29-.787l.09-.15a2.25 2.25 0 012.37-1.048l1.178.236a1.125 1.125 0 001.302-.795l.208-.73a1.125 1.125 0 00-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 01-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 01-1.458-1.137l1.279-2.132" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 8.25l-3 3-1.5-1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    title: "Sustainability Commitment",
+    body: "Zero-pesticide farming, solar-powered processing facilities, and FSC-certified recyclable packaging across all SKUs.",
+  },
+  {
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+      </svg>
+    ),
+    title: "Dedicated Account Support",
+    body: "A named B2B account manager, Japanese-speaking liaison, and 4-hour response SLA — partnership, not just procurement.",
+  },
+  {
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+      </svg>
+    ),
+    title: "Seasonal Harvest Previews",
+    body: "Priority-access sampling of new-season shincha before public release — stay ahead of trends, impress your buyers.",
+  },
+];
+
+const process = [
+  { step: "01", title: "Shading", desc: "Leaves are covered 4 weeks before harvest, intensifying chlorophyll and amino acids." },
+  { step: "02", title: "Hand-picking", desc: "Only the youngest two leaves and bud are selected by experienced pickers each May." },
+  { step: "03", title: "Steaming & Drying", desc: "Immediate steaming halts oxidation. Slow drying locks in colour, aroma and nutrients." },
+  { step: "04", title: "Stone-grinding", desc: "Granite mills rotate at 30 RPM to prevent heat build-up, preserving antioxidants." },
+];
 
 export default function WhyOurMatcha() {
   return (
-    <main className="min-h-screen bg-white text-gray-800">
-      {/* Hero Section */}
-      <section className="bg-[#4E3D33] text-white py-20">
-        <div className="container mx-auto px-6 lg:px-12 flex flex-col-reverse lg:flex-row items-center">
-          <div className="lg:w-1/2">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#D04636] mb-6 leading-tight">
-              Why Our Matcha Sets the Standard for B2B Excellence
-            </h1>
-            <p className="text-lg md:text-xl text-white mb-8">
-              Sourced directly from the mist‑clad tea fields of Kagoshima, our matcha is cultivated, harvested, and stone‑ground by generations of artisans. The result is a vibrant, umami‑rich tea that elevates any menu, retail shelf, or corporate offering.
-            </p>
-            <ul className="space-y-4 text-white mb-8">
-              <li className="flex items-start">
-                <svg className="w-6 h-6 text-[#D04636] flex-shrink-0 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 4.707 7.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"/></svg>
-                <span>100% organic, shade‑grown leaves for unmatched flavor depth.</span>
-              </li>
-              <li className="flex items-start">
-                <svg className="w-6 h-6 text-[#D04636] flex-shrink-0 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 4.707 7.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"/></svg>
-                <span>Stone‑ground using traditional granite mills – preserving antioxidants.</span>
-              </li>
-              <li className="flex items-start">
-                <svg className="w-6 h-6 text-[#D04636] flex-shrink-0 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 4.707 7.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"/></svg>
-                <span>Transparent supply chain – each batch is traceable to its farm.</span>
-              </li>
-            </ul>
+    <main className="min-h-screen bg-white text-gray-800" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-[#4E3D33]">
+        {/* Accent line top */}
+        <div className="h-1 w-full bg-[#D04636]" />
+
+        <div className="relative container mx-auto px-6 lg:px-16 py-24 lg:py-32">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+
+            {/* Left copy */}
+            <div className="lg:w-1/2 lg:pr-8">
+              {/* Eyebrow */}
+              <div className="inline-flex items-center gap-2 mb-6">
+                <span className="h-px w-8 bg-[#D04636]" />
+                <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">
+                  B2B Wholesale Programme
+                </span>
+              </div>
+
+              <h1
+                className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white leading-[1.1] mb-6"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                Where Japanese
+                <br />
+                <span className="text-[#D04636]">craftsmanship</span>
+                <br />
+                meets your brand.
+              </h1>
+
+              <p className="text-lg text-[#E7DDC1] leading-relaxed mb-8 max-w-md">
+                Sourced directly from the mist-clad fields of Kagoshima and stone-ground by fifth-generation artisans — matcha that earns its place on any premium shelf.
+              </p>
+
+              <ul className="space-y-3 mb-10">
+                {[
+                  "100% organic, shade-grown tencha leaves",
+                  "Stone-ground at 30 RPM — antioxidants fully preserved",
+                  "Farm-origin traceability on every batch",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-[#E7DDC1]">
+                    <span className="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-[#D04636] flex items-center justify-center">
+                      <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 4.707 7.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" />
+                      </svg>
+                    </span>
+                    <span className="text-[0.95rem] leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 bg-[#D04636] hover:bg-[#B83C2D] text-white font-semibold py-3.5 px-7 rounded-lg transition-all duration-200 shadow-lg shadow-[#D04636]/20 text-sm tracking-wide"
+                >
+                  Request Wholesale Access
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+                <a
+                  href="/catalogue"
+                  className="inline-flex items-center justify-center gap-2 border border-[#E7DDC1]/30 hover:border-[#E7DDC1]/60 text-[#E7DDC1] hover:text-white font-medium py-3.5 px-7 rounded-lg transition-all duration-200 text-sm"
+                >
+                  Download Catalogue
+                </a>
+              </div>
+            </div>
+
+            {/* Right image */}
+            <div className="lg:w-1/2 flex justify-center">
+              <div className="relative">
+                {/* Decorative frame */}
+                <div className="absolute -inset-3 border border-[#D04636]/30 rounded-2xl" />
+                <div className="absolute -inset-6 border border-[#E7DDC1]/10 rounded-2xl" />
+                <Image
+                  src="/productbanner.avif"
+                  alt="Premium matcha leaves from Kagoshima"
+                  width={520}
+                  height={520}
+                  className="rounded-xl object-cover relative z-10"
+                  style={{ boxShadow: "0 32px 64px rgba(0,0,0,0.4)" }}
+                />
+                {/* Floating badge */}
+                <div className="absolute -bottom-5 -left-5 z-20 bg-white rounded-xl px-5 py-4 shadow-xl">
+                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">Certified Organic</p>
+                  <p className="text-[#4E3D33] font-bold text-sm">JAS · USDA · EU Organic</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── STAT STRIP ───────────────────────────────────── */}
+      <section className="bg-[#3A2D25] border-y border-[#D04636]/20">
+        <div className="container mx-auto px-6 lg:px-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#E7DDC1]/10">
+            {stats.map(({ value, label }) => (
+              <div key={label} className="py-8 px-6 text-center">
+                <p className="text-3xl font-bold text-[#D04636] mb-1">{value}</p>
+                <p className="text-xs text-[#E7DDC1] opacity-70 uppercase tracking-widest">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── HERITAGE ─────────────────────────────────────── */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6 lg:px-16">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="order-2 lg:order-1">
+              <div className="inline-flex items-center gap-2 mb-5">
+                <span className="h-px w-8 bg-[#D04636]" />
+                <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">
+                  Our Story
+                </span>
+              </div>
+              <h2 className="text-4xl font-bold text-[#4E3D33] leading-tight mb-6" style={{ letterSpacing: "-0.02em" }}>
+                A legacy honored<br />since 1895.
+              </h2>
+              <p className="text-gray-600 leading-relaxed mb-4 text-[0.975rem]">
+                Kaori's family has cultivated tea across five generations. Each refines the art of shading, hand-picking, and stone-grinding to capture what the leaf has to offer at its very best.
+              </p>
+              <p className="text-gray-600 leading-relaxed mb-8 text-[0.975rem]">
+                Our Kagoshima farms benefit from volcanic Shirasu soil, cool Kirishima mists, and daily humidity variance that produces the vivid emerald hue and smooth, buttery sweetness our partners have built menus around.
+              </p>
+              <blockquote className="border-l-4 border-[#D04636] pl-5 py-1">
+                <p className="text-[#4E3D33] font-medium italic text-lg leading-relaxed">
+                  "Partnering with us means inheriting a story that resonates with consumers who value authenticity."
+                </p>
+              </blockquote>
+            </div>
+            <div className="order-1 lg:order-2">
+              <div className="relative">
+                <Image
+                  src="/about1.avif"
+                  alt="Tea fields of Kagoshima"
+                  width={640}
+                  height={480}
+                  className="rounded-2xl object-cover w-full"
+                  style={{ boxShadow: "0 24px 48px rgba(78,61,51,0.15)" }}
+                />
+                {/* Year badge */}
+                <div
+                  className="absolute top-6 right-6 w-20 h-20 rounded-full flex flex-col items-center justify-center"
+                  style={{ background: "#4E3D33" }}
+                >
+                  <span className="text-[#D04636] font-bold text-xl leading-none">130</span>
+                  <span className="text-[#E7DDC1] text-[10px] uppercase tracking-wider mt-0.5">years</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROCESS ──────────────────────────────────────── */}
+      <section className="py-24 bg-[#FAF8F5]">
+        <div className="container mx-auto px-6 lg:px-16">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 mb-4 justify-center">
+              <span className="h-px w-8 bg-[#D04636]" />
+              <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">Craft Process</span>
+              <span className="h-px w-8 bg-[#D04636]" />
+            </div>
+            <h2 className="text-3xl font-bold text-[#4E3D33]" style={{ letterSpacing: "-0.02em" }}>
+              From field to stone mill — four precise stages.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-0 relative">
+            {/* Connector line */}
+            <div className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px bg-[#D04636]/20" />
+
+            {process.map(({ step, title, desc }) => (
+              <div key={step} className="relative flex flex-col items-center text-center px-6 py-4">
+                <div
+                  className="relative z-10 w-16 h-16 rounded-full border-2 border-[#D04636] bg-white flex items-center justify-center mb-5"
+                  style={{ boxShadow: "0 0 0 6px #FAF8F5" }}
+                >
+                  <span className="text-[#D04636] font-bold text-lg">{step}</span>
+                </div>
+                <h3 className="text-[#4E3D33] font-bold text-base mb-2">{title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BENEFITS GRID ────────────────────────────────── */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6 lg:px-16">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
+            {/* Left sticky heading */}
+            <div className="lg:w-1/3 lg:sticky lg:top-24">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <span className="h-px w-8 bg-[#D04636]" />
+                <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">Why Partner</span>
+              </div>
+              <h2 className="text-3xl font-bold text-[#4E3D33] leading-tight mb-5" style={{ letterSpacing: "-0.02em" }}>
+                Everything a serious wholesale partner needs.
+              </h2>
+              <p className="text-gray-500 text-sm leading-relaxed mb-8">
+                We've built our operations around the demands of premium B2B buyers — from indie tea bars to national grocery chains.
+              </p>
+              <a
+                href="/contact"
+                className="inline-flex items-center gap-2 bg-[#4E3D33] hover:bg-[#3A2D25] text-white text-sm font-semibold py-3 px-6 rounded-lg transition-colors"
+              >
+                Start a Conversation
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+            </div>
+
+            {/* Right grid */}
+            <div className="lg:w-2/3 grid sm:grid-cols-2 gap-5">
+              {benefits.map(({ icon, title, body }) => (
+                <div
+                  key={title}
+                  className="group p-6 rounded-xl border border-gray-100 hover:border-[#D04636]/30 bg-white hover:bg-[#FAF8F5] transition-all duration-200"
+                  style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}
+                >
+                  <div className="w-11 h-11 rounded-lg bg-[#4E3D33]/5 group-hover:bg-[#D04636]/10 flex items-center justify-center mb-4 text-[#4E3D33] group-hover:text-[#D04636] transition-colors">
+                    {icon}
+                  </div>
+                  <h3 className="font-semibold text-[#4E3D33] mb-2 text-[0.95rem]">{title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SOCIAL PROOF STRIP ───────────────────────────── */}
+      <section className="py-16 bg-[#FAF8F5] border-y border-gray-100">
+        <div className="container mx-auto px-6 lg:px-16 text-center">
+          <p className="text-xs text-gray-400 uppercase tracking-widest mb-8">Trusted by premium partners across Asia-Pacific & Europe</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 lg:gap-14 opacity-40">
+            {/* Placeholder partner logos — replace with actual <Image> tags */}
+            {["Partner Co.", "Tea House EU", "Café Chain JP", "Retail Group AU", "Specialty Foods UK"].map((name) => (
+              <span key={name} className="text-[#4E3D33] font-semibold text-sm tracking-wide">
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ──────────────────────────────────────────── */}
+      <section className="py-24 bg-[#4E3D33] relative overflow-hidden">
+        <div className="relative container mx-auto px-6 lg:px-16 text-center max-w-3xl">
+          <div className="inline-flex items-center gap-2 mb-6 justify-center">
+            <span className="h-px w-8 bg-[#D04636]" />
+            <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">Get Started</span>
+            <span className="h-px w-8 bg-[#D04636]" />
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-5 leading-tight" style={{ letterSpacing: "-0.02em" }}>
+            Ready to elevate your offering with the finest Japanese matcha?
+          </h2>
+          <p className="text-[#E7DDC1] text-base mb-10 max-w-xl mx-auto leading-relaxed">
+            Speak with our wholesale team, request a sample pack, or download the full product catalogue — no commitment required.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/contact"
-              className="inline-block bg-[#D04636] text-white font-medium py-3 px-6 rounded-lg hover:bg-[#B83C2D] transition-colors shadow-md"
+              className="inline-flex items-center justify-center gap-2 bg-[#D04636] hover:bg-[#B83C2D] text-white font-semibold py-4 px-8 rounded-lg transition-all duration-200 shadow-lg shadow-[#D04636]/25 text-sm tracking-wide"
             >
-              Get in Touch – Wholesale Inquiry
+              Request a Sample Pack
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a
+              href="/catalogue"
+              className="inline-flex items-center justify-center gap-2 border border-[#E7DDC1]/30 hover:border-[#E7DDC1]/60 text-[#E7DDC1] hover:text-white font-medium py-4 px-8 rounded-lg transition-all duration-200 text-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Download Catalogue
             </a>
           </div>
-          <div className="lg:w-1/2 mb-10 lg:mb-0 flex justify-center">
-            <Image
-              src="/productbanner.avif"
-              alt="Premium matcha leaves"
-              width={500}
-              height={500}
-              className="rounded-xl shadow-lg object-cover"
-            />
-          </div>
         </div>
       </section>
 
-      {/* Story & Heritage Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6 lg:px-12 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <Image
-              src="/about1.avif"
-              alt="Tea fields of Kagoshima"
-              width={600}
-              height={400}
-              className="rounded-xl shadow-md"
-            />
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold text-[#4E3D33] mb-4">
-              A Legacy Honored for Over a Century
-            </h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              Kaori’s family has cultivated tea since 1895. Each generation refines the art of shading, picking, and stone‑grinding to capture the essence of the leaf. Our farms benefit from volcanic soil, mist‑filled mornings, and meticulous hand‑picking, guaranteeing a vivid green hue and a smooth, buttery finish.
-            </p>
-            <p className="text-gray-700 leading-relaxed">
-              Partnering with us means you inherit not only a product but a story that resonates with discerning consumers who value authenticity and sustainability.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits for B2B Clients */}
-      <section className="py-16">
-        <div className="container mx-auto px-6 lg:px-12 text-center">
-          <h2 className="text-3xl font-bold text-[#4E3D33] mb-8">Why Wholesale Partners Choose Us</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-6 bg-white rounded-xl shadow-sm border border-zinc-200 hover:shadow-md transition-shadow">
-              <svg className="w-12 h-12 mx-auto text-[#D04636] mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.61.07-.61 1 .07 1.53 1.02 1.53 1.02.89 1.51 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-2 1.03-2.71-.1-.25-.45-1.28.1-2.66 0 0 .84-.27 2.75 1.03a9.54 9.54 0 015 0c1.9-1.3 2.74-1.03 2.74-1.03.55 1.38.2 2.41.1 2.66.64.71 1.03 1.62 1.03 2.71 0 3.84-2.34 4.68-4.57 4.93.36.31.68.93.68 1.88v2.79c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
-              <h3 className="font-semibold text-lg mb-2 text-[#3E4F25]">Premium Quality Assurance</h3>
-              <p className="text-gray-600">Every batch undergoes rigorous testing for purity, colour, and flavour consistency.</p>
-            </div>
-            <div className="p-6 bg-white rounded-xl shadow-sm border border-zinc-200 hover:shadow-md transition-shadow">
-              <svg className="w-12 h-12 mx-auto text-[#D04636] mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8V4l8 8-8 8v-4H4V8z"/></svg>
-              <h3 className="font-semibold text-lg mb-2 text-[#3E4F25]">Scalable Supply Chain</h3>
-              <p className="text-gray-600">From boutique cafés to large‑scale retailers, we adapt packaging and volume to your needs.</p>
-            </div>
-            <div className="p-6 bg-white rounded-xl shadow-sm border border-zinc-200 hover:shadow-md transition-shadow">
-              <svg className="w-12 h-12 mx-auto text-[#D04636] mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zm7 12l-5-5h10l-5 5z"/></svg>
-              <h3 className="font-semibold text-lg mb-2 text-[#3E4F25]">Sustainability Commitment</h3>
-              <p className="text-gray-600">Eco‑friendly farming and recyclable packaging reduce environmental impact.</p>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }

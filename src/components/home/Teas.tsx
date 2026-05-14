@@ -1,39 +1,42 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import prisma from '@/lib/prisma';
+import { pickHeroImageUrl, productCardImageInclude } from '@/lib/product-images';
 
+const TEAS_SECTION_LIMIT = 4;
 
+const teasProductInclude = {
+  reviews: { select: { rating: true } },
+  images: {
+    ...productCardImageInclude,
+    select: { image_url: true },
+  },
+} as const;
 
 export default async function Teas() {
-  // Fetch featured products with their review stats
-  const products = await prisma.product.findMany({
+  // Featured first (up to 4), then fill with other active products so the grid is not a single card
+  const featured = await prisma.product.findMany({
     where: { is_active: true, is_featured: true },
-    include: {
-      reviews: { select: { rating: true } },
-      images: {
-        where: { is_primary: true },
-        select: { image_url: true },
-        take: 1,
-      },
-    },
-    take: 4,
-    orderBy: { created_at: 'asc' },
+    include: teasProductInclude,
+    take: TEAS_SECTION_LIMIT,
+    orderBy: { created_at: "asc" },
   });
 
-  // Fallback: if no featured products, just take first 4 active products
-  const featuredProducts = products.length >= 1 ? products : await prisma.product.findMany({
-    where: { is_active: true },
-    include: {
-      reviews: { select: { rating: true } },
-      images: {
-        where: { is_primary: true },
-        select: { image_url: true },
-        take: 1,
-      },
-    },
-    take: 4,
-    orderBy: { created_at: 'asc' },
-  });
+  const need = TEAS_SECTION_LIMIT - featured.length;
+  const extras =
+    need > 0
+      ? await prisma.product.findMany({
+          where: {
+            is_active: true,
+            id: { notIn: featured.map((p) => p.id) },
+          },
+          include: teasProductInclude,
+          take: need,
+          orderBy: { created_at: "asc" },
+        })
+      : [];
+
+  const featuredProducts = [...featured, ...extras];
 
   return (
     <section className="bg-zinc-50 py-16 sm:py-20 lg:py-24">
@@ -59,7 +62,7 @@ export default async function Teas() {
               ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
               : 0;
             const category = product.name.split(' ')[0].toUpperCase();
-            const imageSrc = product.images[0]?.image_url || null;
+            const imageSrc = pickHeroImageUrl(product.images);
 
             return (
               <div key={product.id} className="group overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
