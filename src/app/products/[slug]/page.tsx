@@ -7,6 +7,8 @@ import ProductInfo from "@/components/product-details/ProductInfo";
 import OrderForm from "@/components/product-details/OrderForm";
 import BrewingGuide from "@/components/product-details/BrewingGuide";
 import ReviewsSection from "@/components/product-details/ReviewsSection";
+import WhyHamada from "@/components/product-details/WhyHamada";
+import ProductDetailsFooter from "@/components/product-details/ProductDetailsFooter";
 import { sortProductImagesForGallery } from "@/lib/product-images";
 
 const prisma = new PrismaClient();
@@ -94,13 +96,15 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
-      <Breadcrumb productName={product.name} />
+      <Breadcrumb productName={product.name} categoryName={product.category.name} />
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 pt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left Column: Image Gallery */}
-          <div>
+      {/* Main Content Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* Left Column: Image Gallery, Specs, Use Cases, Comparison Table */}
+          <div className="lg:col-span-7 space-y-10">
+            {/* Image Gallery */}
             <ImageGallery
               images={galleryImages.map((img) => ({
                 url: img.image_url,
@@ -108,10 +112,8 @@ export default async function ProductDetailPage({ params }: Props) {
                 isPrimary: img.is_primary,
               }))}
             />
-          </div>
 
-          {/* Right Column: Product Info + Order Form */}
-          <div className="space-y-10">
+            {/* Product Metadata, Ratings, Best For and Specifications */}
             <ProductInfo
               productId={product.id}
               categoryTag={categoryTag || "TEA"}
@@ -123,12 +125,24 @@ export default async function ProductDetailPage({ params }: Props) {
               variantSizes={variantSizes}
               storageInstructions={product.storage_instructions}
               shelfLife={product.shelf_life}
+              productSlug={product.slug}
+              categoryName={product.category.name}
             />
 
+            {/* Brand Comparison Table */}
+            <WhyHamada productName={product.name} />
+          </div>
+
+          {/* Right Column: Sticky Sidebar Order Form */}
+          <div className="lg:col-span-5 lg:sticky lg:top-[100px]">
             <OrderForm variants={variants} productSlug={product.slug} />
           </div>
+          
         </div>
       </div>
+
+      {/* Trust & Guarantee Banner */}
+      <ProductDetailsFooter />
 
       {/* Brewing Guide */}
       <BrewingGuide />

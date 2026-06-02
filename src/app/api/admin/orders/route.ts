@@ -89,7 +89,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { id, type, orderStatus, trackingLink } = body;
+    const { id, type, orderStatus, trackingLink, paymentStatus, notes } = body;
 
     if (!id || !type) return NextResponse.json({ error: "Order ID and type required" }, { status: 400 });
 
@@ -98,7 +98,9 @@ export async function PATCH(req: NextRequest) {
         where: { id },
         data: {
           ...(orderStatus && { order_status: orderStatus }),
+          ...(paymentStatus && { payment_status: paymentStatus }),
           ...(trackingLink !== undefined && { tracking_link: trackingLink }),
+          ...(notes !== undefined && { notes }),
           ...(orderStatus === "dispatched" && { dispatched_at: new Date() }),
         },
       });
@@ -107,7 +109,9 @@ export async function PATCH(req: NextRequest) {
         where: { id },
         data: {
           ...(orderStatus && { order_status: orderStatus }),
+          ...(paymentStatus && { payment_status: paymentStatus }),
           ...(trackingLink !== undefined && { tracking_link: trackingLink }),
+          ...(notes !== undefined && { notes }),
           ...(orderStatus === "dispatched" && { dispatched_at: new Date() }),
         },
       });
