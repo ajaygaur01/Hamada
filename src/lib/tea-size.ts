@@ -13,11 +13,13 @@ export function parseSizeGrams(size: string): number {
 export const SAMPLE_MAX_GRAMS = 99;
 
 export function isSampleSize(size: string): boolean {
+  if (size.toLowerCase().includes("sample")) return true;
   const grams = parseSizeGrams(size);
   return grams > 0 && grams <= SAMPLE_MAX_GRAMS;
 }
 
 export function isBulkSize(size: string): boolean {
+  if (size.toLowerCase().includes("sample")) return false;
   const grams = parseSizeGrams(size);
   return grams >= 100;
 }

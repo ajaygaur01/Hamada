@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Package, Truck, Lock, ShieldCheck } from "lucide-react";
+import { Package, ShieldCheck, FileText, Globe, UserCheck, MessageSquare } from "lucide-react";
 import { isBulkSize, isSampleSize } from "@/lib/tea-size";
 
 interface Variant {
@@ -19,167 +19,219 @@ interface OrderFormProps {
 }
 
 export default function OrderForm({ variants, productSlug }: OrderFormProps) {
+  // Separate variants into sample and bulk categories
   const sampleVariants = variants.filter((v) => isSampleSize(v.size));
   const bulkVariants = variants.filter((v) => isBulkSize(v.size));
 
-  const sampleSizes =
-    sampleVariants.length > 0 ? sampleVariants : variants.filter((v) => !isBulkSize(v.size));
-  const bulkSizes =
-    bulkVariants.length > 0 ? bulkVariants : variants.filter((v) => !isSampleSize(v.size));
-
-  const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
+  // State for active choices
   const [selectedBulkIdx, setSelectedBulkIdx] = useState(0);
-  const [bulkQuantity, setBulkQuantity] = useState(bulkSizes[0]?.minBulkQuantity || 1);
+  const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
 
-  const selectedBulkVariant = bulkSizes[selectedBulkIdx];
-  const minQty = selectedBulkVariant?.minBulkQuantity || 1;
+  const selectedBulkVariant = bulkVariants[selectedBulkIdx];
+  const selectedSampleVariant = sampleVariants[selectedSampleIdx] || variants[selectedSampleIdx];
+
+  // Dynamic URLs
+  const sampleCheckoutUrl = selectedSampleVariant
+    ? `/sample-order?product=${encodeURIComponent(productSlug)}&variant=${encodeURIComponent(selectedSampleVariant.id)}`
+    : `/sample-order?product=${encodeURIComponent(productSlug)}`;
 
   const bulkCheckoutUrl = selectedBulkVariant
-    ? `/bulk-order/checkout?variant=${encodeURIComponent(selectedBulkVariant.id)}&qty=${bulkQuantity}`
+    ? `/bulk-order/checkout?variant=${encodeURIComponent(selectedBulkVariant.id)}`
     : `/bulk-order/checkout`;
 
+  const activeSizeStr = selectedBulkVariant?.size || selectedSampleVariant?.size || "";
+  const whatsappMsg = `Hi Hamada, I am interested in wholesale pricing for the ${productSlug} (${activeSizeStr}).`;
+  const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(whatsappMsg)}`;
+
+  // Trust items under the WhatsApp button
+  const trustItems = [
+    { icon: <ShieldCheck className="w-4 h-4 text-zinc-600" />, text: "Secure & easy inquiry" },
+    { icon: <FileText className="w-4 h-4 text-zinc-600" />, text: "Export documentation included" },
+    { icon: <Globe className="w-4 h-4 text-zinc-600" />, text: "Pan-India & global shipping" },
+    { icon: <UserCheck className="w-4 h-4 text-zinc-600" />, text: "Dedicated account support" },
+  ];
+
+  // Helper to format bulk option text and badges
+  const getBulkFormatInfo = (vSize: string, idx: number) => {
+    const is500g = vSize.toLowerCase().includes("500g");
+    const isBulk = vSize.toLowerCase().includes("5kg") || vSize.toLowerCase().includes("bulk");
+    
+    // Add "Pouch" or format details for wholesale
+    let displayName = vSize;
+    if (!displayName.toLowerCase().includes("pouch") && !isBulk) {
+      displayName = `${vSize} Pouch`;
+    }
+    
+    return {
+      name: displayName,
+      badge: is500g ? (
+        <span className="text-[9px] font-bold bg-[#FAF8F5] border border-zinc-200 text-zinc-500 px-1.5 py-0.5 rounded uppercase">
+          MOQ
+        </span>
+      ) : isBulk ? (
+        <span className="text-[9px] font-bold bg-zinc-100 text-zinc-500 px-1.5 py-0.5 rounded uppercase">
+          Contact Sales
+        </span>
+      ) : null,
+    };
+  };
+
+  // Helper to format sample format text and check for badges
+  const getSampleFormatInfo = (vSize: string, idx: number) => {
+    const is100g = vSize.toLowerCase().includes("100g") || idx === 1;
+    
+    let displayName = vSize;
+    if (!displayName.toLowerCase().includes("pack") && !displayName.toLowerCase().includes("sample")) {
+      displayName = `${vSize} Sample Pack`;
+    }
+    
+    return {
+      name: displayName,
+      isRecommended: is100g,
+    };
+  };
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150 fill-mode-both items-start">
+    <div className="bg-white border border-zinc-200/80 rounded-2xl p-6 md:p-8 space-y-8 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
       
-      {/* Sample Order Card */}
-      <div className="bg-white rounded-2xl p-5 md:p-6 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-300 border border-[#e5e7eb] relative overflow-hidden flex flex-col">
-        <div className="absolute -right-10 -top-10 text-[#f0f4ea] pointer-events-none">
-          <Package size={120} strokeWidth={1} />
-        </div>
-
-        <div className="relative z-10 flex flex-col">
-          <div className="flex justify-between items-start mb-5">
-            <div>
-              <h3 className="font-heading text-xl lg:text-2xl text-[#3E4F25] mb-1 leading-tight">Order a Sample</h3>
-              <p className="text-xs md:text-sm text-[#3E4F25]/70 pr-2">Test with your team and menu. No account needed.</p>
-            </div>
-            <div className="bg-[#f0f4ea] text-[#3E4F25] p-1.5 md:p-2 rounded-full shrink-0">
-              <Truck size={18} strokeWidth={1.5} />
-            </div>
-          </div>
-
-          <div className="space-y-5 flex flex-col">
-            <div>
-              <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage mb-2">SELECT SIZE</p>
-              <div className="flex flex-wrap gap-2">
-                {sampleSizes.map((v, idx) => (
-                  <button
-                     key={v.id}
-                     onClick={() => setSelectedSampleIdx(idx)}
-                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
-                       selectedSampleIdx === idx 
-                         ? "bg-[#D04636] border-[#D04636] text-white shadow-sm" 
-                         : "bg-white border-[#e5e7eb] text-[#3E4F25] hover:border-[#D04636] hover:text-[#D04636]"
-                     }`}
-                  >
-                    {v.size}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {sampleSizes[selectedSampleIdx] && (
-              <div className="pt-2">
-                <div className="flex items-end gap-2">
-                  <span className="text-2xl lg:text-3xl font-bold text-[#3E4F25]">
-                    ₹{sampleSizes[selectedSampleIdx].samplePrice.toLocaleString()}
-                  </span>
-                  <span className="text-xs lg:text-sm text-[#3E4F25]/70 font-medium mb-1 lg:mb-1.5">/ sample pack</span>
-                </div>
-              </div>
-            )}
-
-            <Link
-              href={`/sample-order?product=${encodeURIComponent(productSlug)}&variant=${encodeURIComponent(sampleSizes[selectedSampleIdx]?.id ?? "")}`}
-              className="flex items-center justify-center w-full bg-white text-[#D04636] border border-[#e5e7eb] hover:border-[#D04636] font-medium py-3 rounded-xl hover:bg-[#D04636] hover:text-white transition-all shadow-[0_2px_10px_rgba(0,0,0,0.03)] text-sm lg:text-base mt-2"
-            >
-              Order Sample
-            </Link>
-          </div>
-        </div>
+      {/* Sticky Sidebar Header */}
+      <div className="space-y-1">
+        <span className="text-[10px] font-bold tracking-[0.2em] text-[#4C632E] uppercase">
+          Wholesale Only
+        </span>
+        <h2 className="font-serif text-3xl font-bold text-zinc-800 leading-tight">
+          MOQ {bulkVariants[0]?.size || "500g"}
+        </h2>
+        <p className="text-sm text-zinc-500 font-medium italic">
+          Pricing available on request
+        </p>
       </div>
 
-      {/* Bulk Order Card */}
-      <div className="bg-white rounded-2xl p-5 md:p-6 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-300 border border-[#e5e7eb] relative flex flex-col">
-        <div className="flex justify-between items-start mb-5">
-          <div>
-            <h3 className="font-heading text-xl lg:text-2xl text-[#3E4F25] mb-1 leading-tight">Place a Bulk Order</h3>
-            <p className="text-xs md:text-sm text-[#3E4F25]/70 pr-2">For verified wholesale buyers.</p>
-          </div>
-          <div className="bg-[#f0f4ea] text-[#3E4F25] p-1.5 md:p-2 rounded-full shrink-0">
-            <Lock size={18} strokeWidth={1.5} />
-          </div>
-        </div>
-
-        <div className="space-y-5 flex flex-col">
-          <div>
-            <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage mb-2">SELECT SIZE</p>
-            <div className="flex flex-wrap gap-2">
-              {bulkSizes.map((v, idx) => (
+      {/* SELECT FORMAT (Bulk variants) */}
+      {bulkVariants.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-400">
+            Select Format
+          </h3>
+          <div className="space-y-2">
+            {bulkVariants.map((v, idx) => {
+              const info = getBulkFormatInfo(v.size, idx);
+              const isSelected = selectedBulkIdx === idx;
+              return (
                 <button
                   key={v.id}
-                  onClick={() => {
-                    setSelectedBulkIdx(idx);
-                    setBulkQuantity(v.minBulkQuantity || 1);
-                  }}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
-                    selectedBulkIdx === idx 
-                      ? "bg-white border-[#D04636] text-[#D04636] shadow-sm" 
-                      : "bg-white/50 border-[#e5e7eb] text-[#3E4F25]/70 hover:border-[#D04636] hover:text-[#D04636]"
+                  onClick={() => setSelectedBulkIdx(idx)}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-xl bg-white border transition-all text-left ${
+                    isSelected
+                      ? "border-[#D04636] ring-1 ring-[#D04636] text-[#D04636] shadow-sm"
+                      : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
                   }`}
                 >
-                  {v.size}
+                  <span>{info.name}</span>
+                  {info.badge}
                 </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div className="flex justify-between items-end mb-2">
-              <p className="text-[10px] font-bold tracking-widest uppercase text-brand-sage">QUANTITY</p>
-              {minQty > 1 && (
-                <p className="text-[10px] font-medium text-brand-sage">Minimum: {minQty} units</p>
-              )}
-            </div>
-            <div className="flex items-center gap-4 bg-white border border-[#e5e7eb] rounded-lg p-1 w-fit shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-              <button
-                onClick={() => setBulkQuantity(Math.max(minQty, bulkQuantity - 1))}
-                className="w-10 h-10 flex items-center justify-center text-[#3E4F25] hover:bg-[#f0f4ea] rounded-md transition-colors"
-              >
-                −
-              </button>
-              <span className="w-12 text-center text-sm font-bold text-[#3E4F25]">
-                {bulkQuantity}
-              </span>
-              <button
-                onClick={() => setBulkQuantity(bulkQuantity + 1)}
-                className="w-10 h-10 flex items-center justify-center text-[#3E4F25] hover:bg-[#f0f4ea] rounded-md transition-colors"
-              >
-                +
-              </button>
-            </div>
-          </div>
-
-          {selectedBulkVariant && (
-            <div className="pt-2">
-              <p className="text-xs lg:text-sm text-[#3E4F25]/80 font-medium leading-tight">
-                Bulk pricing available upon verification.
-              </p>
-            </div>
-          )}
-
-          <div className="pt-2 mt-2">
-            <Link
-              href={bulkCheckoutUrl}
-              className="flex items-center justify-center gap-2 w-full bg-[#D04636] text-white font-medium py-3 rounded-xl hover:bg-[#B83C2D] transition-all shadow-[0_2px_10px_rgba(208,70,54,0.2)] text-sm lg:text-base px-2"
-            >
-              <ShieldCheck size={18} />
-              Login to Verify
-            </Link>
+              );
+            })}
           </div>
         </div>
+      )}
+
+      {/* SELECT SAMPLE SIZE */}
+      {sampleVariants.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-400">
+            Select Sample Size
+          </h3>
+          <div className="grid grid-cols-3 gap-2">
+            {sampleVariants.map((v, idx) => {
+              const info = getSampleFormatInfo(v.size, idx);
+              const isSelected = selectedSampleIdx === idx;
+              return (
+                <button
+                  key={v.id}
+                  onClick={() => setSelectedSampleIdx(idx)}
+                  className={`relative flex flex-col items-center justify-center py-4 px-2 text-center rounded-xl bg-white border transition-all ${
+                    isSelected
+                      ? "border-[#4C632E] ring-1 ring-[#4C632E] text-[#4C632E] shadow-sm"
+                      : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
+                  }`}
+                >
+                  {info.isRecommended && (
+                    <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#4C632E] text-white text-[8px] font-bold px-1.5 py-0.5 rounded tracking-wide whitespace-nowrap">
+                      Most Ordered
+                    </span>
+                  )}
+                  <span className="text-sm font-bold text-zinc-800 leading-tight">
+                    {v.size.replace(/[^0-9gkg]/gi, "")}
+                  </span>
+                  <span className="text-[10px] text-zinc-400 font-medium mt-0.5 leading-none">
+                    Sample Pack
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Call-to-Action Buttons */}
+      <div className="space-y-3 pt-2">
+        {/* Request Sample Kit Button */}
+        <Link
+          href={sampleCheckoutUrl}
+          className="flex flex-col items-center justify-center w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-3.5 rounded-xl transition-all shadow-[0_4px_12px_rgba(208,70,54,0.15)] text-center group"
+        >
+          <div className="flex items-center justify-center gap-2 font-bold text-sm leading-none">
+            <Package className="w-4 h-4" />
+            <span>Request Sample Kit</span>
+          </div>
+          <span className="text-[10px] text-white/80 font-medium mt-1 group-hover:text-white transition-colors leading-none">
+            Taste before you scale
+          </span>
+        </Link>
+
+        {/* Get Bulk Pricing Button */}
+        <Link
+          href={bulkCheckoutUrl}
+          className="flex flex-col items-center justify-center w-full bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-700 py-3.5 rounded-xl transition-all text-center group"
+        >
+          <div className="font-bold text-sm leading-none text-zinc-800">
+            Get Bulk Pricing
+          </div>
+          <span className="text-[10px] text-zinc-400 font-medium mt-1 leading-none">
+            Volume-based pricing
+          </span>
+        </Link>
+
+        {/* Chat on WhatsApp Button */}
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center justify-center w-full bg-[#FAF8F5] border border-zinc-200/80 hover:bg-zinc-100/50 py-3.5 rounded-xl transition-all text-center group"
+        >
+          <div className="flex items-center justify-center gap-2 font-bold text-sm leading-none text-zinc-800">
+            <MessageSquare className="w-4 h-4 text-[#25D366] fill-[#25D366]/10" />
+            <span>Chat on WhatsApp</span>
+          </div>
+          <span className="text-[10px] text-zinc-400 font-medium mt-1 leading-none">
+            Quick response
+          </span>
+        </a>
       </div>
-      
+
+      {/* Trust Badges List */}
+      <div className="border-t border-zinc-200 pt-6 space-y-3">
+        {trustItems.map((item, idx) => (
+          <div key={idx} className="flex items-center gap-3 text-xs font-semibold text-zinc-700 leading-none">
+            <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-[0_1px_3px_rgba(0,0,0,0.01)] border border-zinc-100 shrink-0">
+              {item.icon}
+            </div>
+            <span>{item.text}</span>
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 }
