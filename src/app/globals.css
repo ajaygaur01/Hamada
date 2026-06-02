@@ -9,7 +9,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: "Acumin Pro", "Acumin Variable Concept", "Avenir Next", "Segoe UI", Arial, Helvetica, sans-serif;
-  --font-heading: var(--font-yeseva-one);
+  --font-heading: var(--font-ibm-plex-sans), "IBM Plex Sans", "Segoe UI", Arial, Helvetica, sans-serif;
   --color-brand-cream: #E7DDC1;
   --color-brand-green: #4C632E;
   --color-brand-sage: #9AA958;
