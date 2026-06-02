@@ -13,6 +13,7 @@ import { useToast } from "@/components/admin/ui/Toast";
 import { generateOrderInvoice } from "@/lib/admin/invoice-generator";
 
 const ORDER_STATUSES = ["pending", "confirmed", "processing", "dispatched", "delivered", "cancelled"];
+const PAYMENT_STATUSES = ["pending", "paid", "verified", "failed"];
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
@@ -23,7 +24,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [status, setStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
   const [trackingLink, setTrackingLink] = useState("");
+  const [notes, setNotes] = useState("");
   const { toast } = useToast();
 
   const fetchOrder = useCallback(async () => {
@@ -34,7 +37,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       const data = await res.json();
       setOrder(data);
       setStatus(data.order_status);
+      setPaymentStatus(data.payment_status);
       setTrackingLink(data.tracking_link || "");
+      setNotes(data.notes || "");
     } catch {
       toast("Failed to load order details", "error");
     } finally {
@@ -56,8 +61,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           id,
           type: order.type,
           orderStatus: status,
-          trackingLink: trackingLink
-        })
+          paymentStatus,
+          trackingLink,
+          notes,
+        }),
       });
       if (!res.ok) throw new Error();
       toast("Order updated successfully", "success");
@@ -133,6 +140,16 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 </select>
               </div>
               <div>
+                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Payment Status</label>
+                <select 
+                  value={paymentStatus} 
+                  onChange={(e) => setPaymentStatus(e.target.value)}
+                  className="w-full border border-zinc-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#D04636]"
+                >
+                  {PAYMENT_STATUSES.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                </select>
+              </div>
+              <div className="md:col-span-2">
                 <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Tracking Link / ID</label>
                 <input 
                   type="text" 
@@ -140,6 +157,16 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                   onChange={(e) => setTrackingLink(e.target.value)}
                   placeholder="https://shiprocket.co/..."
                   className="w-full border border-zinc-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#D04636]" 
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Internal notes</label>
+                <textarea 
+                  rows={2}
+                  value={notes} 
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Admin-only notes about this order…"
+                  className="w-full border border-zinc-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#D04636] resize-none" 
                 />
               </div>
             </div>

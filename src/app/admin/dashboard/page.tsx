@@ -61,8 +61,8 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">Dashboard</h1>
-        <p className="text-zinc-500 text-sm mt-1">Welcome back! Here's what's happening with your store.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">Dashboard</h1>
+        <p className="mt-1.5 text-sm text-zinc-500">Overview of revenue, orders, inventory, and recent activity.</p>
       </div>
 
       {/* Revenue KPI row */}
@@ -75,7 +75,7 @@ export default function AdminDashboardPage() {
         ].map(card => {
           const Icon = card.icon;
           return (
-            <div key={card.label} className="bg-white rounded-xl border border-zinc-200 p-5 hover:shadow-md transition-shadow">
+            <div key={card.label} className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
               <div className={`w-10 h-10 ${card.color} rounded-lg flex items-center justify-center text-white mb-3`}>
                 <Icon size={20} />
               </div>
