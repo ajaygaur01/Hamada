@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import PageHeader from "@/components/products/PageHeader";
 import CTASection from "@/components/products/CTASection";
 import ProductGrid from "@/components/products/ProductGrid";
+import ProductInfoTabs from "@/components/products/ProductInfoTabs";
 import { pickHeroImageUrl, productCardImageInclude } from "@/lib/product-images";
 
 const prisma = new PrismaClient();
@@ -59,6 +60,7 @@ export default async function ProductsPage() {
   return (
     <div className="flex flex-col bg-white min-h-screen">
       <PageHeader />
+      <ProductInfoTabs />
       <ProductGrid products={products} categories={categories} />
       <CTASection />
     </div>

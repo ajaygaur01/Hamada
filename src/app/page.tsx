@@ -3,6 +3,7 @@ import Hero from "@/components/home/Hero";
 import Story from "@/components/home/Story";
 import Teas from "@/components/home/Teas";
 import Features from "@/components/home/Features";
+import USPBanner from "@/components/home/USPBanner";
 import TrustedBy from "@/components/home/TrustedBy";
 import TopReviews, { type LandingReview } from "@/components/home/TopReviews";
 import HowItWorksHeader from "@/components/how-it-works/HowItWorksHeader";
@@ -44,13 +45,14 @@ export default async function Home() {
     <>
       <Hero />
       <Story />
+      <USPBanner />
+      <Features />
       {/* <HowItWorksHeader /> */}
       <StepsSection />
       <Teas />
       <TopReviews reviews={topReviews} />
       <FAQSection />
       <StillHaveQuestions />
-      <Features />
       <TrustedBy />
     </>
   );

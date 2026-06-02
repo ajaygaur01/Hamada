@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import SampleOrderPageClient from "@/components/sample-order/SampleOrderPageClient";
 import { getServerAuthUser } from "@/lib/auth/server-session";
+import { isSampleSize } from "@/lib/tea-size";
 
 type SearchParams = Promise<{
   product?: string | string[];
@@ -10,11 +11,6 @@ type SearchParams = Promise<{
 type Props = {
   searchParams: SearchParams;
 };
-
-function isSampleSize(size: string) {
-  const numericSize = Number.parseInt(size, 10);
-  return Number.isFinite(numericSize) ? numericSize <= 100 : true;
-}
 
 export default async function SampleOrderPage({ searchParams }: Props) {
   const params = await searchParams;
