@@ -122,8 +122,10 @@ export async function POST(req: NextRequest) {
         } : undefined,
         images: images?.length ? {
           create: images.map((img: any, idx: number) => ({
-            image_url: img.url, alt_text: img.altText || null,
-            is_primary: idx === 0, display_order: idx,
+            image_url: img.url,
+            alt_text: img.altText?.trim() || null,
+            is_primary: img.isPrimary ?? idx === 0,
+            display_order: typeof img.displayOrder === "number" ? img.displayOrder : idx,
           })),
         } : undefined,
       },
@@ -182,10 +184,53 @@ export async function PATCH(req: NextRequest) {
       },
     });
 
-    // Update variants (including inline stock updates)
-    if (variants) {
-      for (const v of variants) {
-        if (v.id) {
+    // Variant updates: full catalog sync from ProductForm vs quick inline stock edit
+    if (variants !== undefined && Array.isArray(variants)) {
+      const fullVariantSync =
+        variants.some((v: { id?: string; size?: string }) => !v.id || v.size !== undefined);
+
+      if (fullVariantSync) {
+        const existing = await prisma.productVariant.findMany({
+          where: { product_id: id },
+          select: { id: true },
+        });
+        const incomingIds = new Set(
+          variants.filter((v: { id?: string }) => v.id).map((v: { id: string }) => v.id)
+        );
+        const removedIds = existing.filter((e) => !incomingIds.has(e.id)).map((e) => e.id);
+
+        if (removedIds.length > 0) {
+          await prisma.productVariant.updateMany({
+            where: { id: { in: removedIds } },
+            data: { is_active: false },
+          });
+        }
+
+        for (const v of variants) {
+          const variantData = {
+            size: v.size || "Standard",
+            unit: v.unit || "grams",
+            sample_price: v.samplePrice ?? 0,
+            bulk_price: v.bulkPrice ?? 0,
+            stock_quantity: v.stock ?? 0,
+            min_bulk_quantity: v.minBulkQuantity ?? 1,
+            is_active: v.isActive ?? true,
+          };
+
+          if (v.id) {
+            await prisma.productVariant.update({
+              where: { id: v.id },
+              data: variantData,
+            });
+          } else if (v.size?.trim()) {
+            await prisma.productVariant.create({
+              data: { product_id: id, ...variantData },
+            });
+          }
+        }
+      } else {
+        for (const v of variants) {
+          if (!v.id) continue;
           await prisma.productVariant.update({
             where: { id: v.id },
             data: {
