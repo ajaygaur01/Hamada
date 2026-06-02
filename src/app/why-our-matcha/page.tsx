@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 const stats = [
-  { value: "130+", label: "Years of cultivation" },
+  { value: "50+", label: "Years of cultivation" },
   { value: "100%", label: "Organic certified" },
   { value: "48hr", label: "Farm to dispatch" },
   { value: "60+", label: "Wholesale partners" },
@@ -76,14 +76,15 @@ const benefits = [
 
 const process = [
   { step: "01", title: "Shading", desc: "Leaves are covered 4 weeks before harvest, intensifying chlorophyll and amino acids." },
-  { step: "02", title: "Hand-picking", desc: "Only the youngest two leaves and bud are selected by experienced pickers each May." },
+  { step: "02", title: "Harvesting", desc: "Only the youngest two leaves and bud are selected by experienced pickers each May." },
   { step: "03", title: "Steaming & Drying", desc: "Immediate steaming halts oxidation. Slow drying locks in colour, aroma and nutrients." },
-  { step: "04", title: "Stone-grinding", desc: "Granite mills rotate at 30 RPM to prevent heat build-up, preserving antioxidants." },
+  { step: "04", title: "Blending", desc: "Batches are balanced for colour, aroma, and consistency before final finishing." },
+  { step: "05", title: "Milling", desc: "Granite mills rotate at 30 RPM to prevent heat build-up, preserving antioxidants." },
 ];
 
 export default function WhyOurMatcha() {
   return (
-    <main className="min-h-screen bg-white text-gray-800" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+    <main className="min-h-screen bg-white text-gray-800 font-sans">
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#4E3D33]">
@@ -104,7 +105,7 @@ export default function WhyOurMatcha() {
               </div>
 
               <h1
-                className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white leading-[1.1] mb-6"
+                className="font-heading text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white leading-[1.1] mb-6"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Where Japanese
@@ -204,11 +205,11 @@ export default function WhyOurMatcha() {
                   Our Story
                 </span>
               </div>
-              <h2 className="text-4xl font-bold text-[#4E3D33] leading-tight mb-6" style={{ letterSpacing: "-0.02em" }}>
-                A legacy honored<br />since 1895.
+              <h2 className="font-heading text-4xl font-bold text-[#4E3D33] leading-tight mb-6" style={{ letterSpacing: "-0.02em" }}>
+                A legacy honored<br />since 1975.
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4 text-[0.975rem]">
-                Kaori's family has cultivated tea across five generations. Each refines the art of shading, hand-picking, and stone-grinding to capture what the leaf has to offer at its very best.
+                The Hamada family has cultivated tea across five generations. Each refines the art of shading, hand-picking, and stone-grinding to capture what the leaf has to offer at its very best.
               </p>
               <p className="text-gray-600 leading-relaxed mb-8 text-[0.975rem]">
                 Our Kagoshima farms benefit from volcanic Shirasu soil, cool Kirishima mists, and daily humidity variance that produces the vivid emerald hue and smooth, buttery sweetness our partners have built menus around.
@@ -234,7 +235,7 @@ export default function WhyOurMatcha() {
                   className="absolute top-6 right-6 w-20 h-20 rounded-full flex flex-col items-center justify-center"
                   style={{ background: "#4E3D33" }}
                 >
-                  <span className="text-[#D04636] font-bold text-xl leading-none">130</span>
+                  <span className="text-[#D04636] font-bold text-xl leading-none">50+</span>
                   <span className="text-[#E7DDC1] text-[10px] uppercase tracking-wider mt-0.5">years</span>
                 </div>
               </div>
@@ -243,8 +244,36 @@ export default function WhyOurMatcha() {
         </div>
       </section>
 
-      {/* ── PROCESS ──────────────────────────────────────── */}
+      {/* ── WHY KAGOSHIMA ─────────────────────────────────── */}
       <section className="py-24 bg-[#FAF8F5]">
+        <div className="container mx-auto px-6 lg:px-16 max-w-4xl">
+          <div className="inline-flex items-center gap-2 mb-5">
+            <span className="h-px w-8 bg-[#D04636]" />
+            <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">
+              Why Kagoshima?
+            </span>
+          </div>
+          <h2 className="font-heading text-3xl font-bold text-[#4E3D33] mb-6" style={{ letterSpacing: "-0.02em" }}>
+            Japan&apos;s celebrated tea-growing region
+          </h2>
+          <div className="space-y-4 text-gray-600 leading-relaxed text-[0.975rem]">
+            <p>
+              Kagoshima, located at the southern tip of Japan&apos;s Kyushu island, is one of the
+              country&apos;s most celebrated tea-growing regions. Volcanic soil, coastal breezes, and ideal
+              humidity create a microclimate that produces green tea with deep umami, low bitterness,
+              and a natural sweetness that&apos;s hard to replicate.
+            </p>
+            <p>
+              Home to some of the most progressive and sustainable tea farms in Japan, Kagoshima has
+              rapidly grown into a favorite among both traditional tea masters and contemporary tea
+              brands.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROCESS ──────────────────────────────────────── */}
+      <section className="py-24 bg-white">
         <div className="container mx-auto px-6 lg:px-16">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 mb-4 justify-center">
@@ -252,14 +281,14 @@ export default function WhyOurMatcha() {
               <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">Craft Process</span>
               <span className="h-px w-8 bg-[#D04636]" />
             </div>
-            <h2 className="text-3xl font-bold text-[#4E3D33]" style={{ letterSpacing: "-0.02em" }}>
-              From field to stone mill — four precise stages.
+            <h2 className="font-heading text-3xl font-bold text-[#4E3D33]" style={{ letterSpacing: "-0.02em" }}>
+              Shading → Harvesting → Steaming &amp; Drying → Blending → Milling
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-0 relative">
+          <div className="grid md:grid-cols-5 gap-0 relative">
             {/* Connector line */}
-            <div className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px bg-[#D04636]/20" />
+            <div className="hidden md:block absolute top-8 left-[10%] right-[10%] h-px bg-[#D04636]/20" />
 
             {process.map(({ step, title, desc }) => (
               <div key={step} className="relative flex flex-col items-center text-center px-6 py-4">
@@ -278,7 +307,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── BENEFITS GRID ────────────────────────────────── */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#FAF8F5]">
         <div className="container mx-auto px-6 lg:px-16">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
             {/* Left sticky heading */}
@@ -287,7 +316,7 @@ export default function WhyOurMatcha() {
                 <span className="h-px w-8 bg-[#D04636]" />
                 <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">Why Partner</span>
               </div>
-              <h2 className="text-3xl font-bold text-[#4E3D33] leading-tight mb-5" style={{ letterSpacing: "-0.02em" }}>
+              <h2 className="font-heading text-3xl font-bold text-[#4E3D33] leading-tight mb-5" style={{ letterSpacing: "-0.02em" }}>
                 Everything a serious wholesale partner needs.
               </h2>
               <p className="text-gray-500 text-sm leading-relaxed mb-8">
@@ -347,7 +376,7 @@ export default function WhyOurMatcha() {
             <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">Get Started</span>
             <span className="h-px w-8 bg-[#D04636]" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-5 leading-tight" style={{ letterSpacing: "-0.02em" }}>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-5 leading-tight" style={{ letterSpacing: "-0.02em" }}>
             Ready to elevate your offering with the finest Japanese matcha?
           </h2>
           <p className="text-[#E7DDC1] text-base mb-10 max-w-xl mx-auto leading-relaxed">

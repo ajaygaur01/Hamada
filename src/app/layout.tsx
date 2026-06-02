@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Yeseva_One } from "next/font/google";
+import { IBM_Plex_Sans } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { getServerAuthUser } from "@/lib/auth/server-session";
 import "./globals.css";
 
-const yesevaOne = Yeseva_One({
-  weight: "400",
-  variable: "--font-yeseva-one",
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-ibm-plex-sans",
   subsets: ["latin"],
 });
 
@@ -28,7 +28,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${yesevaOne.variable} h-full antialiased`}
+      className={`${ibmPlexSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-cream font-sans">
         <Suspense fallback={null}>
