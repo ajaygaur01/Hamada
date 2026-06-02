@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { isSampleSize as isSampleSizeByGrams } from "@/lib/tea-size";
 
 export type SampleOrderInput = {
   customerName?: string;
@@ -18,8 +19,7 @@ export type SampleOrderInput = {
 };
 
 export function isSampleSize(size: string) {
-  const numericSize = Number.parseInt(size, 10);
-  return Number.isFinite(numericSize) ? numericSize <= 100 : true;
+  return isSampleSizeByGrams(size);
 }
 
 export function validateSampleOrderInput(input: SampleOrderInput) {

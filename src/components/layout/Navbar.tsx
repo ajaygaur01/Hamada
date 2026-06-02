@@ -23,10 +23,10 @@ export default function Navbar() {
             >
               <Image
                 src="/logo.avif"
-                alt="Kaori by Chiran logo"
-                width={112}
-                height={32}
-                className="h-8 w-auto object-contain"
+                alt="Hamada logo"
+                width={168}
+                height={48}
+                className="h-12 w-auto object-contain sm:h-14"
                 priority
               />
             </Link>

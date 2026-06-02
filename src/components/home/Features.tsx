@@ -26,7 +26,7 @@ export default function Features() {
           <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-brand-cream/80">
             Why Businesses Choose Hamada
           </p>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          <h2 className="font-heading text-2xl font-bold text-white sm:text-3xl">
             Built for dependable B2B tea sourcing
           </h2>
         </div>
@@ -42,7 +42,7 @@ export default function Features() {
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-green/10">
                   <Icon className="h-6 w-6 text-brand-green" />
                 </div>
-                <h3 className="mb-2 text-base font-semibold tracking-wide text-brand-brown">
+                <h3 className="font-heading mb-2 text-base font-semibold tracking-wide text-brand-brown">
                   {feature.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-brand-brown/75">

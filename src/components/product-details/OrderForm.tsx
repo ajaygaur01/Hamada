@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Package, Truck, Lock, ShieldCheck } from "lucide-react";
+import { isBulkSize, isSampleSize } from "@/lib/tea-size";
 
 interface Variant {
   id: string;
@@ -18,15 +19,13 @@ interface OrderFormProps {
 }
 
 export default function OrderForm({ variants, productSlug }: OrderFormProps) {
-  // Split variants into sample sizes and bulk sizes
-  // Filter samples to only 10gm and 30gm as per user request
-  const sampleVariants = variants.filter(v => 
-    parseInt(v.size) <= 100 && (v.size.toLowerCase().includes("10g") || v.size.toLowerCase().includes("30g") || v.size === "10" || v.size === "30")
-  );
-  const bulkVariants = variants.filter(v => parseInt(v.size) > 100);
+  const sampleVariants = variants.filter((v) => isSampleSize(v.size));
+  const bulkVariants = variants.filter((v) => isBulkSize(v.size));
 
-  const sampleSizes = sampleVariants.length > 0 ? sampleVariants : variants.filter(v => parseInt(v.size) <= 100);
-  const bulkSizes = bulkVariants.length > 0 ? bulkVariants : variants;
+  const sampleSizes =
+    sampleVariants.length > 0 ? sampleVariants : variants.filter((v) => !isBulkSize(v.size));
+  const bulkSizes =
+    bulkVariants.length > 0 ? bulkVariants : variants.filter((v) => !isSampleSize(v.size));
 
   const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
   const [selectedBulkIdx, setSelectedBulkIdx] = useState(0);
@@ -44,7 +43,6 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
       
       {/* Sample Order Card */}
       <div className="bg-white rounded-2xl p-5 md:p-6 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-300 border border-[#e5e7eb] relative overflow-hidden flex flex-col">
-        {/* Soft decorative background element */}
         <div className="absolute -right-10 -top-10 text-[#f0f4ea] pointer-events-none">
           <Package size={120} strokeWidth={1} />
         </div>
