@@ -20,7 +20,6 @@ export default async function ProductsPage() {
       variants: {
         where: { is_active: true },
         orderBy: { sample_price: 'asc' },
-        take: 1
       },
       images: {
         ...productCardImageInclude,
@@ -45,7 +44,9 @@ export default async function ProductsPage() {
       id: p.id,
       slug: p.slug,
       name: p.name,
+      description: p.short_description,
       categoryName: derivedTag || "TEA",
+      categorySlug: p.category.slug,
       useCases: p.use_cases || [],
       categoryId: p.category_id,
       imageUrl: pickHeroImageUrl(p.images),
@@ -54,6 +55,12 @@ export default async function ProductsPage() {
       averageRating: p.reviews.length > 0
         ? p.reviews.reduce((sum, r) => sum + r.rating, 0) / p.reviews.length
         : 0,
+      variants: p.variants.map((v) => ({
+        id: v.id,
+        size: v.size,
+        samplePrice: Number(v.sample_price),
+        bulkPrice: Number(v.bulk_price),
+      })),
     };
   });
 

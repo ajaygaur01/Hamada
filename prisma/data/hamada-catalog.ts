@@ -148,9 +148,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Ceremonial A",
     short_description:
-      "First flush shade-grown tencha — vivid colour and refined sweetness.",
+      "Our finest grade matcha, from the first flush of shade-grown tencha leaves from Kagoshima.",
     full_description:
-      "First flush of shade-grown tencha leaves, stone-ground for ceremonial service. Vibrant jade colour, silky foam, and the refined sweetness expected on premium cafe and hotel menus.",
+      "Our finest grade matcha, from the first flush of shade-grown tencha leaves from Kagoshima. Vivid green, intensely umami, with a natural sweetness and no bitterness.\n\nHarvest season: April–May. Non-organic.\nBlend: cultivars - Yutaka, Saemidori, asatsuyu.\nCeremonial grade: can consume with just hot water.",
     use_cases: ["Cafe Menu", "Hotel", "Retail"],
     featured: true,
     variants: rowVariants({
@@ -167,9 +167,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Ceremonial B",
     short_description:
-      "Slightly bolder, deeper character — still ceremonial grade.",
+      "A ceremonial grade matcha with a slightly bolder, deeper character.",
     full_description:
-      "A ceremonial matcha with slightly bolder, deeper character while maintaining ceremonial grade clarity. Excellent for usucha-forward menus and premium blended drinks.",
+      "A ceremonial grade matcha with a slightly bolder, deeper character — still smooth, still vibrant, but with a fuller body that doesn't lose to sweeteners, flavours and milk. Ideal for cafes.\n\nHarvest season: July–August.\nNon-organic blend.\nCeremonial grade.",
     use_cases: ["Cafe Menu", "Hotel", "Retail"],
     featured: true,
     variants: rowVariants({
@@ -186,9 +186,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Culinary A",
     short_description:
-      "Kagoshima culinary matcha with stable colour retention.",
+      "Premium culinary grade from Kagoshima — stable colour retention under heat.",
     full_description:
-      "Culinary grade matcha from Kagoshima with stable colour retention — formulated for lattes, baking, and high-volume kitchen use without sacrificing visual appeal.",
+      "Premium culinary grade from Kagoshima — stable colour retention under heat, clean flavour that holds in lattes, baked goods, and plated desserts. Performs noticeably better than standard culinary imports. Recommended for kitchens where matcha is a feature ingredient, not a background note.",
     use_cases: ["Bakery", "Cafe Menu", "Retail"],
     variants: rowVariants({
       g10: 100,
@@ -204,9 +204,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Culinary B",
     short_description:
-      "Value-forward culinary matcha for applications where volume matters.",
+      "Standard culinary grade from Kagoshima, perfect for general kitchen use.",
     full_description:
-      "A value-forward culinary matcha for applications where volume matters — lattes, premix bases, and pastry lines that need dependable colour and body at scale.",
+      "Standard culinary grade from Kagoshima, perfect for general kitchen use, blending, and cost-effective food service applications.",
     use_cases: ["Bakery", "Cafe Menu", "Hotel"],
     variants: rowVariants({
       g10: 100,
@@ -222,9 +222,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Powder",
     short_description:
-      "Stone-ground hojicha — low caffeine, warm roasted notes.",
+      "Roasted Japanese hojicha, finely ground. Low caffeine, warm roasted flavour profile.",
     full_description:
-      "Finely ground hojicha powder with low caffeine and warm roasted character. Ideal for lattes, desserts, and evening menus.",
+      "Roasted Japanese hojicha, finely ground. Low caffeine, warm roasted flavour profile — performs well in lattes, desserts, and ganaches. Increasingly in demand as an alternative to matcha for guests who want a Japanese tea experience without intensity or caffeine. A strong menu differentiator.",
     use_cases: ["Cafe Menu", "Bakery", "Retail"],
     variants: rowVariants({
       g10: 100,
@@ -240,9 +240,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Premium",
     short_description:
-      "Loose-leaf sencha for bright, clean cup service.",
+      "Single-origin Kagoshima sencha for loose-leaf tea service.",
     full_description:
-      "Loose-leaf sencha for bright, clean cup service — well suited to hotels, restaurants, and retail loose-leaf programmes.",
+      "Single-origin Kagoshima sencha for loose-leaf tea service. Bright, clean, grassy — delivers a consistent, high-quality cup that communicates provenance clearly to guests. Suitable for premium tea menus, hospitality settings, and wellness-focused F&B.",
     use_cases: ["Hotel", "Cafe Menu", "Retail"],
     variants: rowVariants({
       g10: 100,
@@ -258,9 +258,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Premium",
     short_description:
-      "Roasted leaf tea — low caffeine, naturally sweet, deeply comforting.",
+      "Roasted Kagoshima sencha — low caffeine, naturally sweet, deeply approachable.",
     full_description:
-      "Roasted hojicha leaf with low caffeine, naturally sweet profile, and deeply comforting aroma — popular for evening service and food pairings.",
+      "Roasted Kagoshima sencha — low caffeine, naturally sweet, deeply approachable. Works well across all dayparts, including evening service where guests want something warm but not stimulating. A reliable addition to any Japanese tea offering.",
     use_cases: ["Cafe Menu", "Hotel", "Retail"],
     variants: rowVariants({
       g10: 100,
@@ -276,9 +276,9 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     category: "premium",
     grade: "Standard",
     short_description:
-      "Sencha with toasted brown rice — nutty, light, highly approachable.",
+      "Kagoshima sencha blended with roasted brown rice. Nutty, light, and highly drinkable.",
     full_description:
-      "Sencha blended with toasted brown rice for a nutty, light cup that is highly approachable across lunch menus and retail tins.",
+      "Kagoshima sencha blended with roasted brown rice. Nutty, light, and highly drinkable — one of the most guest-friendly Japanese teas on any menu. Broad appeal across age groups and tea familiarity levels. Low barrier to entry, strong repeat order potential.",
     use_cases: ["Hotel", "Retail", "Cafe Menu"],
     variants: rowVariants({
       g10: 100,
@@ -289,14 +289,14 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     }),
   },
   {
-    name: "Matcha Latte Premix",
-    slug: "matcha-latte-premix",
+    name: "Matcha Latte",
+    slug: "matcha-latte",
     category: "instant",
     grade: "Commercial",
     short_description:
-      "Ready-to-prepare matcha latte base with vibrant colour.",
+      "Premix blended for consistent latte preparation. Delivers vibrant colour and clean flavour.",
     full_description:
-      "Matcha latte premix for consistent preparation. Delivers vibrant colour and balanced sweetness for high-throughput cafe and QSR formats. Sample minimum 15g.",
+      "Premix blended for consistent latte preparation. Delivers vibrant colour, clean flavour, and easy-to-train consistency across barista skill levels. Eliminates the variables of in-house matcha blending. Ready to integrate into your existing latte menu.",
     use_cases: ["Cafe Menu", "Hotel"],
     featured: true,
     variants: rowVariants({
@@ -306,14 +306,14 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     }),
   },
   {
-    name: "Hojicha Latte Premix",
-    slug: "hojicha-latte-premix",
+    name: "Hojicha Latte",
+    slug: "hojicha-latte",
     category: "instant",
     grade: "Commercial",
     short_description:
-      "Roasted latte premix with rounded, comforting flavour.",
+      "Instant premix: low caffeine, warm and rounded flavour.",
     full_description:
-      "Hojicha latte premix with rounded roasted flavour — growing in popularity for seasonal menus and grab-and-go. Sample minimum 15g.",
+      "Instant premix: low caffeine, warm and rounded flavour — growing in popularity as a coffee alternative and evening beverage. Easy to prepare, visually distinct, and increasingly requested by health-conscious guests.",
     use_cases: ["Cafe Menu", "Retail"],
     variants: rowVariants({
       g15: 100,

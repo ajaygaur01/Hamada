@@ -1,10 +1,10 @@
 const certifications = [
   { label: "FSSAI Certified", icon: "shield" },
-  { label: "ISO 22000", icon: "check-circle" },
-  { label: "JAS Organic", icon: "leaf" },
   { label: "HACCP", icon: "award" },
   { label: "FDA Approved", icon: "file-check" },
   { label: "Halal Certified", icon: "globe" },
+  { label: "JAS Organic", icon: "leaf" },
+  { label: "FSSC 22000", icon: "check-circle" },
 ];
 
 function CertIcon({ type }: { type: string }) {
@@ -37,7 +37,7 @@ function CertIcon({ type }: { type: string }) {
     case "file-check":
       return (
         <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       );
     case "globe":
@@ -59,11 +59,11 @@ export default function Awards() {
           RECOGNITION
         </p>
         <h2 className="text-2xl font-bold text-white mb-4">
-          Awards and Certifications
+          Compliances
         </h2>
         <p className="text-sm text-[#E7DDC1]/70 mb-16 max-w-xl mx-auto">
           Our quality standards are verified by leading international food safety, testing
-          industry and food safety bodies.
+          and food safety bodies.
         </p>
 
         <div className="grid grid-cols-3 md:grid-cols-6 gap-8">
