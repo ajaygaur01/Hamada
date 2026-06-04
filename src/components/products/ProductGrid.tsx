@@ -4,17 +4,27 @@ import { useState, useMemo } from 'react';
 import ProductCard from './ProductCard';
 import { Search } from 'lucide-react';
 
+interface VariantData {
+  id: string;
+  size: string;
+  samplePrice: number;
+  bulkPrice: number;
+}
+
 interface ProductData {
   id: string;
   slug: string;
   name: string;
+  description: string | null;
   categoryName: string;
+  categorySlug: string;
   useCases: string[];
   categoryId: string;
   imageUrl: string | null;
   startingPrice?: number;
   averageRating?: number;
   reviewCount?: number;
+  variants: VariantData[];
 }
 
 interface CategoryData {
@@ -27,44 +37,64 @@ interface ProductGridProps {
   categories: CategoryData[];
 }
 
+const USE_CASES = ["CAFE MENU", "RETAIL", "HOTEL", "BAKERY"];
+const TEA_TYPES = ["Matcha", "Loose Teas", "Latte Premix", "Samples"];
+
 export default function ProductGrid({ products, categories }: ProductGridProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeUseCase, setActiveUseCase] = useState<string | null>(null);
+  const [activeTeaType, setActiveTeaType] = useState<string | null>(null);
 
-  // Extract top use cases for filter pills
-  const allUseCases = useMemo(() => {
-    const counts: Record<string, number> = {};
-    products.forEach(p => {
-      p.useCases.forEach(uc => {
-        counts[uc] = (counts[uc] || 0) + 1;
-      });
+  // Filter products dynamically
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      // 1. Search term match (name and description)
+      const nameMatch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const descMatch = product.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
+      const matchesSearch = nameMatch || descMatch;
+
+      // 2. Use case match (case-insensitive)
+      const matchesUseCase = activeUseCase
+        ? product.useCases.some(uc => uc.toUpperCase() === activeUseCase.toUpperCase())
+        : true;
+
+      // 3. Tea type match
+      let matchesTeaType = true;
+      if (activeTeaType) {
+        const nameLower = product.name.toLowerCase();
+        if (activeTeaType === "Matcha") {
+          matchesTeaType = nameLower.includes("matcha") && !nameLower.includes("premix");
+        } else if (activeTeaType === "Loose Teas") {
+          matchesTeaType = nameLower.includes("leaf") || 
+                           nameLower.includes("gyokuro") || 
+                           nameLower.includes("sencha") || 
+                           nameLower.includes("genmaicha") || 
+                           (nameLower.includes("hojicha") && !nameLower.includes("powder"));
+        } else if (activeTeaType === "Latte Premix") {
+          matchesTeaType = nameLower.includes("premix") || nameLower.includes("latte");
+        } else if (activeTeaType === "Samples") {
+          matchesTeaType = product.categorySlug === "sample-sets" || nameLower.includes("sample");
+        }
+      }
+
+      return matchesSearch && matchesUseCase && matchesTeaType;
     });
-    return Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .map(entry => entry[0]);
-  }, [products]);
+  }, [products, searchTerm, activeUseCase, activeTeaType]);
 
-  // Filter products
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          product.categoryName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesUseCase = activeUseCase ? product.useCases.includes(activeUseCase) : true;
-    return matchesSearch && matchesUseCase;
-  });
+  // Group into two main categories for rendering
+  const premiumTeas = useMemo(() => {
+    return filteredProducts.filter(p => 
+      !p.name.toLowerCase().includes("premix") && 
+      !p.name.toLowerCase().includes("tea bag")
+    );
+  }, [filteredProducts]);
 
-  // Group into exactly two categories as per brief:
-  // 1. Premium Japanese Teas (Matcha, Sencha, Hojicha, Genmaicha)
-  // 2. Instant Teas & Ready Formats (Premix, Tea Bags)
-  // We'll infer this from product names/tags since we don't have these exact DB categories mapped right now.
-  const premiumTeas = filteredProducts.filter(p => 
-    !p.name.toLowerCase().includes("premix") && 
-    !p.name.toLowerCase().includes("tea bag")
-  );
-
-  const readyFormats = filteredProducts.filter(p => 
-    p.name.toLowerCase().includes("premix") || 
-    p.name.toLowerCase().includes("tea bag")
-  );
+  const readyFormats = useMemo(() => {
+    return filteredProducts.filter(p => 
+      p.name.toLowerCase().includes("premix") || 
+      p.name.toLowerCase().includes("tea bag")
+    );
+  }, [filteredProducts]);
 
   const getStatus = (productName: string) => {
     if (productName.toLowerCase().includes("ingredient grade") || productName.toLowerCase().includes("genmaicha")) {
@@ -77,46 +107,82 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
     <div className="bg-white pb-24">
       
       {/* Search & Filter Header */}
-      <div className="sticky top-16 z-40 bg-white/90 backdrop-blur-md border-b border-[#d2e0c2] py-4">
+      <div className="relative bg-white border-b border-[#d2e0c2] py-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
+          <div className="flex flex-col lg:flex-row gap-5 lg:items-center justify-between">
             
-            {/* Filter Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-              <button
-                onClick={() => setActiveUseCase(null)}
-                className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
-                  activeUseCase === null 
-                    ? "bg-[#D04636] text-white" 
-                    : "bg-transparent text-zinc-600 hover:bg-zinc-100"
-                }`}
-              >
-                All Teas
-              </button>
-              {allUseCases.slice(0, 6).map(uc => (
+            {/* Filter Rows */}
+            <div className="flex-1 space-y-3.5">
+              {/* Row 1: Use Cases */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mr-2 shrink-0">
+                  Use Case:
+                </span>
                 <button
-                  key={uc}
-                  onClick={() => setActiveUseCase(uc)}
-                  className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
-                    activeUseCase === uc 
-                      ? "bg-[#D04636] text-white" 
-                      : "bg-transparent border border-zinc-300 text-zinc-600 hover:border-[#D04636] hover:text-[#D04636]"
+                  onClick={() => setActiveUseCase(null)}
+                  className={`px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap border ${
+                    activeUseCase === null 
+                      ? "bg-[#D04636] text-white border-[#D04636] shadow-sm" 
+                      : "bg-white border-zinc-200 text-zinc-600 hover:border-[#D04636] hover:text-[#D04636]"
                   }`}
                 >
-                  {uc}
+                  All Teas
                 </button>
-              ))}
+                {USE_CASES.map(uc => (
+                  <button
+                    key={uc}
+                    onClick={() => setActiveUseCase(uc)}
+                    className={`px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap border ${
+                      activeUseCase === uc 
+                        ? "bg-[#D04636] text-white border-[#D04636] shadow-sm" 
+                        : "bg-white border-zinc-200 text-zinc-600 hover:border-[#D04636] hover:text-[#D04636]"
+                    }`}
+                  >
+                    {uc}
+                  </button>
+                ))}
+              </div>
+
+              {/* Row 2: Tea Types */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mr-2 shrink-0">
+                  Tea Type:
+                </span>
+                <button
+                  onClick={() => setActiveTeaType(null)}
+                  className={`px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap border ${
+                    activeTeaType === null 
+                      ? "bg-[#4c632e] text-white border-[#4c632e] shadow-sm" 
+                      : "bg-white border-zinc-200 text-zinc-600 hover:border-[#4c632e] hover:text-[#4c632e]"
+                  }`}
+                >
+                  All Types
+                </button>
+                {TEA_TYPES.map(tt => (
+                  <button
+                    key={tt}
+                    onClick={() => setActiveTeaType(tt)}
+                    className={`px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap border ${
+                      activeTeaType === tt 
+                        ? "bg-[#4c632e] text-white border-[#4c632e] shadow-sm" 
+                        : "bg-white border-zinc-200 text-zinc-600 hover:border-[#4c632e] hover:text-[#4c632e]"
+                    }`}
+                  >
+                    {tt}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Search Input */}
-            <div className="relative w-full md:w-64 shrink-0">
-              <Search className="w-4 h-4 text-brand-sage absolute left-3 top-1/2 -translate-y-1/2" />
+            {/* Search Input on Right */}
+            <div className="relative w-full lg:w-72 shrink-0 self-start lg:self-center">
+              <Search className="w-4 h-4 text-brand-sage absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input 
                 type="text" 
-                placeholder="Search catalog..." 
+                placeholder="Search by name or description..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-white border border-[#d2e0c2] text-[#3E4F25] text-sm py-2.5 pl-9 pr-4 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-green focus:border-brand-green placeholder:text-brand-sage transition-all shadow-sm"
+                className="w-full bg-white border border-[#d2e0c2] text-[#3E4F25] text-sm py-2.5 pl-10 pr-4 rounded-full focus:outline-none focus:ring-1 focus:ring-brand-green focus:border-brand-green placeholder:text-brand-sage transition-all shadow-sm"
               />
             </div>
           </div>
@@ -147,6 +213,7 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                       id={product.id}
                       slug={product.slug}
                       name={product.name}
+                      description={product.description}
                       categoryName={product.categoryName}
                       useCases={product.useCases}
                       imageUrl={product.imageUrl}
@@ -154,6 +221,7 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                       startingPrice={product.startingPrice}
                       averageRating={product.averageRating}
                       reviewCount={product.reviewCount}
+                      variants={product.variants}
                     />
                   ))}
                 </div>
@@ -175,6 +243,7 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                       id={product.id}
                       slug={product.slug}
                       name={product.name}
+                      description={product.description}
                       categoryName={product.categoryName}
                       useCases={product.useCases}
                       imageUrl={product.imageUrl}
@@ -182,6 +251,7 @@ export default function ProductGrid({ products, categories }: ProductGridProps) 
                       startingPrice={product.startingPrice}
                       averageRating={product.averageRating}
                       reviewCount={product.reviewCount}
+                      variants={product.variants}
                     />
                   ))}
                 </div>

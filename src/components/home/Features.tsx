@@ -24,10 +24,10 @@ export default function Features() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-10 max-w-3xl text-center">
           <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-brand-cream/80">
-            Why Businesses Choose Hamada
+            B2B Sourcing
           </p>
           <h2 className="font-heading text-2xl font-bold text-white sm:text-3xl">
-            Built for dependable B2B tea sourcing
+            Your B2B Partner in Japanese Tea
           </h2>
         </div>
 
