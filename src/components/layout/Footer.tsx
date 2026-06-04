@@ -49,16 +49,26 @@ export default function Footer() {
           </div>
 
           {/* Contact Column */}
-          <div>
+          <div className="md:col-span-1">
             <h3 className="text-sm font-semibold text-zinc-900 tracking-wider mb-4">Contact Us</h3>
-            <ul className="space-y-3">
-              <li className="flex items-center text-sm text-zinc-500">
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                wholesale@kaoribychiran.com
+            <ul className="space-y-3 text-sm text-zinc-500">
+              <li className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Websites</span>
+                <span>India: <a href="https://www.hamadaglobaltrading.in" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-900 underline">www.hamadaglobaltrading.in</a></span>
+                <span>Japan: <a href="https://chiran-omoiire.com" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-900 underline">chiran-omoiire.com</a></span>
               </li>
-              <li className="flex items-center text-sm text-zinc-500">
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                +1 (555) 123-4567
+              <li className="flex flex-col gap-0.5">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Phone</span>
+                <a href="tel:+919899923445" className="hover:text-zinc-900">+91 98999 23445</a>
+                <a href="tel:+919354262542" className="hover:text-zinc-900">+91 93542 62542</a>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Email</span>
+                <a href="mailto:sales@chirantea.in" className="hover:text-zinc-900">sales@chirantea.in</a>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Registered Office</span>
+                <span className="leading-snug">B1, house no 2P, Sector 31, Gurugram 122001</span>
               </li>
             </ul>
           </div>
@@ -67,7 +77,7 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="pt-8 border-t border-zinc-200 flex flex-col md:flex-row justify-between items-center">
           <p className="text-xs text-zinc-400 mb-4 md:mb-0">
-            &copy; 2024 Kaori by Chiran. All rights reserved.
+            &copy; 2026 Hamada Global Trading Pvt Ltd. All rights reserved.
           </p>
           <div className="flex space-x-4">
             <a href="#" className="text-zinc-400 hover:text-zinc-600 transition-colors">

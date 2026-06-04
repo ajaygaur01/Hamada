@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Package, ShieldCheck, FileText, Globe, UserCheck, MessageSquare } from "lucide-react";
+import { Package, ShieldCheck, FileText, Globe, UserCheck, MessageSquare, Lock } from "lucide-react";
 import { isBulkSize, isSampleSize } from "@/lib/tea-size";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface Variant {
   id: string;
@@ -19,6 +20,9 @@ interface OrderFormProps {
 }
 
 export default function OrderForm({ variants, productSlug }: OrderFormProps) {
+  const { user, openAuthModal } = useAuth();
+  const isVerifiedBuyer = user?.gstin_verified === true;
+
   // Separate variants into sample and bulk categories
   const sampleVariants = variants.filter((v) => isSampleSize(v.size));
   const bulkVariants = variants.filter((v) => isBulkSize(v.size));
@@ -102,9 +106,18 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
         <h2 className="font-serif text-3xl font-bold text-zinc-800 leading-tight">
           MOQ {bulkVariants[0]?.size || "500g"}
         </h2>
-        <p className="text-sm text-zinc-500 font-medium italic">
-          Pricing available on request
-        </p>
+        {isVerifiedBuyer && selectedBulkVariant ? (
+          <p className="text-2xl font-bold text-[#4C632E] mt-1">
+            ₹{selectedBulkVariant.bulkPrice}
+            <span className="text-xs font-normal text-zinc-500 italic ml-1">
+              per pack
+            </span>
+          </p>
+        ) : (
+          <p className="text-sm text-zinc-500 font-medium italic mt-1">
+            {!isVerifiedBuyer ? "*GST required to view wholesale pricing" : "Pricing available on request"}
+          </p>
+        )}
       </div>
 
       {/* SELECT FORMAT (Bulk variants) */}
@@ -127,7 +140,17 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                       : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
                   }`}
                 >
-                  <span>{info.name}</span>
+                  <div className="flex flex-col">
+                    <span>{info.name}</span>
+                    <span className="text-xs font-normal text-zinc-400 mt-0.5">
+                      Price: {isVerifiedBuyer ? `₹${v.bulkPrice}` : (
+                        <span className="inline-flex items-center gap-1 text-[#D04636] font-semibold">
+                          <Lock className="w-2.5 h-2.5" />
+                          <span className="blur-[3px] select-none">₹9,999</span>
+                        </span>
+                      )}
+                    </span>
+                  </div>
                   {info.badge}
                 </button>
               );
@@ -190,18 +213,33 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
           </span>
         </Link>
 
-        {/* Get Bulk Pricing Button */}
-        <Link
-          href={bulkCheckoutUrl}
-          className="flex flex-col items-center justify-center w-full bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-700 py-3.5 rounded-xl transition-all text-center group"
-        >
-          <div className="font-bold text-sm leading-none text-zinc-800">
-            Get Bulk Pricing
-          </div>
-          <span className="text-[10px] text-zinc-400 font-medium mt-1 leading-none">
-            Volume-based pricing
-          </span>
-        </Link>
+        {/* Wholesale pricing action */}
+        {!isVerifiedBuyer ? (
+          <button
+            onClick={() => openAuthModal("login")}
+            className="flex flex-col items-center justify-center w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-3.5 rounded-xl transition-all text-center group shadow-md"
+          >
+            <div className="flex items-center justify-center gap-2 font-bold text-sm leading-none">
+              <Lock className="w-4 h-4" />
+              <span>Login to See Wholesale Pricing</span>
+            </div>
+            <span className="text-[10px] text-white/80 font-medium mt-1 leading-none">
+              GST Registration Required
+            </span>
+          </button>
+        ) : (
+          <Link
+            href={bulkCheckoutUrl}
+            className="flex flex-col items-center justify-center w-full bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-700 py-3.5 rounded-xl transition-all text-center group"
+          >
+            <div className="font-bold text-sm leading-none text-zinc-800">
+              Get Bulk Pricing
+            </div>
+            <span className="text-[10px] text-zinc-400 font-medium mt-1 leading-none">
+              Volume-based pricing
+            </span>
+          </Link>
+        )}
 
         {/* Chat on WhatsApp Button */}
         <a

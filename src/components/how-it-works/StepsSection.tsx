@@ -1,78 +1,77 @@
-import Link from "next/link";
-import { Package, Users, ShoppingBag, ArrowRight } from "lucide-react";
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 const steps = [
   {
-    number: "01",
-    title: "Order a Sample",
-    description: "Experience the quality firsthand. Choose any tea, pay via UPI, and we'll deliver directly to your door with no account required.",
-    icon: <Package className="w-8 h-8 text-[#D04636]" />,
+    number: '01',
+    title: 'Shading',
+    description: 'Leaves are covered 4 weeks before harvest, intensifying chlorophyll and amino acids.',
   },
   {
-    number: "02",
-    title: "Test With Your Team",
-    description: "The most important step. Share the samples with your chef or barista, brew under your service conditions, and select your favorites.",
-    icon: <Users className="w-8 h-8 text-[#D04636]" />,
+    number: '02',
+    title: 'Harvesting',
+    description: 'Only the youngest two leaves and bud are selected by experienced pickers each May.',
   },
   {
-    number: "03",
-    title: "Place Your Bulk Order",
-    description: "Ready to scale? Create a verified business account with your GST details to unlock wholesale pricing and bulk quantities.",
-    icon: <ShoppingBag className="w-8 h-8 text-[#D04636]" />,
+    number: '03',
+    title: 'Steaming & Drying',
+    description: 'Immediate steaming halts oxidation. Slow drying locks in colour, aroma and nutrients.',
+  },
+  {
+    number: '04',
+    title: 'Blending',
+    description: 'Batches are blended for colour, aroma, and consistency before final finishing.',
+  },
+  {
+    number: '05',
+    title: 'Milling',
+    description: 'Granite mills rotate at 30 RPM to prevent heat build-up, preserving antioxidants.',
   },
 ];
 
 export default function StepsSection() {
   return (
-    <section className="bg-[#FAF9F6] py-24 sm:py-32 overflow-hidden">
+    <section className="bg-[#FAF9F6] py-20 sm:py-24 overflow-hidden border-t border-zinc-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16">
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#9AA958] mb-4">
-            Our Process
+            The Process
           </p>
-          <h2 className="font-heading text-4xl md:text-5xl text-[#3E4F25] mb-6">
-            Simple, Transparent, Professional
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[#3E4F25] mb-4">
+            Our Craft Process
           </h2>
-          <div className="w-20 h-1 bg-[#D04636] mx-auto opacity-20"></div>
+          <div className="w-20 h-0.5 bg-[#D04636] mx-auto opacity-35"></div>
         </div>
 
-        {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-20 relative">
+        {/* Infographic Layout */}
+        <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between gap-12 md:gap-4 max-w-5xl mx-auto mb-16">
           
           {/* Connecting Line (Desktop) */}
-          <div className="hidden md:block absolute top-1/4 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-[#E2D9C5] to-transparent z-0"></div>
+          <div className="hidden md:block absolute top-[40px] left-[10%] right-[10%] h-[2px] bg-zinc-200 z-0"></div>
 
           {steps.map((step, idx) => (
             <div 
               key={step.number} 
-              className="group relative z-10 flex flex-col items-center text-center p-8 lg:p-10 rounded-3xl bg-white border border-[#E2D9C5] shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(76,99,46,0.08)]"
+              className="group relative z-10 flex flex-col items-center text-center flex-1"
             >
-              {/* Step Number Badge */}
-              <div className="absolute -top-4 right-8 bg-[#D04636] text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-lg transform transition-transform group-hover:scale-110">
-                Step {step.number}
+              {/* Numbered Node */}
+              <div className="w-20 h-20 rounded-full border-2 border-brand-green bg-white flex items-center justify-center font-bold text-lg text-brand-green shadow-xs transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-green group-hover:text-white">
+                {step.number}
               </div>
 
-              {/* Icon Container */}
-              <div className="relative mb-8">
-                <div className="w-20 h-20 rounded-2xl bg-[#F5F0E8] flex items-center justify-center transition-transform duration-500 group-hover:rotate-[10deg]">
-                  {step.icon}
-                </div>
-                <div className="absolute -inset-2 bg-[#D04636]/5 rounded-3xl -z-10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-
-              <h3 className="font-heading text-xl text-[#3E4F25] mb-4 group-hover:text-[#D04636] transition-colors">
+              {/* Title & Description */}
+              <h3 className="font-heading text-base font-bold text-[#3E4F25] mt-5 mb-2 group-hover:text-[#D04636] transition-colors">
                 {step.title}
               </h3>
-              
-              <p className="text-[14px] text-zinc-500 leading-relaxed max-w-[260px] mx-auto">
+              <p className="text-xs text-zinc-500 leading-relaxed max-w-[180px] mx-auto">
                 {step.description}
               </p>
 
-              {/* Connector dots for mobile */}
+              {/* Connector line for mobile */}
               {idx < steps.length - 1 && (
-                <div className="md:hidden mt-8 w-1 h-8 border-r border-dashed border-[#E2D9C5]"></div>
+                <div className="md:hidden absolute top-[80px] bottom-[-48px] w-0.5 border-r-2 border-dashed border-zinc-200 z-0"></div>
               )}
             </div>
           ))}
@@ -82,17 +81,14 @@ export default function StepsSection() {
         <div className="text-center">
           <Link
             href="/products"
-            className="group inline-flex items-center gap-3 bg-[#D04636] text-white font-bold px-10 py-5 rounded-full text-[13px] tracking-widest uppercase hover:bg-[#B83C2D] transition-all hover:px-12 shadow-xl hover:shadow-[0_12px_24px_rgba(208,70,54,0.3)]"
+            className="group inline-flex items-center gap-3 bg-[#D04636] text-white font-bold px-10 py-4.5 rounded-full text-[12px] tracking-widest uppercase hover:bg-[#B83C2D] transition-all hover:px-11 shadow-lg shadow-brand-red/20"
           >
             Explore Catalog
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
-          
-          <p className="mt-8 text-[12px] text-zinc-400 font-medium">
-            Starting your wholesale journey has never been easier.
-          </p>
         </div>
       </div>
     </section>
   );
 }
+
