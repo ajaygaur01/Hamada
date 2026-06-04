@@ -8,8 +8,8 @@ export default function Story() {
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 shadow-sm">
             <Image
-              src="/about1.avif"
-              alt="Tea fields in Kagoshima, Japan"
+              src="/founder.avif"
+              alt="Hamada and farmer in tea fields"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"
@@ -18,28 +18,21 @@ export default function Story() {
 
           <div className="max-w-xl">
             <div className="mb-5 inline-block rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-zinc-500">
-              Our Story
+              Unit of Hamada Tea Co Ltd
             </div>
             <h2 className="font-heading mb-5 text-3xl font-bold leading-tight text-zinc-900 md:text-4xl">
-              Unit of Hamada Tea Co. Ltd
-            </h2>
-            <p className="mb-4 text-lg font-medium text-brand-red">
               Founded in Japan. Trusted in India.
-            </p>
+            </h2>
             <div className="space-y-4 text-[15px] leading-relaxed text-zinc-600 sm:text-base">
               <p>
-                Hamada Tea Co. has crafted premium teas for over 50 years, since 1975.
-              </p>
-              <p>
-                Today, Hamada Global Trading Pvt. Ltd. carries that legacy forward to serve
-                India&apos;s growing demand for clean, high-quality Japanese teas.
+                Hamada Tea Co. has crafted premium teas for over 50 years, since 1975. Today, Hamada Global Trading Pvt. Ltd. carries that legacy forward to serve India&apos;s growing demand for clean, high-quality Japanese teas.
               </p>
             </div>
             <Link
               href="/about"
               className="mt-8 inline-flex items-center justify-center rounded-lg bg-[#D04636] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#B83C2D]"
             >
-              Know more
+              Know More
             </Link>
           </div>
         </div>
@@ -47,3 +40,4 @@ export default function Story() {
     </section>
   );
 }
+
