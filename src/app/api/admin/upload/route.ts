@@ -3,6 +3,7 @@ import { getServerAuthUser } from "@/lib/auth/server-session";
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import { existsSync, mkdirSync } from "fs";
+import { put } from "@vercel/blob";
 
 export async function POST(req: NextRequest) {
   const user = await getServerAuthUser();
@@ -23,6 +24,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "File too large. Max 5MB allowed." }, { status: 400 });
     }
 
+    const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(7)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "")}`;
+
+    // Cloud upload (Vercel Blob) if configured
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      const blob = await put(uniqueName, file, { access: "public" });
+      return NextResponse.json({ url: blob.url });
+    }
+
+    // Local development fallback
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -31,9 +41,7 @@ export async function POST(req: NextRequest) {
       mkdirSync(uploadDir, { recursive: true });
     }
 
-    const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(7)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "")}`;
     const filePath = join(uploadDir, uniqueName);
-
     await writeFile(filePath, buffer);
 
     return NextResponse.json({ url: `/uploads/${uniqueName}` });
@@ -42,3 +50,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
   }
 }
+
