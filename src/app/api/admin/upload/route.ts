@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
 
     const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(7)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "")}`;
 
-    // Cloud upload (Vercel Blob) if configured
-    if (process.env.BLOB_READ_WRITE_TOKEN) {
+    // Cloud upload (Vercel Blob) if configured or running on Vercel
+    if (process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID || process.env.VERCEL) {
       const blob = await put(uniqueName, file, { access: "public" });
       return NextResponse.json({ url: blob.url });
     }
