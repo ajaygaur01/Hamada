@@ -15,6 +15,7 @@ interface BulkOrderCheckoutClientProps {
   companyAddress: string;
   gstin: string;
   razorpayKeyId: string;
+  minQty?: number;
 }
 
 type FormState = {
@@ -62,7 +63,7 @@ function validateStep2(values: FormState) {
 
 export default function BulkOrderCheckoutClient({
   variantId,
-  quantity,
+  quantity: initialQuantity,
   productName,
   variantSize,
   bulkPrice,
@@ -70,6 +71,7 @@ export default function BulkOrderCheckoutClient({
   companyAddress,
   gstin,
   razorpayKeyId,
+  minQty = 1,
 }: BulkOrderCheckoutClientProps) {
   const router = useRouter();
   
@@ -82,6 +84,7 @@ export default function BulkOrderCheckoutClient({
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [quantity, setQuantity] = useState(initialQuantity);
 
   const subtotal = bulkPrice * quantity;
   const gstRate = 0.05;
@@ -336,6 +339,40 @@ export default function BulkOrderCheckoutClient({
                           onChange={(e) => setFormValues((prev) => ({ ...prev, phone: e.target.value }))}
                         />
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-zinc-100 pt-6">
+                    <h3 className="text-sm font-semibold text-zinc-900 mb-2">Order Quantity</h3>
+                    <p className="text-xs text-zinc-500 mb-3">
+                      Minimum order quantity for this size is {minQty} {minQty === 1 ? "pack" : "packs"}.
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setQuantity((prev) => Math.max(minQty, prev - 1))}
+                        disabled={quantity <= minQty}
+                        className="w-10 h-10 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 hover:bg-zinc-50 active:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed select-none"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min={minQty}
+                        value={quantity}
+                        onChange={(e) => setQuantity(Math.max(minQty, parseInt(e.target.value) || minQty))}
+                        className="w-20 text-center rounded-lg border border-zinc-300 py-2 font-semibold text-zinc-900 focus:border-[#D04636] focus:ring-1 focus:ring-[#D04636] outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setQuantity((prev) => prev + 1)}
+                        className="w-10 h-10 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 hover:bg-zinc-50 active:bg-zinc-100 select-none"
+                      >
+                        +
+                      </button>
+                      <span className="text-sm text-zinc-600 font-medium">
+                        packs ({variantSize})
+                      </span>
                     </div>
                   </div>
                 </div>

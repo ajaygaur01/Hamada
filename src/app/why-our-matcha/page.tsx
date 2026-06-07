@@ -215,8 +215,8 @@ export default function WhyOurMatcha() {
                 Our Kagoshima farms benefit from volcanic Shirasu soil, cool Kirishima mists, and daily humidity variance that produces the vivid emerald hue and smooth, buttery sweetness our partners have built menus around.
               </p>
               <blockquote className="border-l-4 border-[#D04636] pl-5 py-1">
-                <p className="text-[#4E3D33] font-medium italic text-lg leading-relaxed">
-                  "Partnering with us means inheriting a story that resonates with consumers who value authenticity."
+                <p className="text-[#4E3D33] font-accent italic text-lg sm:text-xl leading-relaxed">
+                  &ldquo;Partnering with us means inheriting a story that resonates with consumers who value authenticity.&rdquo;
                 </p>
               </blockquote>
             </div>

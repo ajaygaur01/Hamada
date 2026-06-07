@@ -30,9 +30,13 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
   // State for active choices
   const [selectedBulkIdx, setSelectedBulkIdx] = useState(0);
   const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
+  const [bulkQty, setBulkQty] = useState(1);
 
   const selectedBulkVariant = bulkVariants[selectedBulkIdx];
   const selectedSampleVariant = sampleVariants[selectedSampleIdx] || variants[selectedSampleIdx];
+
+  const minBulkQty = selectedBulkVariant?.minBulkQuantity || 1;
+  const currentBulkQty = Math.max(minBulkQty, bulkQty);
 
   // Dynamic URLs
   const sampleCheckoutUrl = selectedSampleVariant
@@ -40,7 +44,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
     : `/sample-order?product=${encodeURIComponent(productSlug)}`;
 
   const bulkCheckoutUrl = selectedBulkVariant
-    ? `/bulk-order/checkout?variant=${encodeURIComponent(selectedBulkVariant.id)}`
+    ? `/bulk-order/checkout?variant=${encodeURIComponent(selectedBulkVariant.id)}&qty=${currentBulkQty}`
     : `/bulk-order/checkout`;
 
   const activeSizeStr = selectedBulkVariant?.size || selectedSampleVariant?.size || "";
@@ -228,17 +232,48 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
             </span>
           </button>
         ) : (
-          <Link
-            href={bulkCheckoutUrl}
-            className="flex flex-col items-center justify-center w-full bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-700 py-3.5 rounded-xl transition-all text-center group"
-          >
-            <div className="font-bold text-sm leading-none text-zinc-800">
-              Get Bulk Pricing
+          <div className="space-y-3">
+            {/* Quantity Selector */}
+            <div className="flex items-center justify-between border border-zinc-200 rounded-xl px-4 py-2.5 bg-[#FAF8F5]">
+              <span className="text-xs font-semibold text-zinc-600">Bulk Quantity</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev - 1))}
+                  disabled={currentBulkQty <= minBulkQty}
+                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed select-none"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min={minBulkQty}
+                  value={currentBulkQty}
+                  onChange={(e) => setBulkQty(Math.max(minBulkQty, parseInt(e.target.value) || minBulkQty))}
+                  className="w-14 text-center rounded-lg border border-zinc-300 py-1 text-xs font-semibold text-zinc-900 focus:border-[#D04636] focus:ring-1 focus:ring-[#D04636] bg-white outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev + 1))}
+                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 select-none"
+                >
+                  +
+                </button>
+              </div>
             </div>
-            <span className="text-[10px] text-zinc-400 font-medium mt-1 leading-none">
-              Volume-based pricing
-            </span>
-          </Link>
+
+            <Link
+              href={bulkCheckoutUrl}
+              className="flex flex-col items-center justify-center w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-3.5 rounded-xl transition-all text-center group shadow-md"
+            >
+              <div className="font-bold text-sm leading-none flex items-center gap-1.5">
+                <span>Place Bulk Order</span>
+              </div>
+              <span className="text-[10px] text-white/80 font-medium mt-1 leading-none">
+                Proceed to Checkout ({currentBulkQty} {currentBulkQty === 1 ? "pack" : "packs"})
+              </span>
+            </Link>
+          </div>
         )}
 
         {/* Chat on WhatsApp Button */}

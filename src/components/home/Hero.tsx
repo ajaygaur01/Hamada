@@ -44,7 +44,7 @@ const SLIDES: Slide[] = [
     ctas: [
       { text: 'Explore Catalogue', href: '/products', style: 'green' },
     ],
-    image: '/banner2.avif',
+    image: '/crousel2.avif',
     overlayClass: 'bg-black/45',
     theme: 'dark',
     isMatchaSlide: true,
@@ -57,7 +57,7 @@ const SLIDES: Slide[] = [
       { text: 'Know More', href: '/about-kagoshima', style: 'orange' },
       { text: 'Learn About Kagoshima', href: '/kagoshima', style: 'white-shadow' },
     ],
-    image: '/banner2.avif',
+    image: '/crousel3.avif',
     overlayClass: 'bg-black/45',
     theme: 'dark',
     isKagoshimaSlide: true,
@@ -66,15 +66,13 @@ const SLIDES: Slide[] = [
 
 export default function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    if (isHovered) return;
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % SLIDES.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [currentIndex]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + SLIDES.length) % SLIDES.length);
@@ -87,8 +85,6 @@ export default function Hero() {
   return (
     <section
       className="relative w-full h-[85vh] lg:h-[90vh] min-h-[580px] overflow-hidden bg-zinc-900 group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Slides */}
       <div className="relative h-full w-full z-10">
@@ -119,8 +115,8 @@ export default function Hero() {
                     {slide.eyebrow && (
                       <span
                         className={`inline-block text-xs font-semibold uppercase tracking-[0.25em] mb-4 transition-all duration-700 delay-100 ease-out transform ${isActive
-                            ? 'opacity-100 translate-y-0'
-                            : 'opacity-0 translate-y-4'
+                          ? 'opacity-100 translate-y-0'
+                          : 'opacity-0 translate-y-4'
                           } ${slide.theme === 'light' ? 'text-brand-red' : 'text-white/90'
                           }`}
                       >
@@ -131,8 +127,8 @@ export default function Hero() {
                     {/* Headline */}
                     <div
                       className={`mb-4 transition-all duration-700 delay-200 ease-out transform ${isActive
-                          ? 'opacity-100 translate-y-0'
-                          : 'opacity-0 translate-y-4'
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-4'
                         }`}
                     >
                       {slide.isMatchaSlide ? (
@@ -168,8 +164,8 @@ export default function Hero() {
                     {slide.description && (
                       <p
                         className={`mb-8 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl transition-all duration-700 delay-350 ease-out transform ${isActive
-                            ? 'opacity-100 translate-y-0'
-                            : 'opacity-0 translate-y-4'
+                          ? 'opacity-100 translate-y-0'
+                          : 'opacity-0 translate-y-4'
                           } ${slide.theme === 'light' ? 'text-zinc-800' : 'text-white/85'
                           }`}
                       >
@@ -180,8 +176,8 @@ export default function Hero() {
                     {/* CTAs */}
                     <div
                       className={`flex transition-all duration-700 delay-500 ease-out transform ${isActive
-                          ? 'opacity-100 translate-y-0'
-                          : 'opacity-0 translate-y-4'
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-4'
                         } ${slide.isKagoshimaSlide
                           ? 'flex-col items-start gap-3 sm:w-80'
                           : 'flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4'

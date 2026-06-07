@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { IBM_Plex_Sans, Lora } from "next/font/google";
+import { IBM_Plex_Sans, Lora, Noto_Sans_JP } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/components/auth/AuthProvider";
@@ -19,6 +19,12 @@ const lora = Lora({
   subsets: ["latin"],
 });
 
+const notoSansJp = Noto_Sans_JP({
+  weight: ["400", "500", "700"],
+  variable: "--font-noto-sans-jp",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Kaori by Chiran | Premium Japanese Tea",
   description: "B2B wholesale Japanese tea, directly sourced from Kagoshima, Japan.",
@@ -34,7 +40,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${ibmPlexSans.variable} ${lora.variable} h-full antialiased`}
+      className={`${ibmPlexSans.variable} ${lora.variable} ${notoSansJp.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-cream font-sans">
         <Suspense fallback={null}>

@@ -103,11 +103,11 @@ export default function TopReviews({ reviews }: { reviews: LandingReview[] }) {
                     &ldquo;
                   </span>
                   {review.reviewText ? (
-                    <p className="relative z-[1] line-clamp-5 min-h-[4.5rem] pl-5 text-[13px] leading-[1.65] text-zinc-700 sm:text-sm">
+                    <p className="relative z-[1] line-clamp-5 min-h-[4.5rem] pl-5 text-[13px] leading-[1.65] text-zinc-700 sm:text-sm font-accent italic">
                       {review.reviewText}
                     </p>
                   ) : (
-                    <p className="relative z-[1] min-h-[4.5rem] pl-5 text-[13px] italic leading-relaxed text-zinc-500 sm:text-sm">
+                    <p className="relative z-[1] min-h-[4.5rem] pl-5 text-[13px] text-zinc-500 sm:text-sm font-accent italic">
                       Left a {review.rating}-star rating for this tea.
                     </p>
                   )}

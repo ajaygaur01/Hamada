@@ -25,17 +25,17 @@ export default function TrustedBy() {
           Long-term sourcing relationships built on consistency, quality, and dependable nationwide fulfillment.
         </p>
 
-        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9 items-center justify-center">
+        <div className="mx-auto flex flex-wrap items-center justify-center gap-3 sm:gap-4 max-w-5xl">
           {premiumBrands.map((brand) => (
             <div
               key={brand.name}
-              className="flex h-16 items-center justify-center rounded-lg border border-zinc-200/50 bg-white px-3 py-2 text-center shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-zinc-300 col-span-1"
+              className="flex h-14 items-center justify-center rounded-lg border border-zinc-200/50 bg-white px-5 py-2 text-center shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-zinc-300"
             >
-              <span className={brand.style}>{brand.name}</span>
+              <span className={`${brand.style} whitespace-nowrap`}>{brand.name}</span>
             </div>
           ))}
-          <div className="flex h-16 items-center justify-center px-3 py-2 text-center col-span-1">
-            <span className="font-serif italic text-sm text-zinc-400 tracking-wide">
+          <div className="flex h-14 items-center justify-center px-3 py-2 text-center">
+            <span className="font-accent italic text-sm text-zinc-400 tracking-wide whitespace-nowrap">
               and more
             </span>
           </div>

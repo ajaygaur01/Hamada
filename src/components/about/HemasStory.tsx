@@ -32,7 +32,7 @@ export default function HemasStory() {
             </div>
 
             <div className="mt-8 pt-6 border-t border-zinc-200">
-              <p className="text-xs text-zinc-400 italic">
+              <p className="text-sm text-zinc-500 font-accent italic">
                 &ldquo;Good tea speaks softly. But profoundly.&rdquo;
               </p>
             </div>

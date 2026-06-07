@@ -1,6 +1,7 @@
 import { CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
 import type { UserProfile } from "../AccountPageClient";
 import { useState } from "react";
+import Link from "next/link";
 
 interface ProfileSectionProps {
   profile: UserProfile;
@@ -169,9 +170,12 @@ export default function ProfileSection({
                 <h3 className="text-lg font-bold text-amber-800 mb-2">Unverified Account</h3>
                 <p className="text-sm text-amber-700 mb-6">Verify your business to place bulk orders and access wholesale pricing.</p>
                 
-                <button className="w-full bg-[#D04636] text-white py-2.5 rounded-lg font-medium hover:bg-[#B83C2D] transition-colors shadow-sm">
+                <Link 
+                  href="/bulk-order/verify-gstin"
+                  className="w-full bg-[#D04636] text-white py-2.5 rounded-lg font-medium hover:bg-[#B83C2D] transition-colors shadow-sm inline-block"
+                >
                   Verify Now
-                </button>
+                </Link>
               </div>
             )}
           </div>

@@ -145,9 +145,16 @@ export default function ProductInfo({
       </div>
 
       {/* Description */}
-      <p className="text-[#483b34]/80 text-base leading-relaxed font-sans">
-        {shortDescription}
-      </p>
+      <div className="space-y-4">
+        <p className="text-[#483b34]/95 text-[15px] sm:text-base leading-relaxed font-sans font-medium">
+          {shortDescription}
+        </p>
+        {fullDescription && (
+          <p className="text-zinc-600 text-[13px] sm:text-sm leading-relaxed whitespace-pre-line font-sans border-l-2 border-[#4C632E]/30 pl-4 py-1">
+            {fullDescription}
+          </p>
+        )}
+      </div>
 
       {/* Best For Section */}
       {useCases.length > 0 && (

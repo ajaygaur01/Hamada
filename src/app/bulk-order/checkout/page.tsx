@@ -78,6 +78,7 @@ export default async function BulkOrderCheckoutPage({ searchParams }: Props) {
         companyAddress={dbUser?.company_address || ""}
         gstin={dbUser?.gstin || ""}
         razorpayKeyId={razorpayKeyId}
+        minQty={minQty}
       />
     </div>
   );
