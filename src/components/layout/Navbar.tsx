@@ -2,16 +2,22 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { UserCircle2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
+import ProductUtilityStrip from "@/components/layout/ProductUtilityStrip";
 
 export default function Navbar() {
   const { user, openAuthModal, logout } = useAuth();
+  const pathname = usePathname();
+  const isProductPage = pathname === "/products" || pathname?.startsWith("/products/");
 
   return (
-    <nav className="w-full sticky top-0 z-50 
-                    bg-white/95 backdrop-blur-md 
-                    border-b border-zinc-200 shadow-sm">
+    <>
+      {isProductPage && <ProductUtilityStrip />}
+      <nav className={`w-full sticky ${isProductPage ? "top-[36px] md:top-0" : "top-0"} z-50 
+                      bg-white/95 backdrop-blur-md 
+                      border-b border-zinc-200 shadow-sm`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-18 py-4">
 
@@ -128,5 +134,6 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    </>
   );
 }

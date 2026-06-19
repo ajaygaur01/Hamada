@@ -35,17 +35,57 @@ const paymentColors: Record<string, string> = {
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     fetch("/api/admin/stats")
-      .then(r => r.json())
-      .then(data => setStats(data))
-      .catch(() => toast("Failed to load dashboard data", "error"))
+      .then(async r => {
+        if (!r.ok) {
+          const data = await r.json().catch(() => ({}));
+          throw new Error(data.error || "Failed to load stats");
+        }
+        return r.json();
+      })
+      .then(data => {
+        setStats(data);
+        setError(null);
+      })
+      .catch(err => {
+        const msg = err instanceof Error ? err.message : "Failed to load dashboard data";
+        setError(msg);
+        toast(msg, "error");
+      })
       .finally(() => setLoading(false));
   }, [toast]);
 
-  const allRecent = stats ? [
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
+        <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center">
+          <AlertTriangle size={32} />
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-zinc-900 font-serif">Dashboard Access Error</h2>
+          <p className="text-zinc-500 text-sm mt-1">{error}</p>
+        </div>
+        {error.toLowerCase().includes("unauthorized") ? (
+          <Link href="/login" className="bg-[#D04636] hover:bg-[#B83C2D] text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all">
+            Go to Login
+          </Link>
+        ) : (
+          <button 
+            onClick={() => { setLoading(true); setError(null); }}
+            className="bg-[#4C632E] hover:bg-[#3E4F25] text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all"
+          >
+            Retry
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  const allRecent = stats && stats.recentSampleOrders && stats.recentBulkOrders ? [
     ...stats.recentSampleOrders.map(o => ({
       id: o.id, orderNumber: o.order_number, customer: o.customer_name,
       amount: o.amount, status: o.order_status, paymentStatus: o.payment_status,
