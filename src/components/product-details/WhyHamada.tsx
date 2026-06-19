@@ -34,7 +34,7 @@ export default function WhyHamada({ productName }: WhyHamadaProps) {
   return (
     <div className="space-y-6 pt-8 border-t border-zinc-200">
       <h3 className="font-serif text-2xl text-[#3E4F25] font-semibold leading-tight">
-        Why Hamada {shortName}?
+        Why Hamada {productName}?
       </h3>
 
       <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">

@@ -69,6 +69,17 @@ export type SeedCatalogResult = {
   products: { id: string; slug: string; name: string }[];
 };
 
+function stockImageAltText(name: string, index: number): string {
+  const alts = [
+    "matcha powder in Japanese vessel with brewed cup",
+    "Kagoshima tea field / farm landscape",
+    "Brewed cup close-up showing color and clarity",
+    "Powder macro detail shot",
+    "Packaging shot (the pouch the buyer receives)"
+  ];
+  return alts[index] ? `${name} - ${alts[index]}` : `${name} — image ${index + 1}`;
+}
+
 /** Upsert categories and insert catalog products + variants. */
 export async function seedProductCatalog(
   prisma: PrismaClient,
@@ -120,9 +131,9 @@ export async function seedProductCatalog(
         ...(withImages
           ? {
               images: {
-                create: [0, 1, 2].map((i) => ({
+                create: [0, 1, 2, 3, 4].map((i) => ({
                   image_url: stockImageUrl(slug, i),
-                  alt_text: `${p.name} — image ${i + 1}`,
+                  alt_text: stockImageAltText(p.name, i),
                   display_order: i,
                   is_primary: i === 0,
                 })),
