@@ -20,8 +20,8 @@ export default function ProductDetailsFooter() {
     {
       icon: <PhoneCall className="w-6 h-6 text-[#4C632E]" strokeWidth={1.5} />,
       title: "Need help?",
-      desc: "+91 98765 43210",
-      href: "tel:+919876543210",
+      desc: "+91 98999 23445",
+      href: "tel:+919899923445",
     },
   ];
 
