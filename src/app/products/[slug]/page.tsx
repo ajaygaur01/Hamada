@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Breadcrumb from "@/components/product-details/Breadcrumb";
@@ -10,8 +10,6 @@ import ReviewsSection from "@/components/product-details/ReviewsSection";
 import WhyHamada from "@/components/product-details/WhyHamada";
 import ProductDetailsFooter from "@/components/product-details/ProductDetailsFooter";
 import { sortProductImagesForGallery } from "@/lib/product-images";
-
-const prisma = new PrismaClient();
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -93,6 +91,16 @@ export default async function ProductDetailPage({ params }: Props) {
     };
   });
 
+  const slugLower = product.slug.toLowerCase();
+  let badgeText: string | null = null;
+  if (slugLower.includes("ceremonial")) {
+    badgeText = "PREMIUM";
+  } else if (slugLower.includes("culinary")) {
+    badgeText = "CULINARY";
+  } else if (slugLower.includes("hojicha-powder")) {
+    badgeText = "POWDER";
+  }
+
   return (
     <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
@@ -111,6 +119,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 alt: img.alt_text || product.name,
                 isPrimary: img.is_primary,
               }))}
+              badge={badgeText}
             />
 
             {/* Product Metadata, Ratings, Best For and Specifications */}
