@@ -49,7 +49,10 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
 
   const activeSizeStr = selectedBulkVariant?.size || selectedSampleVariant?.size || "";
   const whatsappMsg = `Hi Hamada, I am interested in wholesale pricing for the ${productSlug} (${activeSizeStr}).`;
-  const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(whatsappMsg)}`;
+  const whatsappUrl = `https://wa.me/919899923445?text=${encodeURIComponent(whatsappMsg)}`;
+
+  const bulkWhatsappMsg = `Hi Hamada, I am interested in bulk wholesale pricing (5kg+) for the ${productSlug}.`;
+  const bulkWhatsappUrl = `https://wa.me/919899923445?text=${encodeURIComponent(bulkWhatsappMsg)}`;
 
   // Trust items under the WhatsApp button
   const trustItems = [
@@ -138,7 +141,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                 <button
                   key={v.id}
                   onClick={() => setSelectedBulkIdx(idx)}
-                  className={`w-full flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-xl bg-white border transition-all text-left ${
+                  className={`w-full flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-xl bg-white border transition-all text-left cursor-pointer ${
                     isSelected
                       ? "border-[#D04636] ring-1 ring-[#D04636] text-[#D04636] shadow-sm"
                       : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
@@ -159,6 +162,24 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                 </button>
               );
             })}
+
+            {/* Bulk (5kg+) Card */}
+            <a
+              href={bulkWhatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-xl bg-white border border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:shadow-sm transition-all text-left cursor-pointer"
+            >
+              <div className="flex flex-col">
+                <span>Bulk (5kg+)</span>
+                <span className="text-xs font-normal text-zinc-400 mt-0.5">
+                  Contact Sales for custom pricing
+                </span>
+              </div>
+              <span className="border border-[#4C632E] text-[#4C632E] bg-transparent rounded-[4px] text-[11px] font-bold px-[8px] py-[3px] leading-none uppercase select-none hover:bg-[#4C632E]/5 transition-colors">
+                Contact Sales
+              </span>
+            </a>
           </div>
         </div>
       )}
@@ -177,10 +198,10 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                 <button
                   key={v.id}
                   onClick={() => setSelectedSampleIdx(idx)}
-                  className={`relative flex flex-col items-center justify-center py-4 px-2 text-center rounded-xl bg-white border transition-all ${
+                  className={`relative flex flex-col items-center justify-center py-4 px-2 text-center rounded-[6px] transition-all cursor-pointer ${
                     isSelected
-                      ? "border-[#4C632E] ring-1 ring-[#4C632E] text-[#4C632E] shadow-sm"
-                      : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
+                      ? "border-2 border-[#4C632E] bg-[#F0EDE4] shadow-sm text-[#4C632E]"
+                      : "border border-[#D4C9A8] bg-white text-zinc-700 hover:border-zinc-400"
                   }`}
                 >
                   {info.isRecommended && (
@@ -188,10 +209,14 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                       Most Ordered
                     </span>
                   )}
-                  <span className="text-sm font-bold text-zinc-800 leading-tight">
+                  <span className={`text-[16px] font-bold leading-tight ${
+                    isSelected ? "text-[#4C632E]" : "text-zinc-800"
+                  }`}>
                     {v.size.replace(/[^0-9gkg]/gi, "")}
                   </span>
-                  <span className="text-[10px] text-zinc-400 font-medium mt-0.5 leading-none">
+                  <span className={`text-[11px] font-medium mt-0.5 leading-none ${
+                    isSelected ? "text-[#4C632E]/70" : "text-zinc-400"
+                  }`}>
                     Sample Pack
                   </span>
                 </button>
@@ -202,11 +227,11 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
       )}
 
       {/* Call-to-Action Buttons */}
-      <div className="space-y-3 pt-2">
+      <div className="space-y-2 pt-2">
         {/* Request Sample Kit Button */}
         <Link
           href={sampleCheckoutUrl}
-          className="flex flex-col items-center justify-center w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-3.5 rounded-xl transition-all shadow-[0_4px_12px_rgba(208,70,54,0.15)] text-center group"
+          className="flex flex-col items-center justify-center w-full bg-[#C0392B] hover:bg-[#A93226] text-white py-3.5 rounded-xl transition-all shadow-[0_4px_12px_rgba(192,57,43,0.15)] text-center group cursor-pointer"
         >
           <div className="flex items-center justify-center gap-2 font-bold text-sm leading-none">
             <Package className="w-4 h-4" />
@@ -221,18 +246,18 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
         {!isVerifiedBuyer ? (
           <button
             onClick={() => openAuthModal("login")}
-            className="flex flex-col items-center justify-center w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-3.5 rounded-xl transition-all text-center group shadow-md"
+            className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
           >
-            <div className="flex items-center justify-center gap-2 font-bold text-sm leading-none">
-              <Lock className="w-4 h-4" />
-              <span>Login to See Wholesale Pricing</span>
+            <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
+              <Lock className="w-4 h-4 text-[#2C3E1A]" />
+              <span>Get Bulk Pricing</span>
             </div>
-            <span className="text-[10px] text-white/80 font-medium mt-1 leading-none">
-              GST Registration Required
+            <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
+              Volume-based pricing
             </span>
           </button>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {/* Quantity Selector */}
             <div className="flex items-center justify-between border border-zinc-200 rounded-xl px-4 py-2.5 bg-[#FAF8F5]">
               <span className="text-xs font-semibold text-zinc-600">Bulk Quantity</span>
@@ -241,7 +266,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                   type="button"
                   onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev - 1))}
                   disabled={currentBulkQty <= minBulkQty}
-                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed select-none"
+                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer"
                 >
                   -
                 </button>
@@ -255,7 +280,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
                 <button
                   type="button"
                   onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev + 1))}
-                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 select-none"
+                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 select-none cursor-pointer"
                 >
                   +
                 </button>
@@ -264,7 +289,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
 
             <Link
               href={bulkCheckoutUrl}
-              className="flex flex-col items-center justify-center w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-3.5 rounded-xl transition-all text-center group shadow-md"
+              className="flex flex-col items-center justify-center w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-3.5 rounded-xl transition-all text-center group shadow-md cursor-pointer"
             >
               <div className="font-bold text-sm leading-none flex items-center gap-1.5">
                 <span>Place Bulk Order</span>
@@ -281,7 +306,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col items-center justify-center w-full bg-[#FAF8F5] border border-zinc-200/80 hover:bg-zinc-100/50 py-3.5 rounded-xl transition-all text-center group"
+          className="flex flex-col items-center justify-center w-full bg-transparent border border-zinc-200 hover:bg-zinc-50 py-3.5 rounded-xl transition-all text-center group cursor-pointer"
         >
           <div className="flex items-center justify-center gap-2 font-bold text-sm leading-none text-zinc-800">
             <MessageSquare className="w-4 h-4 text-[#25D366] fill-[#25D366]/10" />

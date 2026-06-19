@@ -67,9 +67,12 @@ export function rowVariants(
 ): CatalogVariant[] {
   const entries: { size: string; price: number; minBulk: number }[] = [];
 
-  if (row.g10 != null) entries.push({ size: "10g", price: row.g10, minBulk: 5 });
+  if (row.g10 != null) {
+    entries.push({ size: "10g", price: row.g10, minBulk: 5 });
+    entries.push({ size: "20g", price: row.g10 * 2, minBulk: 5 });
+    entries.push({ size: "30g", price: row.g10 * 3, minBulk: 5 });
+  }
   if (row.g15 != null) entries.push({ size: "15g", price: row.g15, minBulk: 5 });
-  if (row.g20 != null) entries.push({ size: "20g", price: row.g20, minBulk: 5 });
   if (row.g100 != null) entries.push({ size: "100g", price: row.g100, minBulk: 3 });
   if (row.g250 != null) entries.push({ size: "250g", price: row.g250, minBulk: 2 });
   if (row.g500 != null) entries.push({ size: "500g", price: row.g500, minBulk: 2 });
