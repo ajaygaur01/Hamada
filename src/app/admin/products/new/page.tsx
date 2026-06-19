@@ -3,7 +3,10 @@ import ProductForm from "@/components/admin/ProductForm";
 import { getServerAuthUser } from "@/lib/auth/server-session";
 import { redirect } from "next/navigation";
 
-export default async function NewProductPage({ searchParams }: { searchParams: { duplicateId?: string } }) {
+type SearchParams = Promise<{ duplicateId?: string }>;
+
+export default async function NewProductPage({ searchParams }: { searchParams: SearchParams }) {
+  const resolvedParams = await searchParams;
   const user = await getServerAuthUser();
   if (!user || user.role !== "admin") redirect("/");
 
@@ -12,8 +15,8 @@ export default async function NewProductPage({ searchParams }: { searchParams: {
       orderBy: { display_order: "asc" },
       select: { id: true, name: true },
     }),
-    searchParams.duplicateId ? prisma.product.findUnique({
-      where: { id: searchParams.duplicateId },
+    resolvedParams.duplicateId ? prisma.product.findUnique({
+      where: { id: resolvedParams.duplicateId },
       include: {
         images: { orderBy: { display_order: "asc" } },
         variants: { orderBy: { size: "asc" } },
