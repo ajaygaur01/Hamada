@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import PageHeader from "@/components/products/PageHeader";
 import CTASection from "@/components/products/CTASection";
 import ProductGrid from "@/components/products/ProductGrid";
 import ProductInfoTabs from "@/components/products/ProductInfoTabs";
 import { pickHeroImageUrl, productCardImageInclude } from "@/lib/product-images";
-
-const prisma = new PrismaClient();
 
 export default async function ProductsPage() {
   // Fetch data from database
