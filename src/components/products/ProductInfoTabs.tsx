@@ -64,19 +64,19 @@ export default function ProductInfoTabs() {
           <div className="space-y-4 text-sm leading-relaxed text-brand-brown/80 sm:text-base">
             <p>
               Kagoshima, at the southern tip of Japan&apos;s Kyushu island, is one of the
-              country&apos;s most celebrated tea-growing regions. Volcanic Shirasu soil, coastal
+              country&apos;s most celebrated tea-growing regions. Volcanic soil, coastal
               breezes, and ideal humidity create a microclimate that produces green tea with
               deep umami, low bitterness, and natural sweetness that&apos;s hard to replicate.
             </p>
             <p>
-              Our Kagoshima farms benefit from cool Kirishima mists and daily humidity
+              Our Kagoshima farms benefit from cool mists and daily humidity
               variance that help develop the vivid emerald hue and smooth character our
               partners build menus around.
             </p>
             <p>
               Home to some of the most progressive and sustainable tea farms in Japan,
               Kagoshima has become a favourite among traditional tea masters and contemporary
-              brands alike — and the foundation of Hamada&apos;s matcha programme.
+              brands alike — and the foundation of the &quot;Hamada&quot; family legacy.
             </p>
           </div>
         </div>

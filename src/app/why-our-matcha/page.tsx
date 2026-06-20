@@ -47,25 +47,6 @@ const benefits = [
   {
     icon: (
       <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M20.893 13.393l-1.135-1.135a2.252 2.252 0 01-.421-.585l-1.08-2.16a.414.414 0 00-.663-.107.827.827 0 01-.812.21l-1.273-.363a.89.89 0 00-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.211.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 01-1.81 1.025 1.055 1.055 0 01-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.654-.261a2.25 2.25 0 01-1.384-2.46l.007-.042a2.25 2.25 0 01.29-.787l.09-.15a2.25 2.25 0 012.37-1.048l1.178.236a1.125 1.125 0 001.302-.795l.208-.73a1.125 1.125 0 00-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 01-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 01-1.458-1.137l1.279-2.132" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 8.25l-3 3-1.5-1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    title: "Sustainability Commitment",
-    body: "Zero-pesticide farming, solar-powered processing facilities, and FSC-certified recyclable packaging across all SKUs.",
-  },
-  {
-    icon: (
-      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-      </svg>
-    ),
-    title: "Dedicated Account Support",
-    body: "A named B2B account manager, Japanese-speaking liaison, and 4-hour response SLA — partnership, not just procurement.",
-  },
-  {
-    icon: (
-      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
       </svg>
     ),
@@ -91,7 +72,7 @@ export default function WhyOurMatcha() {
         {/* Accent line top */}
         <div className="h-1 w-full bg-[#D04636]" />
 
-        <div className="relative container mx-auto px-6 lg:px-16 py-24 lg:py-32">
+        <div className="relative container mx-auto px-6 lg:px-16 py-16 lg:py-24">
           <div className="flex flex-col lg:flex-row items-center gap-16">
 
             {/* Left copy */}
@@ -195,7 +176,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── HERITAGE ─────────────────────────────────────── */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-6 lg:px-16">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1">
@@ -209,10 +190,10 @@ export default function WhyOurMatcha() {
                 A legacy honored<br />since 1975.
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4 text-[0.975rem]">
-                The Hamada family has cultivated tea across five generations. Each refines the art of shading, hand-picking, and stone-grinding to capture what the leaf has to offer at its very best.
+                The Hamada family has cultivated tea across five generations. Each refines the art of shading to capture what the leaf has to offer at its very best.
               </p>
               <p className="text-gray-600 leading-relaxed mb-8 text-[0.975rem]">
-                Our Kagoshima farms benefit from volcanic Shirasu soil, cool Kirishima mists, and daily humidity variance that produces the vivid emerald hue and smooth, buttery sweetness our partners have built menus around.
+                Our Kagoshima farms benefit from volcanic soil, cool mists, and daily humidity variance that produces the vivid emerald hue and smooth, buttery sweetness our partners have built menus around.
               </p>
               <blockquote className="border-l-4 border-[#D04636] pl-5 py-1">
                 <p className="text-[#4E3D33] font-accent italic text-lg sm:text-xl leading-relaxed">
@@ -245,7 +226,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── WHY KAGOSHIMA ─────────────────────────────────── */}
-      <section className="py-24 bg-[#FAF8F5]">
+      <section className="py-16 md:py-20 bg-[#FAF8F5]">
         <div className="container mx-auto px-6 lg:px-16 max-w-4xl">
           <div className="inline-flex items-center gap-2 mb-5">
             <span className="h-px w-8 bg-[#D04636]" />
@@ -273,7 +254,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── PROCESS ──────────────────────────────────────── */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-6 lg:px-16">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 mb-4 justify-center">
@@ -307,7 +288,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── BENEFITS GRID ────────────────────────────────── */}
-      <section className="py-24 bg-[#FAF8F5]">
+      <section className="pt-16 pb-12 md:pt-20 md:pb-16 bg-[#FAF8F5]">
         <div className="container mx-auto px-6 lg:px-16">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
             {/* Left sticky heading */}
@@ -354,7 +335,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── SOCIAL PROOF STRIP ───────────────────────────── */}
-      <section className="py-16 bg-[#FAF8F5] border-y border-gray-100">
+      <section className="pt-10 pb-12 md:pt-12 md:pb-16 bg-[#FAF8F5] border-y border-gray-100">
         <div className="container mx-auto px-6 lg:px-16 text-center">
           <p className="text-xs text-gray-400 uppercase tracking-widest mb-8">Trusted by premium partners across Asia-Pacific & Europe</p>
           <div className="flex flex-wrap justify-center items-center gap-8 lg:gap-14 opacity-40">
@@ -369,7 +350,7 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────── */}
-      <section className="py-24 bg-[#4E3D33] relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-[#4E3D33] relative overflow-hidden">
         <div className="relative container mx-auto px-6 lg:px-16 text-center max-w-3xl">
           <div className="inline-flex items-center gap-2 mb-6 justify-center">
             <span className="h-px w-8 bg-[#D04636]" />

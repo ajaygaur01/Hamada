@@ -33,7 +33,7 @@ export default function USPBanner() {
     <section className="border-y border-zinc-200 bg-brand-cream py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#9AA958]">
-          USPs
+
         </p>
         <h2 className="mx-auto mb-12 max-w-3xl font-heading text-2xl font-bold text-brand-brown sm:text-3xl lg:text-4xl tracking-wider">
           END to END CONTROL
