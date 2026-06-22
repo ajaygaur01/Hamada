@@ -10,6 +10,8 @@ import {
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ServerAuthUser } from "@/lib/auth/server-session";
+import { X } from "lucide-react";
+
 
 type AuthUser = ServerAuthUser;
 
@@ -98,10 +100,17 @@ function AuthModal({
   }
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/45 px-4">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 px-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-        <div className="mb-5 flex items-start justify-between">
-          <div>
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <div className="min-w-0 flex-1">
             <h2 className="text-xl font-semibold text-zinc-900">
               {mode === "login" ? "Login to your account" : "Create your account"}
             </h2>
@@ -114,10 +123,10 @@ function AuthModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded p-1 text-zinc-500 transition hover:bg-white border border-[#D04636] text-[#D04636] hover:text-zinc-800"
+            className="shrink-0 rounded-lg p-2 text-[#D04636] hover:bg-[#D04636]/10 border border-[#D04636] hover:text-[#B83C2D] transition-colors focus:outline-none focus:ring-2 focus:ring-[#D04636] flex items-center justify-center"
             aria-label="Close auth modal"
           >
-            X
+            <X size={18} />
           </button>
         </div>
 
