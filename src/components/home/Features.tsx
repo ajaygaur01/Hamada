@@ -56,8 +56,8 @@ export default function Features() {
                 key={index}
                 className="group flex flex-col items-center text-center transition-all duration-300 cursor-default"
               >
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-all duration-300 group-hover:border-brand-cream group-hover:bg-brand-cream/10 group-hover:text-white group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(250,249,246,0.15)]">
-                  <Icon className="h-7 w-7 transition-transform duration-300" />
+                <div className="mb-4 flex h-12 w-12 items-center justify-center text-white/80 transition-all duration-300 group-hover:text-white group-hover:scale-110">
+                  <Icon className="h-9 w-9 transition-transform duration-300" />
                 </div>
                 <h4 className="font-heading text-xs sm:text-sm font-semibold tracking-wider text-brand-cream/90 group-hover:text-white transition-colors uppercase max-w-[150px] leading-relaxed">
                   {client.title}

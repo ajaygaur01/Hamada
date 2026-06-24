@@ -54,8 +54,8 @@ const SLIDES: Slide[] = [
     headline: 'Authentic\nJapanese Teas,\nFrom\nKagoshima',
     description: 'A terroir of taste, purity, and legacy.',
     ctas: [
-      { text: 'Know More', href: '/about-kagoshima', style: 'orange' },
-      { text: 'Learn About Kagoshima', href: '/kagoshima', style: 'white-shadow' },
+      { text: 'Know More', href: '/products?tab=japanese', style: 'orange' },
+      { text: 'Learn About Kagoshima', href: '/products?tab=kagoshima', style: 'white-shadow' },
     ],
     image: '/crousel3.avif',
     overlayClass: 'bg-black/45',

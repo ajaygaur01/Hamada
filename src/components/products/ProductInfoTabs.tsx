@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 type TabId = "catalog" | "japanese" | "kagoshima";
 
@@ -13,9 +14,25 @@ const tabs: { id: TabId; label: string }[] = [
 
 export default function ProductInfoTabs() {
   const [activeTab, setActiveTab] = useState<TabId>("catalog");
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "japanese" || tabParam === "kagoshima" || tabParam === "catalog") {
+      setActiveTab(tabParam as TabId);
+      
+      const timer = setTimeout(() => {
+        const element = document.getElementById("info-tabs");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+    <div id="info-tabs" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
       <div className="flex flex-wrap gap-2 border-b border-[#d2e0c2] pb-4">
         {tabs.map((tab) => (
           <button
