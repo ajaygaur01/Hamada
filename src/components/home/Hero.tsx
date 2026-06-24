@@ -143,7 +143,7 @@ export default function Hero() {
                           )}
                         </>
                       ) : slide.isKagoshimaSlide ? (
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-brand-brown leading-tight whitespace-pre-line">
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-brand-cream leading-tight whitespace-pre-line drop-shadow-md">
                           {slide.headline}
                         </h1>
                       ) : (
