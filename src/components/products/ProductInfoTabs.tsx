@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 type TabId = "catalog" | "japanese" | "kagoshima";
 
@@ -57,27 +58,46 @@ export default function ProductInfoTabs() {
       )}
 
       {activeTab === "kagoshima" && (
-        <div className="mt-6 max-w-3xl rounded-2xl border border-[#d2e0c2] bg-[#FAF9F6] p-6 sm:p-8">
-          <h2 className="font-heading mb-3 text-2xl text-[#3E4F25]">
-            Why Kagoshima Matcha
-          </h2>
-          <div className="space-y-4 text-sm leading-relaxed text-brand-brown/80 sm:text-base">
-            <p>
-              Kagoshima, at the southern tip of Japan&apos;s Kyushu island, is one of the
-              country&apos;s most celebrated tea-growing regions. Volcanic soil, coastal
-              breezes, and ideal humidity create a microclimate that produces green tea with
-              deep umami, low bitterness, and natural sweetness that&apos;s hard to replicate.
-            </p>
-            <p>
-              Our Kagoshima farms benefit from cool mists and daily humidity
-              variance that help develop the vivid emerald hue and smooth character our
-              partners build menus around.
-            </p>
-            <p>
-              Home to some of the most progressive and sustainable tea farms in Japan,
-              Kagoshima has become a favourite among traditional tea masters and contemporary
-              brands alike — and the foundation of the &quot;Hamada&quot; family legacy.
-            </p>
+        <div className="mt-6 max-w-5xl rounded-2xl border border-[#d2e0c2] bg-[#FAF9F6] p-6 sm:p-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            {/* Map Image Column */}
+            <div className="md:col-span-5">
+              <div className="group relative w-full aspect-square md:aspect-[4/5] lg:aspect-square overflow-hidden rounded-2xl border border-[#d2e0c2] bg-white shadow-sm">
+                <Image
+                  src="/map.avif"
+                  alt="Kagoshima tea growing region map"
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  sizes="(min-width: 768px) 40vw, 100vw"
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Written Content Column */}
+            <div className="md:col-span-7 space-y-4">
+              <h2 className="font-heading text-2xl font-bold text-[#3E4F25]">
+                Why Kagoshima Matcha
+              </h2>
+              <div className="space-y-4 text-sm leading-relaxed text-brand-brown/80 sm:text-base">
+                <p>
+                  Kagoshima, at the southern tip of Japan&apos;s Kyushu island, is one of the
+                  country&apos;s most celebrated tea-growing regions. Volcanic soil, coastal
+                  breezes, and ideal humidity create a microclimate that produces green tea with
+                  deep umami, low bitterness, and natural sweetness that&apos;s hard to replicate.
+                </p>
+                <p>
+                  Our Kagoshima farms benefit from cool mists and daily humidity
+                  variance that help develop the vivid emerald hue and smooth character our
+                  partners build menus around.
+                </p>
+                <p>
+                  Home to some of the most progressive and sustainable tea farms in Japan,
+                  Kagoshima has become a favourite among traditional tea masters and contemporary
+                  brands alike — and the foundation of the &quot;Hamada&quot; family legacy.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}

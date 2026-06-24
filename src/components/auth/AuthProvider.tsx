@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -243,7 +244,14 @@ export function AuthProvider({
   const authQuery = searchParams.get("auth");
   const queryMode = authQuery === "login" || authQuery === "signup" ? authQuery : null;
   const visibleMode = queryMode ?? authMode;
-  const modalVisible = isModalOpen || Boolean(queryMode);
+  const modalVisible = isModalOpen;
+
+  // Sync URL query mode changes to local state to trigger opening the modal
+  useEffect(() => {
+    if (queryMode) {
+      setIsModalOpen(true);
+    }
+  }, [queryMode]);
 
   const openAuthModal = useCallback((mode: AuthMode) => {
     setAuthMode(mode);
@@ -256,9 +264,8 @@ export function AuthProvider({
     if (searchParams.get("auth")) {
       const next = new URLSearchParams(searchParams.toString());
       next.delete("auth");
-      if (!next.get("redirect")) {
-        router.replace(next.size ? `${pathname}?${next.toString()}` : pathname);
-      }
+      next.delete("redirect");
+      router.replace(next.size ? `${pathname}?${next.toString()}` : pathname);
     }
   }, [pathname, router, searchParams]);
 

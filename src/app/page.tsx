@@ -12,9 +12,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <TrustedBy />
       <Features />
       <Teas />
+      <TrustedBy />
       <USPBanner />
       <Story />
       <StepsSection />

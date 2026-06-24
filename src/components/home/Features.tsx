@@ -47,19 +47,19 @@ export default function Features() {
           </h3>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 md:gap-5 justify-center">
+        {/* Minimal Categories (No Rectangle Box) */}
+        <div className="grid grid-cols-2 gap-y-10 gap-x-6 sm:grid-cols-3 lg:grid-cols-5 md:gap-x-8 mt-12 justify-center max-w-5xl mx-auto">
           {clientTypes.map((client, index) => {
             const Icon = client.icon;
             return (
               <div
                 key={index}
-                className="rounded-2xl bg-white/75 px-5 py-6 shadow-[0_6px_20px_rgba(76,99,46,0.08)] backdrop-blur-sm flex flex-col items-center justify-center text-center transition-all duration-300 hover:-translate-y-1 hover:bg-white"
+                className="group flex flex-col items-center text-center transition-all duration-300 cursor-default"
               >
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-green/10">
-                  <Icon className="h-6 w-6 text-brand-green" />
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-all duration-300 group-hover:border-brand-cream group-hover:bg-brand-cream/10 group-hover:text-white group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(250,249,246,0.15)]">
+                  <Icon className="h-7 w-7 transition-transform duration-300" />
                 </div>
-                <h4 className="font-heading text-sm font-semibold tracking-wide text-brand-brown">
+                <h4 className="font-heading text-xs sm:text-sm font-semibold tracking-wider text-brand-cream/90 group-hover:text-white transition-colors uppercase max-w-[150px] leading-relaxed">
                   {client.title}
                 </h4>
               </div>
