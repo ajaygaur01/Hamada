@@ -3,7 +3,7 @@ const certifications = [
   { label: "HACCP", icon: "award" },
   { label: "FDA Approved", icon: "file-check" },
   { label: "Halal Certified", icon: "globe" },
-  { label: "JAS Organic", icon: "leaf" },
+  { label: "JAS Certified", icon: "leaf" },
   { label: "FSSC 22000", icon: "check-circle" },
 ];
 

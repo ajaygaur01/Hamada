@@ -153,7 +153,7 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     short_description:
       "Our finest grade matcha, from the first flush of shade-grown tencha leaves from Kagoshima.",
     full_description:
-      "Our finest grade matcha, from the first flush of shade-grown tencha leaves from Kagoshima. Vivid green, intensely umami, with a natural sweetness and no bitterness.\n\nHarvest season: April–May. Non-organic.\nBlend: cultivars - Yutaka, Saemidori, asatsuyu.\nCeremonial grade: can consume with just hot water.",
+      "Our finest grade matcha, from the first flush of shade-grown tencha leaves from Kagoshima. Vivid green, intensely umami, with a natural sweetness and no bitterness.\n\nHarvest season: April–May.\nBlend: cultivars - Yutaka, Saemidori, asatsuyu.\nCeremonial grade: can consume with just hot water.",
     use_cases: ["Cafe Menu", "Hotel", "Retail"],
     featured: true,
     variants: rowVariants({
@@ -172,7 +172,7 @@ export const WHOLESALE_PRODUCTS: CatalogProduct[] = [
     short_description:
       "A ceremonial grade matcha with a slightly bolder, deeper character.",
     full_description:
-      "A ceremonial grade matcha with a slightly bolder, deeper character — still smooth, still vibrant, but with a fuller body that doesn't lose to sweeteners, flavours and milk. Ideal for cafes.\n\nHarvest season: July–August.\nNon-organic blend.\nCeremonial grade.",
+      "A ceremonial grade matcha with a slightly bolder, deeper character — still smooth, still vibrant, but with a fuller body that doesn't lose to sweeteners, flavours and milk. Ideal for cafes.\n\nHarvest season: July–August.\nCeremonial grade.",
     use_cases: ["Cafe Menu", "Hotel", "Retail"],
     featured: true,
     variants: rowVariants({

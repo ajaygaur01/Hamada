@@ -8,12 +8,14 @@ type TimelineEntry = {
   subMilestones?: SubMilestone[];
   imagePosition: "left" | "right";
   showBrandLogo?: boolean;
+  image?: string;
 };
 
 const timeline: TimelineEntry[] = [
   {
     year: "1970",
     imagePosition: "left",
+    image: "/shop_history-1970.png",
     body: [
       `When previous owner Masaharu Hamada was 40 years old, he retired from his job of 17 years at the Chiran Agricultural Cooperative Association, and founded Hamada Tea as an individual. He decided that he would "Sell only strictly selected domestic (produced in Kagoshima) tea", starting Kagoshima's first journey into a competitive journey with Japan's other tea growing prefectures.`,
     ],
@@ -21,6 +23,7 @@ const timeline: TimelineEntry[] = [
   {
     year: "1975",
     imagePosition: "right",
+    image: "/shop_history-1975.png",
     body: [
       "While increasing performance, Hamada Industries Co., Ltd. is established. There are 2 employees.",
     ],
@@ -28,6 +31,7 @@ const timeline: TimelineEntry[] = [
   {
     year: "1980",
     imagePosition: "left",
+    image: "/shop_history-1980.png",
     body: [
       "In order to accommodate the increasing amount of tea leaves being handled, a collection and tea blending facility is established at the current location (Chiran). Retail sales begin in part of the office.",
     ],
@@ -41,6 +45,7 @@ const timeline: TimelineEntry[] = [
   {
     year: "2000",
     imagePosition: "right",
+    image: "/shop history 2000.jpg",
     body: [
       '"Ocha no Hamada" is constructed. Chiran being a tourist spot, in order to create a store for Chiran tea that tourists could easily visit.',
     ],
@@ -54,6 +59,7 @@ const timeline: TimelineEntry[] = [
   {
     year: "2016",
     imagePosition: "left",
+    image: "/shop history 2016.JPG",
     body: [
       "Shuhei Hamada, the 3rd generation is appointed as CEO. Studied under tea masters in Shizuoka and is a Level 6 tea master along with his father. Starts export to America, Australia and Europe.",
       "Starts his plan for the company's first oversees subsidiary. Research begins in India",
@@ -62,14 +68,29 @@ const timeline: TimelineEntry[] = [
   {
     year: "2022",
     imagePosition: "right",
+    image: "/2022.jpeg",
     body: [
       "Hamada Global Trading is established, in Gurguram, India",
       "A brand new market, to start from scratch at the health and wellness sector, to introduce India to Japan's superfoods.",
       "In 3 years, we have managed to capture and build an extremely small niche market into a growing market by enabling brands to execute smoothly in building the Matcha market.",
     ],
-    showBrandLogo: true,
+    showBrandLogo: false,
   },
 ];
+
+function TimelineImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="group relative aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 shadow-md">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        sizes="(min-width: 1024px) 30vw, 100vw"
+      />
+    </div>
+  );
+}
 
 function ImagePlaceholder() {
   return (
@@ -203,7 +224,11 @@ export default function AboutStoryTimeline() {
                   body={entry.body}
                   showBrandLogo={entry.showBrandLogo}
                 />
-                <ImagePlaceholder />
+                {entry.image ? (
+                  <TimelineImage src={entry.image} alt={`${entry.year} milestone`} />
+                ) : (
+                  <ImagePlaceholder />
+                )}
               </div>
             </li>
           ))}
@@ -231,7 +256,11 @@ export default function AboutStoryTimeline() {
                     {isImageLeft ? (
                       <>
                         <div className="flex justify-end">
-                          <ImagePlaceholder />
+                          {entry.image ? (
+                            <TimelineImage src={entry.image} alt={`${entry.year} milestone`} />
+                          ) : (
+                            <ImagePlaceholder />
+                          )}
                         </div>
                         <div className="pl-2">
                           <YearBlock
@@ -255,7 +284,11 @@ export default function AboutStoryTimeline() {
                           />
                         </div>
                         <div>
-                          <ImagePlaceholder />
+                          {entry.image ? (
+                            <TimelineImage src={entry.image} alt={`${entry.year} milestone`} />
+                          ) : (
+                            <ImagePlaceholder />
+                          )}
                         </div>
                       </>
                     )}

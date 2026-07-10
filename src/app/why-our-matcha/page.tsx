@@ -51,7 +51,7 @@ const benefits = [
       </svg>
     ),
     title: "Seasonal Harvest Previews",
-    body: "Priority-access sampling of new-season shincha before public release — stay ahead of trends, impress your buyers.",
+    body: "Choose taste profiles of tea that works for your business based on seasonal harvests.",
   },
 ];
 
@@ -60,7 +60,7 @@ const process = [
   { step: "02", title: "Harvesting", desc: "Only the youngest two leaves and bud are selected by experienced pickers each May." },
   { step: "03", title: "Steaming & Drying", desc: "Immediate steaming halts oxidation. Slow drying locks in colour, aroma and nutrients." },
   { step: "04", title: "Blending", desc: "Batches are balanced for colour, aroma, and consistency before final finishing." },
-  { step: "05", title: "Milling", desc: "Granite mills rotate at 30 RPM to prevent heat build-up, preserving antioxidants." },
+  { step: "05", title: "Milling", desc: "prevents heat, producing fresh, green, antioxidant-rich matcha" },
 ];
 
 export default function WhyOurMatcha() {
@@ -102,9 +102,9 @@ export default function WhyOurMatcha() {
 
               <ul className="space-y-3 mb-10">
                 {[
-                  "100% organic, shade-grown tencha leaves",
-                  "Stone-ground at 30 RPM — antioxidants fully preserved",
-                  "Farm-origin traceability on every batch",
+                  // "100% organic, shade-grown tencha leaves",
+                  // "Stone-ground at 30 RPM — antioxidants fully preserved",
+                  // "Farm-origin traceability on every batch",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-[#E7DDC1]">
                     <span className="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-[#D04636] flex items-center justify-center">
@@ -151,10 +151,10 @@ export default function WhyOurMatcha() {
                   style={{ boxShadow: "0 32px 64px rgba(0,0,0,0.4)" }}
                 />
                 {/* Floating badge */}
-                <div className="absolute -bottom-5 -left-5 z-20 bg-white rounded-xl px-5 py-4 shadow-xl">
+                {/* <div className="absolute -bottom-5 -left-5 z-20 bg-white rounded-xl px-5 py-4 shadow-xl">
                   <p className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">Certified Organic</p>
                   <p className="text-[#4E3D33] font-bold text-sm">JAS · USDA · EU Organic</p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -164,14 +164,14 @@ export default function WhyOurMatcha() {
       {/* ── STAT STRIP ───────────────────────────────────── */}
       <section className="bg-[#3A2D25] border-y border-[#D04636]/20">
         <div className="container mx-auto px-6 lg:px-16">
-          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#E7DDC1]/10">
+          {/* <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#E7DDC1]/10">
             {stats.map(({ value, label }) => (
               <div key={label} className="py-8 px-6 text-center">
                 <p className="text-3xl font-bold text-[#D04636] mb-1">{value}</p>
                 <p className="text-xs text-[#E7DDC1] opacity-70 uppercase tracking-widest">{label}</p>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -227,28 +227,47 @@ export default function WhyOurMatcha() {
 
       {/* ── WHY KAGOSHIMA ─────────────────────────────────── */}
       <section className="py-16 md:py-20 bg-[#FAF8F5]">
-        <div className="container mx-auto px-6 lg:px-16 max-w-4xl">
-          <div className="inline-flex items-center gap-2 mb-5">
-            <span className="h-px w-8 bg-[#D04636]" />
-            <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">
-              Why Kagoshima?
-            </span>
-          </div>
-          <h2 className="font-heading text-3xl font-bold text-[#4E3D33] mb-6" style={{ letterSpacing: "-0.02em" }}>
-            Japan&apos;s celebrated tea-growing region
-          </h2>
-          <div className="space-y-4 text-gray-600 leading-relaxed text-[0.975rem]">
-            <p>
-              Kagoshima, located at the southern tip of Japan&apos;s Kyushu island, is one of the
-              country&apos;s most celebrated tea-growing regions. Volcanic soil, coastal breezes, and ideal
-              humidity create a microclimate that produces green tea with deep umami, low bitterness,
-              and a natural sweetness that&apos;s hard to replicate.
-            </p>
-            <p>
-              Home to some of the most progressive and sustainable tea farms in Japan, Kagoshima has
-              rapidly grown into a favorite among both traditional tea masters and contemporary tea
-              brands.
-            </p>
+        <div className="container mx-auto px-6 lg:px-16 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Text Column */}
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2 mb-5">
+                <span className="h-px w-8 bg-[#D04636]" />
+                <span className="text-[#D04636] text-xs font-semibold tracking-[0.18em] uppercase">
+                  Why Kagoshima?
+                </span>
+              </div>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-[#4E3D33] mb-6" style={{ letterSpacing: "-0.02em" }}>
+                Japan&apos;s celebrated tea-growing region
+              </h2>
+              <div className="space-y-4 text-gray-600 leading-relaxed text-[0.975rem]">
+                <p>
+                  Kagoshima, located at the southern tip of Japan&apos;s Kyushu island, is one of the
+                  country&apos;s most celebrated tea-growing regions. Volcanic soil, coastal breezes, and ideal
+                  humidity create a microclimate that produces green tea with deep umami, low bitterness,
+                  and a natural sweetness that&apos;s hard to replicate.
+                </p>
+                <p>
+                  Home to some of the most progressive and sustainable tea farms in Japan, Kagoshima has
+                  rapidly grown into a favorite among both traditional tea masters and contemporary tea
+                  brands.
+                </p>
+              </div>
+            </div>
+
+            {/* Map Image Column */}
+            <div className="lg:col-span-5 w-full flex justify-center">
+              <div className="relative w-full max-w-md aspect-square overflow-hidden rounded-2xl border border-[#d2e0c2] bg-white shadow-lg shadow-[#4E3D33]/5 group">
+                <Image
+                  src="/map.avif"
+                  alt="Kagoshima tea growing region map"
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  sizes="(min-width: 1024px) 35vw, 100vw"
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -335,11 +354,10 @@ export default function WhyOurMatcha() {
       </section>
 
       {/* ── SOCIAL PROOF STRIP ───────────────────────────── */}
-      <section className="pt-10 pb-12 md:pt-12 md:pb-16 bg-[#FAF8F5] border-y border-gray-100">
+      {/* <section className="pt-10 pb-12 md:pt-12 md:pb-16 bg-[#FAF8F5] border-y border-gray-100">
         <div className="container mx-auto px-6 lg:px-16 text-center">
           <p className="text-xs text-gray-400 uppercase tracking-widest mb-8">Trusted by premium partners across Asia-Pacific & Europe</p>
           <div className="flex flex-wrap justify-center items-center gap-8 lg:gap-14 opacity-40">
-            {/* Placeholder partner logos — replace with actual <Image> tags */}
             {["Partner Co.", "Tea House EU", "Café Chain JP", "Retail Group AU", "Specialty Foods UK"].map((name) => (
               <span key={name} className="text-[#4E3D33] font-semibold text-sm tracking-wide">
                 {name}
@@ -347,7 +365,7 @@ export default function WhyOurMatcha() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── CTA ──────────────────────────────────────────── */}
       <section className="py-16 md:py-20 bg-[#4E3D33] relative overflow-hidden">

@@ -24,7 +24,7 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    eyebrow: 'UNIT FOR HAMADA TEA CO. LTD. JAPAN',
+    eyebrow: 'UNIT OF HAMADA TEA CO. LTD. JAPAN',
     headline: 'Founded in Japan.\nTrusted in India.',
     subheadline: 'Since 1975.',
     description: 'For 50 years, Hamada Tea has been a pioneer in manufacturing and exporting Japanese teas to the world.',

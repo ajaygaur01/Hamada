@@ -42,7 +42,7 @@ const businesses = [
       </svg>
     ),
     title: "Wellness Studios",
-    description: "Complement your wellness programs with organic Japanese teas. Perfect for yoga studios, spas, and health retreats.",
+    description: "Complement your wellness programs with premium Japanese teas. Perfect for yoga studios, spas, and health retreats.",
   },
   {
     icon: (

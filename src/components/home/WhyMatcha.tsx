@@ -28,7 +28,7 @@ export default function WhyMatcha() {
   return (
     <section className="bg-white py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <span className="mb-3 inline-block text-xs font-bold uppercase tracking-[0.2em] text-[#9AA958]">
@@ -42,7 +42,7 @@ export default function WhyMatcha() {
 
         {/* 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
+
           {/* Column 1: 2x2 Grid of Pillars */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {pillars.map((pillar, index) => {
@@ -69,8 +69,8 @@ export default function WhyMatcha() {
           {/* Column 2: Matcha Bowl Image */}
           <div className="relative aspect-4/3 lg:aspect-square w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 shadow-sm max-w-lg mx-auto">
             <Image
-              src="/productbanner.avif"
-              alt="Premium stone-ground matcha bowl"
+              src="/whykaga.jpg"
+              alt="Premium matcha bowl"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"

@@ -5,7 +5,7 @@ const FLYER_CALLOUTS: Record<string, { heading: string; bullets: string[]; bestF
   "ceremonial-matcha-a": {
     heading: "Ceremonial Grade A",
     bullets: [
-      "First flush harvest | Stone ground tencha | Vibrant emerald green",
+      "First flush harvest | Tencha leaves | Vibrant emerald green",
       "Intense umami profile | Natural sweetness | Reseal within 30 minutes",
     ],
     bestFor: ["Traditional Whisk", "Premium Tea Service", "Usucha & Koicha"],
