@@ -28,6 +28,9 @@ const notoSansJp = Noto_Sans_JP({
 export const metadata: Metadata = {
   title: "Kaori by Chiran | Premium Japanese Tea",
   description: "B2B wholesale Japanese tea, directly sourced from Kagoshima, Japan.",
+  icons: {
+    icon: "/logo.avif",
+  },
 };
 
 export default async function RootLayout({
