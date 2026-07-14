@@ -69,7 +69,7 @@ export default function WhyMatcha() {
           {/* Column 2: Matcha Bowl Image */}
           <div className="relative aspect-4/3 lg:aspect-square w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 shadow-sm max-w-lg mx-auto">
             <Image
-              src="/whykaga.jpg"
+              src="/HP 2.jpg"
               alt="Premium matcha bowl"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"

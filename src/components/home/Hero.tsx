@@ -110,7 +110,7 @@ export default function Hero() {
               {/* Content Container */}
               <div className="relative z-20 h-full flex items-center">
                 <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-                  <div className="max-w-3xl text-left">
+                  <div className="max-w-3xl text-left flex flex-col items-start">
                     {/* Eyebrow */}
                     {slide.eyebrow && (
                       <span
@@ -179,8 +179,8 @@ export default function Hero() {
                         ? 'opacity-100 translate-y-0'
                         : 'opacity-0 translate-y-4'
                         } ${slide.isKagoshimaSlide
-                          ? 'flex-col items-start gap-3 sm:w-80'
-                          : 'flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4'
+                          ? 'flex-col items-start gap-3 sm:w-80 w-full'
+                          : 'flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full'
                         }`}
                     >
                       {slide.ctas.map((cta, ctaIdx) => {

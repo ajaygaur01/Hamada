@@ -8,7 +8,7 @@ export default function Story() {
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 shadow-sm">
             <Image
-              src="/founder.avif"
+              src="/aboutheading.jpg"
               alt="Hamada and farmer in tea fields"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
