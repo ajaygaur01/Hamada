@@ -10,7 +10,29 @@ const quantityOptions = [
 ];
 
 export default function InquiryForm() {
+  const [name, setName] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [selectedQuantity, setSelectedQuantity] = useState("5 – 20 kg/month");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const whatsappMsg = `Hello Hamada Team,
+
+I would like to submit a business inquiry. Here are my details:
+- Name: ${name}
+- Business Name: ${businessName || "Not specified"}
+- Email: ${email || "Not specified"}
+- Monthly Requirement: ${selectedQuantity || "Not specified"}
+
+Message:
+${message}`;
+
+    const whatsappUrl = `https://wa.me/919899923445?text=${encodeURIComponent(whatsappMsg)}`;
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="bg-white border border-zinc-200 rounded-xl p-8 shadow-sm">
@@ -19,12 +41,15 @@ export default function InquiryForm() {
         Fill out the details below and we&apos;ll get back to you shortly.
       </p>
 
-      <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+      <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Your Name */}
         <div>
           <label className="block text-xs font-medium text-zinc-700 mb-2">Your Name</label>
           <input
             type="text"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Rahul Sharma"
             className="w-full bg-zinc-50 border border-zinc-200 text-zinc-700 text-sm py-3 px-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-zinc-900 placeholder:text-zinc-400"
           />
@@ -35,6 +60,8 @@ export default function InquiryForm() {
           <label className="block text-xs font-medium text-zinc-700 mb-2">Business Name</label>
           <input
             type="text"
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
             placeholder="e.g. Brew & Co. Cafe"
             className="w-full bg-zinc-50 border border-zinc-200 text-zinc-700 text-sm py-3 px-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-zinc-900 placeholder:text-zinc-400"
           />
@@ -45,6 +72,8 @@ export default function InquiryForm() {
           <label className="block text-xs font-medium text-zinc-700 mb-2">Email Address</label>
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="e.g. rahul@mycafe.com"
             className="w-full bg-zinc-50 border border-zinc-200 text-zinc-700 text-sm py-3 px-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-zinc-900 placeholder:text-zinc-400"
           />
@@ -55,6 +84,9 @@ export default function InquiryForm() {
           <label className="block text-xs font-medium text-zinc-700 mb-2">Message</label>
           <textarea
             rows={4}
+            required
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             placeholder="Tell us about your requirements..."
             className="w-full bg-zinc-50 border border-zinc-200 text-zinc-700 text-sm py-3 px-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-zinc-900 placeholder:text-zinc-400 resize-none"
           />
@@ -83,16 +115,16 @@ export default function InquiryForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-[#D04636] text-white font-medium py-3.5 rounded-lg text-sm hover:bg-[#B83C2D] transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-[#D04636] text-white font-medium py-3.5 rounded-lg text-sm hover:bg-[#B83C2D] transition-colors flex items-center justify-center gap-2 cursor-pointer"
         >
-          Submit Inquiry
+          Submit Inquiry via WhatsApp
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
           </svg>
         </button>
 
         <p className="text-[10px] text-zinc-400 text-center">
-          By submitting, you agree to our privacy policy. We&apos;ll never share your data.
+          By submitting, your details will be opened as a WhatsApp message to our wholesale team.
         </p>
       </form>
     </div>
