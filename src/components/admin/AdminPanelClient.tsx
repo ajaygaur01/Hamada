@@ -30,7 +30,7 @@ export default function AdminPanelClient({ adminName }: { adminName: string }) {
               <Shield size={20} />
             </div>
             <div>
-              <h1 className="font-bold text-sm">KAORI ADMIN</h1>
+              <h1 className="font-bold text-sm">HAMADA ADMIN</h1>
               <p className="text-zinc-500 text-xs truncate max-w-[140px]">{adminName}</p>
             </div>
           </div>
@@ -44,11 +44,10 @@ export default function AdminPanelClient({ adminName }: { adminName: string }) {
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                  isActive
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${isActive
                     ? "bg-[#D04636] text-white"
                     : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                }`}
+                  }`}
               >
                 <Icon size={18} />
                 {item.label}
@@ -84,9 +83,8 @@ export default function AdminPanelClient({ adminName }: { adminName: string }) {
             <button
               key={item.id}
               onClick={() => setActiveSection(item.id)}
-              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                isActive ? "text-[#D04636]" : "text-zinc-500"
-              }`}
+              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${isActive ? "text-[#D04636]" : "text-zinc-500"
+                }`}
             >
               <Icon size={20} />
               {item.label}

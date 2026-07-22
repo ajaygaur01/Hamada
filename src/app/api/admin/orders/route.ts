@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerAuthUser } from "@/lib/auth/server-session";
+import { syncRazorpayPaymentIfNeeded } from "@/lib/sample-order";
 
 async function requireAdmin() {
   const user = await getServerAuthUser();
@@ -39,12 +40,17 @@ export async function GET(req: NextRequest) {
           email: true, phone: true, delivery_city: true, pincode: true,
           sample_size: true, amount: true, payment_method: true,
           payment_status: true, order_status: true, tracking_link: true,
-          notes: true, created_at: true,
+          notes: true, created_at: true, razorpay_order_id: true, razorpay_payment_id: true,
           product: { select: { name: true } },
           variant: { select: { size: true } },
         },
       });
-      sampleOrders = raw.map(o => ({ ...o, amount: Number(o.amount), type: "sample" }));
+
+      const syncedRaw = await Promise.all(
+        raw.map((o) => syncRazorpayPaymentIfNeeded(o, "sample"))
+      );
+
+      sampleOrders = syncedRaw.map(o => ({ ...o, amount: Number(o.amount), type: "sample" }));
     }
 
     if (type === "all" || type === "bulk") {
@@ -67,11 +73,16 @@ export async function GET(req: NextRequest) {
           items: { select: { product_name: true, variant_size: true, quantity: true, unit_price: true, total_price: true } },
         },
       });
-      bulkOrders = raw.map(o => ({
+
+      const syncedRaw = await Promise.all(
+        raw.map((o) => syncRazorpayPaymentIfNeeded(o, "bulk"))
+      );
+
+      bulkOrders = syncedRaw.map(o => ({
         ...o,
         total_amount: Number(o.total_amount),
         subtotal: Number(o.subtotal),
-        items: o.items.map(i => ({ ...i, unit_price: Number(i.unit_price), total_price: Number(i.total_price) })),
+        items: o.items.map((i: any) => ({ ...i, unit_price: Number(i.unit_price), total_price: Number(i.total_price) })),
         type: "bulk",
       }));
     }

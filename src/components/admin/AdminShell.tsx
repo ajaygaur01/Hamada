@@ -58,9 +58,8 @@ function Sidebar({
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-zinc-800/80 bg-gradient-to-b from-zinc-950 via-zinc-950 to-zinc-900 transition-all duration-300 ${
-        collapsed ? "w-[72px]" : "w-64"
-      }`}
+      className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-zinc-800/80 bg-gradient-to-b from-zinc-950 via-zinc-950 to-zinc-900 transition-all duration-300 ${collapsed ? "w-[72px]" : "w-64"
+        }`}
     >
       <div className="flex h-16 items-center gap-3 border-b border-zinc-800/80 px-4">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#D04636] shadow-lg shadow-[#D04636]/20">
@@ -68,7 +67,7 @@ function Sidebar({
         </div>
         {!collapsed && (
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold tracking-wide text-white">KAORI</p>
+            <p className="text-sm font-bold tracking-wide text-white">HAMDA</p>
             <p className="truncate text-[10px] text-zinc-500">Admin · {adminName}</p>
           </div>
         )}
@@ -100,11 +99,10 @@ function Sidebar({
                     key={item.href}
                     href={item.href}
                     title={collapsed ? item.label : undefined}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                      isActive
+                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${isActive
                         ? "bg-[#D04636] text-white shadow-md shadow-[#D04636]/25"
                         : "text-zinc-400 hover:bg-zinc-800/80 hover:text-white"
-                    }`}
+                      }`}
                   >
                     <Icon size={18} className="shrink-0" />
                     {!collapsed && <span>{item.label}</span>}
@@ -175,11 +173,10 @@ function Topbar({
             ) : (
               <Link
                 href={b.href}
-                className={`truncate ${
-                  i === breadcrumbs.length - 1
+                className={`truncate ${i === breadcrumbs.length - 1
                     ? "font-semibold text-zinc-900"
                     : "text-zinc-400 hover:text-zinc-600"
-                }`}
+                  }`}
               >
                 {b.label}
               </Link>

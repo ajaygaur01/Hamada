@@ -74,13 +74,13 @@ export default function BulkOrderCheckoutClient({
   minQty = 1,
 }: BulkOrderCheckoutClientProps) {
   const router = useRouter();
-  
+
   // Pre-fill addressLine1 with company address as a helpful default
   const [formValues, setFormValues] = useState<FormState>({
     ...INITIAL_FORM,
     addressLine1: companyAddress || "",
   });
-  
+
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -116,7 +116,7 @@ export default function BulkOrderCheckoutClient({
 
   const handlePayment = async () => {
     setError("");
-    
+
     // Final validation
     const step1Err = validateStep1(formValues);
     const step2Err = validateStep2(formValues);
@@ -163,7 +163,7 @@ export default function BulkOrderCheckoutClient({
         key: razorpayKeyId,
         amount: data.amount,
         currency: "INR",
-        name: "Kaori by Chiran",
+        name: "Hamada",
         description: `Bulk Order – ${productName} (${variantSize} × ${quantity})`,
         order_id: data.razorpayOrderId,
         handler: async function (response: any) {
@@ -229,38 +229,36 @@ export default function BulkOrderCheckoutClient({
         <header className="bg-[#4E3D33] text-[#E7DDC1] py-4 shadow-sm relative z-10">
           <div className="mx-auto flex w-full max-w-4xl items-center justify-center px-4">
             <Link href="/" className="font-heading text-xl font-bold text-white tracking-wide">
-              KAORI
+              HAMADA
             </Link>
           </div>
         </header>
 
         <main className="mx-auto w-full max-w-3xl px-4 py-8 md:py-12">
-          
+
           {/* Stepper */}
           <div className="mb-10">
             <div className="flex items-center justify-between relative">
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-0.5 bg-zinc-200 -z-10"></div>
-              <div 
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-[#D04636] -z-10 transition-all duration-500 ease-in-out" 
+              <div
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-[#D04636] -z-10 transition-all duration-500 ease-in-out"
                 style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
               ></div>
-              
+
               {steps.map((step) => {
                 const isCompleted = currentStep > step.id;
                 const isCurrent = currentStep === step.id;
-                
+
                 return (
                   <div key={step.id} className="flex flex-col items-center gap-2">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-300 ${
-                      isCompleted ? "bg-[#D04636] text-white" :
-                      isCurrent ? "bg-[#4E3D33] text-white ring-4 ring-[#E7DDC1]" :
-                      "bg-white border-2 border-zinc-300 text-zinc-400"
-                    }`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-300 ${isCompleted ? "bg-[#D04636] text-white" :
+                        isCurrent ? "bg-[#4E3D33] text-white ring-4 ring-[#E7DDC1]" :
+                          "bg-white border-2 border-zinc-300 text-zinc-400"
+                      }`}>
                       {isCompleted ? <Check size={16} strokeWidth={3} /> : step.id}
                     </div>
-                    <span className={`text-xs font-medium uppercase tracking-wider hidden sm:block ${
-                      isCurrent ? "text-[#4E3D33]" : isCompleted ? "text-zinc-900" : "text-zinc-400"
-                    }`}>
+                    <span className={`text-xs font-medium uppercase tracking-wider hidden sm:block ${isCurrent ? "text-[#4E3D33]" : isCompleted ? "text-zinc-900" : "text-zinc-400"
+                      }`}>
                       {step.title}
                     </span>
                   </div>
@@ -270,7 +268,7 @@ export default function BulkOrderCheckoutClient({
           </div>
 
           <section className="rounded-2xl border border-zinc-100 bg-white p-6 md:p-10 shadow-sm relative overflow-hidden min-h-[400px]">
-            
+
             <h1 className="text-2xl font-heading text-[#4E3D33] mb-6 flex items-center justify-between">
               <span>
                 {currentStep === 1 && "Contact Details"}
@@ -452,12 +450,12 @@ export default function BulkOrderCheckoutClient({
               {/* STEP 3: REVIEW & PAY */}
               {currentStep === 3 && (
                 <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-                  
+
                   {/* Order Summary Card */}
                   <div className="bg-[#4E3D33] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
                     <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
                     <h3 className="text-[#E7DDC1] text-sm font-medium uppercase tracking-wider mb-4">Order Summary</h3>
-                    
+
                     <div className="flex justify-between items-start mb-6">
                       <div>
                         <p className="text-xl font-heading mb-1">{productName}</p>
@@ -512,7 +510,7 @@ export default function BulkOrderCheckoutClient({
                     Back
                   </button>
                 )}
-                
+
                 {currentStep < 3 ? (
                   <button
                     type="button"

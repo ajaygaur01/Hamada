@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerAuthUser } from "@/lib/auth/server-session";
+import { syncRazorpayPaymentIfNeeded } from "@/lib/sample-order";
 
 async function requireAdmin() {
   const user = await getServerAuthUser();
@@ -24,7 +25,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
           variant: { select: { size: true, unit: true } },
         },
       });
-      if (order) return NextResponse.json({ ...order, type: "sample", amount: Number(order.amount) });
+      if (order) {
+        const syncedOrder = await syncRazorpayPaymentIfNeeded(order, "sample");
+        return NextResponse.json({ ...syncedOrder, type: "sample", amount: Number(syncedOrder.amount) });
+      }
     }
 
     if (type === "bulk") {
@@ -36,16 +40,19 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
           items: true,
         },
       });
-      if (order) return NextResponse.json({ 
-        ...order, 
-        type: "bulk", 
-        total_amount: Number(order.total_amount),
-        subtotal: Number(order.subtotal),
-        cgst_amount: Number(order.cgst_amount),
-        sgst_amount: Number(order.sgst_amount),
-        igst_amount: Number(order.igst_amount),
-        items: order.items.map(i => ({ ...i, unit_price: Number(i.unit_price), total_price: Number(i.total_price) }))
-      });
+      if (order) {
+        const syncedOrder = await syncRazorpayPaymentIfNeeded(order, "bulk");
+        return NextResponse.json({ 
+          ...syncedOrder, 
+          type: "bulk", 
+          total_amount: Number(syncedOrder.total_amount),
+          subtotal: Number(syncedOrder.subtotal),
+          cgst_amount: Number(syncedOrder.cgst_amount),
+          sgst_amount: Number(syncedOrder.sgst_amount),
+          igst_amount: Number(syncedOrder.igst_amount),
+          items: syncedOrder.items.map((i: any) => ({ ...i, unit_price: Number(i.unit_price), total_price: Number(i.total_price) }))
+        });
+      }
     }
 
     // If type not specified or not found with type, try both
@@ -67,17 +74,23 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       })
     ]);
 
-    if (sample) return NextResponse.json({ ...sample, type: "sample", amount: Number(sample.amount) });
-    if (bulk) return NextResponse.json({ 
-      ...bulk, 
-      type: "bulk", 
-      total_amount: Number(bulk.total_amount),
-      subtotal: Number(bulk.subtotal),
-      cgst_amount: Number(bulk.cgst_amount),
-      sgst_amount: Number(bulk.sgst_amount),
-      igst_amount: Number(bulk.igst_amount),
-      items: bulk.items.map(i => ({ ...i, unit_price: Number(i.unit_price), total_price: Number(i.total_price) }))
-    });
+    if (sample) {
+      const syncedSample = await syncRazorpayPaymentIfNeeded(sample, "sample");
+      return NextResponse.json({ ...syncedSample, type: "sample", amount: Number(syncedSample.amount) });
+    }
+    if (bulk) {
+      const syncedBulk = await syncRazorpayPaymentIfNeeded(bulk, "bulk");
+      return NextResponse.json({ 
+        ...syncedBulk, 
+        type: "bulk", 
+        total_amount: Number(syncedBulk.total_amount),
+        subtotal: Number(syncedBulk.subtotal),
+        cgst_amount: Number(syncedBulk.cgst_amount),
+        sgst_amount: Number(syncedBulk.sgst_amount),
+        igst_amount: Number(syncedBulk.igst_amount),
+        items: syncedBulk.items.map((i: any) => ({ ...i, unit_price: Number(i.unit_price), total_price: Number(i.total_price) }))
+      });
+    }
 
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   } catch (error) {

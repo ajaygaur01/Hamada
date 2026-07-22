@@ -88,3 +88,74 @@ export function verifyRazorpaySignature(payload: {
 
   return generatedSignature === payload.razorpaySignature;
 }
+
+export async function syncRazorpayPaymentIfNeeded(order: any, type: "sample" | "bulk") {
+  // If not razorpay, or not pending, or no razorpay_order_id, nothing to do
+  if (order.payment_method !== "razorpay" || order.payment_status !== "pending" || !order.razorpay_order_id) {
+    return order;
+  }
+
+  const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
+  const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
+
+  if (!razorpayKeyId || !razorpayKeySecret) {
+    return order;
+  }
+
+  try {
+    const { default: Razorpay } = await import("razorpay");
+    const { default: prisma } = await import("@/lib/prisma");
+
+    const razorpay = new Razorpay({
+      key_id: razorpayKeyId,
+      key_secret: razorpayKeySecret,
+    });
+
+    const rzpOrder = await razorpay.orders.fetch(order.razorpay_order_id);
+
+    // Check if the order is paid
+    if (rzpOrder.status === "paid" || (rzpOrder.amount_paid && Number(rzpOrder.amount_paid) >= Number(rzpOrder.amount))) {
+      // Fetch payments for the order to get the first successful payment ID
+      const payments = await razorpay.orders.fetchPayments(order.razorpay_order_id);
+      const paymentId = payments.items?.find((p: any) => p.status === "captured")?.id || payments.items?.[0]?.id || null;
+
+      if (type === "sample") {
+        const updated = await prisma.sampleOrder.update({
+          where: { id: order.id },
+          data: {
+            payment_status: "paid",
+            order_status: "confirmed",
+            razorpay_payment_id: paymentId,
+          },
+          include: {
+            product: { select: { name: true, images: { where: { is_primary: true }, take: 1 } } },
+            variant: { select: { size: true, unit: true } },
+          }
+        });
+        return updated;
+      } else {
+        const invoiceNumber = order.invoice_number || `INV-${Date.now()}`;
+        const updated = await prisma.bulkOrder.update({
+          where: { id: order.id },
+          data: {
+            payment_status: "paid",
+            order_status: "confirmed",
+            razorpay_payment_id: paymentId,
+            invoice_number: invoiceNumber,
+          },
+          include: {
+            user: { select: { full_name: true, email: true, phone: true, company_name: true, gstin: true } },
+            address: true,
+            items: true,
+          }
+        });
+        return updated;
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to auto-sync Razorpay status for ${type} order ${order.id}:`, error);
+  }
+
+  return order;
+}
+

@@ -7,8 +7,8 @@ export const generateOrderInvoice = (order: any) => {
   // Header
   doc.setFontSize(22);
   doc.setTextColor(78, 61, 51); // Brand Dark Brown
-  doc.text("KAORI BY CHIRAN", 14, 22);
-  
+  doc.text("HAMADA", 14, 22);
+
   doc.setFontSize(10);
   doc.setTextColor(100);
   doc.text("Premium Japanese Matcha & Green Tea", 14, 28);
@@ -18,7 +18,7 @@ export const generateOrderInvoice = (order: any) => {
   doc.setFontSize(20);
   doc.setTextColor(208, 70, 54); // Brand Red
   doc.text("INVOICE", 140, 22);
-  
+
   doc.setFontSize(10);
   doc.setTextColor(100);
   doc.text(`Invoice #: ${order.order_number}`, 140, 28);
@@ -28,20 +28,20 @@ export const generateOrderInvoice = (order: any) => {
   doc.setFontSize(12);
   doc.setTextColor(78, 61, 51);
   doc.text("Bill To:", 14, 50);
-  
+
   doc.setFontSize(10);
   doc.setTextColor(0);
   const customer = order.customer_name || order.user?.full_name;
   doc.text(customer, 14, 56);
   if (order.user?.company_name) doc.text(order.user.company_name, 14, 61);
   if (order.user?.gstin) doc.text(`GSTIN: ${order.user.gstin}`, 14, 66);
-  
+
   // Shipping Address (for bulk)
   if (order.type === "bulk" && order.address) {
     doc.setFontSize(12);
     doc.setTextColor(78, 61, 51);
     doc.text("Ship To:", 100, 50);
-    
+
     doc.setFontSize(10);
     doc.setTextColor(0);
     doc.text(order.address.full_name, 100, 56);
@@ -94,11 +94,11 @@ export const generateOrderInvoice = (order: any) => {
   const finalY = doc.lastAutoTable.finalY + 10;
   doc.setFontSize(10);
   doc.setTextColor(100);
-  
+
   if (order.type === "bulk") {
     doc.text("Subtotal:", 140, finalY);
     doc.text(`Rs. ${order.subtotal}`, 175, finalY, { align: "right" });
-    
+
     doc.text("Tax (GST):", 140, finalY + 5);
     doc.text(`Rs. ${Number(order.cgst_amount || 0) + Number(order.sgst_amount || 0) + Number(order.igst_amount || 0)}`, 175, finalY + 5, { align: "right" });
   }

@@ -23,21 +23,6 @@ interface Props {
   products: Product[];
 }
 
-const DISPLAY_MAP: Record<string, { title: string; description: string }> = {
-  'ceremonial-matcha-discovery-set': {
-    title: 'Matcha Samples — 4 grades',
-    description: 'Matcha samples of our regular house blends. Matcha Ceremonial Grade A, Ceremonial Grade B, Culinary Grade A',
-  },
-  'matcha-hojicha-powder-sample-set': {
-    title: 'Matcha ceremonials + Hojicha Powder',
-    description: 'Matcha samples of our ceremonial grades and dark roast Hojicha powder.',
-  },
-  'japanese-leaf-tea-sample-set': {
-    title: 'Japanese Tea Samples (loose leaf)',
-    description: 'Loose teas. Sencha, Hojicha, Genmaicha',
-  },
-};
-
 export default function SampleSetsGrid({ products }: Props) {
   // Map product slug to its active variant ID
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>(() => {
@@ -55,14 +40,9 @@ export default function SampleSetsGrid({ products }: Props) {
       {/* 3 Cards Grid */}
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         {products.map((product) => {
-          const display = DISPLAY_MAP[product.slug] || {
-            title: product.name,
-            description: product.short_description,
-          };
-
           const activeVariantId = selectedVariants[product.id];
           const activeVariant = product.variants.find((v) => v.id === activeVariantId) || product.variants[0];
-          const isLeafSet = product.slug === 'japanese-leaf-tea-sample-set';
+          const hasMultipleVariants = product.variants.length > 1;
 
           return (
             <div
@@ -75,17 +55,17 @@ export default function SampleSetsGrid({ products }: Props) {
                   Sample Set
                 </span>
                 <h3 className="mb-3 font-heading text-lg font-bold text-zinc-900 leading-tight">
-                  {display.title}
+                  {product.name}
                 </h3>
                 <p className="mb-6 text-sm leading-relaxed text-zinc-500">
-                  {display.description}
+                  {product.short_description}
                 </p>
               </div>
 
               {/* Selector / Price Area */}
               <div className="mt-auto pt-6 border-t border-zinc-100">
                 {/* Size Options Toggle */}
-                {!isLeafSet && product.variants.length > 1 ? (
+                {hasMultipleVariants ? (
                   <div className="mb-5 flex flex-col gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
                       Select Size
@@ -112,10 +92,10 @@ export default function SampleSetsGrid({ products }: Props) {
                     </div>
                   </div>
                 ) : (
-                  /* Spacer/Placeholder for leaf tea set with single variant to maintain alignment */
+                  /* Spacer/Placeholder for sets with single variant to maintain alignment */
                   <div className="mb-5 h-[53px] flex items-center">
                     <span className="text-xs font-medium text-zinc-400">
-                      Standard loose leaf assortment
+                      Available in {activeVariant ? activeVariant.size : 'standard size'}
                     </span>
                   </div>
                 )}

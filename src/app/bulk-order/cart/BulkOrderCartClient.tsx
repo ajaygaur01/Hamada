@@ -97,7 +97,7 @@ export default function BulkOrderCartClient({
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_mockkey", // Fallback for testing
         amount: data.amount,
         currency: "INR",
-        name: "Kaori by Chiran",
+        name: "Hamada",
         description: "Bulk Tea Order",
         order_id: data.razorpayOrderId,
         handler: async function (response: any) {
