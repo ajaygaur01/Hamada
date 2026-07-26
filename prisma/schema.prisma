@@ -202,7 +202,12 @@ model SampleOrder {
   business_name       String?       @db.VarChar
   email               String        @db.VarChar
   phone               String        @db.VarChar
+  address_line1       String?       @db.Text
+  address_line2       String?       @db.Text
+  landmark            String?       @db.Text
   delivery_city       String        @db.VarChar
+  delivery_state      String?       @db.VarChar
+  country             String?       @default("India") @db.VarChar
   pincode             String        @db.VarChar
   product_id          String        @db.Uuid
   variant_id          String        @db.Uuid

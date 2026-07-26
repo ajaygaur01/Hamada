@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerAuthUser } from "@/lib/auth/server-session";
 import { syncRazorpayPaymentIfNeeded } from "@/lib/sample-order";
+import { getSampleOrderShippingAddress } from "@/lib/address-helper";
 
 async function requireAdmin() {
   const user = await getServerAuthUser();
@@ -38,6 +39,8 @@ export async function GET(req: NextRequest) {
         select: {
           id: true, order_number: true, customer_name: true, business_name: true,
           email: true, phone: true, delivery_city: true, pincode: true,
+          address_line1: true, address_line2: true, landmark: true,
+          delivery_state: true, country: true,
           sample_size: true, amount: true, payment_method: true,
           payment_status: true, order_status: true, tracking_link: true,
           notes: true, created_at: true, razorpay_order_id: true, razorpay_payment_id: true,
@@ -105,15 +108,37 @@ export async function PATCH(req: NextRequest) {
     if (!id || !type) return NextResponse.json({ error: "Order ID and type required" }, { status: 400 });
 
     if (type === "sample") {
+      const existingOrder = await prisma.sampleOrder.findUnique({
+        where: { id },
+        select: { notes: true, address_line1: true, delivery_city: true, pincode: true },
+      });
+
+      const updateData: any = {
+        ...(orderStatus && { order_status: orderStatus }),
+        ...(paymentStatus && { payment_status: paymentStatus }),
+        ...(trackingLink !== undefined && { tracking_link: trackingLink }),
+        ...(notes !== undefined && { notes }),
+        ...(orderStatus === "dispatched" && { dispatched_at: new Date() }),
+      };
+
+      if (existingOrder && !existingOrder.address_line1 && existingOrder.notes) {
+        const parsed = getSampleOrderShippingAddress({
+          delivery_city: existingOrder.delivery_city,
+          pincode: existingOrder.pincode,
+          notes: existingOrder.notes,
+        });
+        if (parsed.address_line1) {
+          updateData.address_line1 = parsed.address_line1;
+          updateData.address_line2 = parsed.address_line2;
+          updateData.landmark = parsed.landmark;
+          updateData.delivery_state = parsed.delivery_state;
+          updateData.country = parsed.country;
+        }
+      }
+
       await prisma.sampleOrder.update({
         where: { id },
-        data: {
-          ...(orderStatus && { order_status: orderStatus }),
-          ...(paymentStatus && { payment_status: paymentStatus }),
-          ...(trackingLink !== undefined && { tracking_link: trackingLink }),
-          ...(notes !== undefined && { notes }),
-          ...(orderStatus === "dispatched" && { dispatched_at: new Date() }),
-        },
+        data: updateData,
       });
     } else {
       await prisma.bulkOrder.update({

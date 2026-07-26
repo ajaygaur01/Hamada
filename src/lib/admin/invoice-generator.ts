@@ -1,5 +1,6 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { getSampleOrderShippingAddress } from "@/lib/address-helper";
 
 export const generateOrderInvoice = (order: any) => {
   const doc = new jsPDF() as any;
@@ -54,7 +55,26 @@ export const generateOrderInvoice = (order: any) => {
     doc.text("Ship To:", 100, 50);
     doc.setFontSize(10);
     doc.setTextColor(0);
-    doc.text(`${order.delivery_city || "N/A"}, ${order.pincode || "N/A"}`, 100, 56);
+    
+    const addr = getSampleOrderShippingAddress(order);
+    let y = 56;
+    doc.text(order.customer_name || "N/A", 100, y);
+    y += 5;
+    if (addr.address_line1) {
+      doc.text(addr.address_line1, 100, y);
+      y += 5;
+    }
+    if (addr.address_line2) {
+      doc.text(addr.address_line2, 100, y);
+      y += 5;
+    }
+    if (addr.landmark) {
+      doc.text(`Landmark: ${addr.landmark}`, 100, y);
+      y += 5;
+    }
+    doc.text(`${addr.delivery_city}, ${addr.delivery_state || "N/A"} - ${addr.pincode}`, 100, y);
+    y += 5;
+    doc.text(addr.country || "India", 100, y);
   }
 
   // Items Table

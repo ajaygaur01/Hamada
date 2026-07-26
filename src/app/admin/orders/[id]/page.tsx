@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Badge } from "@/components/admin/ui/Badge";
 import { useToast } from "@/components/admin/ui/Toast";
 import { generateOrderInvoice } from "@/lib/admin/invoice-generator";
+import { getSampleOrderShippingAddress, parseInternalNotes } from "@/lib/address-helper";
 
 const ORDER_STATUSES = ["pending", "confirmed", "processing", "dispatched", "delivered", "cancelled"];
 const PAYMENT_STATUSES = ["pending", "paid", "verified", "failed"];
@@ -39,7 +40,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       setStatus(data.order_status);
       setPaymentStatus(data.payment_status);
       setTrackingLink(data.tracking_link || "");
-      setNotes(data.notes || "");
+      setNotes(data.type === "sample" ? parseInternalNotes(data.notes) : (data.notes || ""));
     } catch {
       toast("Failed to load order details", "error");
     } finally {
@@ -278,13 +279,18 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <h2 className="font-semibold text-zinc-900 flex items-center gap-2 border-b border-zinc-100 pb-3 mb-4">
               <MapPin size={18} className="text-zinc-400" /> Shipping Address
             </h2>
-            {order.type === "sample" ? (
-              <div className="text-sm text-zinc-600 space-y-1">
-                <p>{order.delivery_city}</p>
-                <p>{order.pincode}</p>
-                <p className="text-zinc-400 text-xs italic mt-2">Sample orders currently only capture city/pincode in checkout.</p>
-              </div>
-            ) : (
+            {order.type === "sample" ? (() => {
+              const addr = getSampleOrderShippingAddress(order);
+              return (
+                <div className="text-sm text-zinc-600 space-y-1">
+                  {addr.address_line1 && <p>{addr.address_line1}</p>}
+                  {addr.address_line2 && <p>{addr.address_line2}</p>}
+                  {addr.landmark && <p className="text-zinc-400 text-xs">Landmark: {addr.landmark}</p>}
+                  <p>{addr.delivery_city}, {addr.delivery_state} - {addr.pincode}</p>
+                  <p>{addr.country}</p>
+                </div>
+              );
+            })() : (
               <div className="text-sm text-zinc-600 space-y-1">
                 <p className="font-medium text-zinc-900">{order.address?.full_name}</p>
                 <p>{order.address?.address_line1}</p>

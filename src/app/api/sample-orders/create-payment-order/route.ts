@@ -91,14 +91,18 @@ export async function POST(request: Request) {
     });
 
     const createdOrder = await prisma.sampleOrder.create({
-      // The schema currently has city + pincode fields; save full address detail in notes.
       data: {
         order_number: generateSampleOrderNumber(),
         customer_name: input.customerName,
         business_name: input.businessName,
         email: input.email,
         phone: input.phone,
+        address_line1: input.addressLine1,
+        address_line2: input.addressLine2,
+        landmark: input.landmark,
         delivery_city: input.deliveryCity,
+        delivery_state: input.deliveryState,
+        country: input.country || "India",
         pincode: input.pincode,
         product_id: variant.product.id,
         variant_id: variant.id,
@@ -108,19 +112,7 @@ export async function POST(request: Request) {
         razorpay_order_id: razorpayOrder.id,
         payment_status: "pending",
         order_status: "pending",
-        notes: [
-          input.businessName ? `Business: ${input.businessName}` : null,
-          `Address Line 1: ${input.addressLine1}`,
-          input.addressLine2 ? `Address Line 2: ${input.addressLine2}` : null,
-          input.landmark ? `Landmark: ${input.landmark}` : null,
-          `City: ${input.deliveryCity}`,
-          `State: ${input.deliveryState}`,
-          `Country: ${input.country}`,
-          `Pincode: ${input.pincode}`,
-          input.additionalNote ? `Customer Note: ${input.additionalNote}` : null,
-        ]
-          .filter(Boolean)
-          .join(" | "),
+        notes: input.additionalNote || null,
       },
       select: {
         id: true,
