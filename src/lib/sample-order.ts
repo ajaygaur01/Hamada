@@ -132,6 +132,11 @@ export async function syncRazorpayPaymentIfNeeded(order: any, type: "sample" | "
             variant: { select: { size: true, unit: true } },
           }
         });
+        import("./email-service").then(({ sendOrderNotificationEmail }) => {
+          sendOrderNotificationEmail(order.id, "sample").catch((err) => {
+            console.error("[syncRazorpay] Error sending sample order notification email:", err);
+          });
+        });
         return updated;
       } else {
         const invoiceNumber = order.invoice_number || `INV-${Date.now()}`;
@@ -148,6 +153,11 @@ export async function syncRazorpayPaymentIfNeeded(order: any, type: "sample" | "
             address: true,
             items: true,
           }
+        });
+        import("./email-service").then(({ sendOrderNotificationEmail }) => {
+          sendOrderNotificationEmail(order.id, "bulk").catch((err) => {
+            console.error("[syncRazorpay] Error sending bulk order notification email:", err);
+          });
         });
         return updated;
       }

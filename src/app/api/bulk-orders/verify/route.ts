@@ -45,8 +45,12 @@ export async function POST(request: Request) {
       }
     });
 
-    // We can generate and save invoice logic here in the future
-    // Also send email logic here
+    // Trigger notification email to operations@chirantea.in (non-blocking)
+    import("@/lib/email-service").then(({ sendOrderNotificationEmail }) => {
+      sendOrderNotificationEmail(orderId, "bulk").catch((err) => {
+        console.error("[bulk-verify] Error sending bulk order notification email:", err);
+      });
+    });
 
     return NextResponse.json({ success: true, orderId });
   } catch (error) {

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { verifyRazorpaySignature } from "@/lib/sample-order";
 
+import { sendOrderNotificationEmail } from "@/lib/email-service";
+
 type VerifyPayload = {
   razorpay_order_id?: string;
   razorpay_payment_id?: string;
@@ -53,7 +55,7 @@ export async function POST(request: Request) {
 
     const updatedOrder = await prisma.sampleOrder.findFirst({
       where: { razorpay_order_id: payload.razorpay_order_id },
-      select: { order_number: true },
+      select: { id: true, order_number: true },
     });
     console.log("Fetched updated sampleOrder:", updatedOrder);
 
@@ -61,6 +63,11 @@ export async function POST(request: Request) {
       console.error("verify-payment error: Order not found for order id:", payload.razorpay_order_id);
       return NextResponse.json({ error: "Order not found for this payment." }, { status: 404 });
     }
+
+    // Trigger notification email to operations@chirantea.in (non-blocking, logged in background)
+    sendOrderNotificationEmail(updatedOrder.id, "sample").catch((err) => {
+      console.error("[verify-payment] Error sending order notification email:", err);
+    });
 
     return NextResponse.json({
       success: true,

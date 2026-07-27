@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import WishlistButton from "@/components/wishlist/WishlistButton";
 import { Star, ArrowRight, Lock } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -33,6 +34,7 @@ export default function ProductCard({
   status, startingPrice, averageRating, reviewCount, variants
 }: ProductCardProps) {
   const { user, openAuthModal } = useAuth();
+  const pathname = usePathname();
   const isVerifiedBuyer = user?.gstin_verified === true;
 
   // Separate variants
@@ -195,19 +197,32 @@ export default function ProductCard({
             <div className="space-y-1.5 pt-2 border-t border-dashed border-[#ede4d0]">
               <div className="flex items-start gap-1 text-[8px] text-[#D04636] font-semibold leading-tight">
                 <Lock className="w-2.5 h-2.5 shrink-0" />
-                <span>*GST details required to login as a verified buyer.</span>
+                <span>{user ? "*GST details required to unlock wholesale pricing." : "*GST details required to login as a verified buyer."}</span>
               </div>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  openAuthModal("login");
-                }}
-                className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
-              >
-                <Lock className="w-2.5 h-2.5" />
-                Login to See Wholesale Pricing
-              </button>
+              {user ? (
+                <Link
+                  href={`/bulk-order/verify-gstin?returnTo=${encodeURIComponent(pathname || "/products")}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
+                >
+                  <Lock className="w-2.5 h-2.5" />
+                  Verify GST for Wholesale
+                </Link>
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openAuthModal("login");
+                  }}
+                  className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
+                >
+                  <Lock className="w-2.5 h-2.5" />
+                  Login to See Wholesale Pricing
+                </button>
+              )}
             </div>
           ) : (
             <div className="pt-2 border-t border-dashed border-[#ede4d0]">

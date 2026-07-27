@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Package, ShieldCheck, FileText, Globe, UserCheck, MessageSquare, Lock } from "lucide-react";
 import { isBulkSize, isSampleSize } from "@/lib/tea-size";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -21,6 +22,7 @@ interface OrderFormProps {
 
 export default function OrderForm({ variants, productSlug }: OrderFormProps) {
   const { user, openAuthModal } = useAuth();
+  const pathname = usePathname();
   const isVerifiedBuyer = user?.gstin_verified === true;
 
   // Separate variants into sample and bulk categories
@@ -244,18 +246,33 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
 
         {/* Wholesale pricing action */}
         {!isVerifiedBuyer ? (
-          <button
-            onClick={() => openAuthModal("login")}
-            className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
-          >
-            <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
-              <Lock className="w-4 h-4 text-[#2C3E1A]" />
-              <span>Get Bulk Pricing</span>
-            </div>
-            <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
-              Volume-based pricing
-            </span>
-          </button>
+          user ? (
+            <Link
+              href={`/bulk-order/verify-gstin?returnTo=${encodeURIComponent(pathname || "/products")}`}
+              className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
+            >
+              <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
+                <Lock className="w-4 h-4 text-[#2C3E1A]" />
+                <span>Verify GST to Get Bulk Pricing</span>
+              </div>
+              <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
+                Unlock volume-based pricing
+              </span>
+            </Link>
+          ) : (
+            <button
+              onClick={() => openAuthModal("login")}
+              className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
+            >
+              <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
+                <Lock className="w-4 h-4 text-[#2C3E1A]" />
+                <span>Get Bulk Pricing</span>
+              </div>
+              <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
+                Volume-based pricing
+              </span>
+            </button>
+          )
         ) : (
           <div className="space-y-2">
             {/* Quantity Selector */}
