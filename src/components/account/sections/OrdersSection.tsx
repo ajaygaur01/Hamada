@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
-import { PackageOpen, Download, Truck } from "lucide-react";
+import { PackageOpen, Truck } from "lucide-react";
 import type { SampleOrder, BulkOrder } from "../AccountPageClient";
 
 interface OrdersSectionProps {
@@ -108,11 +108,6 @@ export default function OrdersSection({ sampleOrders, bulkOrders }: OrdersSectio
                       {order.orderStatus.toLowerCase() === 'dispatched' && (
                         <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#D04636] text-[#D04636] text-zinc-700 rounded-md text-sm font-medium hover:bg-[#fdebea] transition-colors">
                           <Truck size={16} /> Track
-                        </button>
-                      )}
-                      {isBulk && (
-                        <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#D04636] text-[#D04636] text-zinc-700 rounded-md text-sm font-medium hover:bg-[#fdebea] transition-colors">
-                          <Download size={16} /> Invoice
                         </button>
                       )}
                       <Link href={isBulk ? "/bulk-order/cart" : `/products/${(order as SampleOrder).productSlug}`} className="px-4 py-1.5 bg-brand-cream text-[#D04636] rounded-md text-sm font-medium hover:bg-[#d8ccaa] transition-colors">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Download, FileText, Calendar } from "lucide-react";
+import { Search, FileText, Calendar } from "lucide-react";
 
 import type { Invoice } from "../AccountPageClient";
 
@@ -57,7 +57,6 @@ export default function InvoicesSection({ invoices }: InvoicesSectionProps) {
                   <th className="px-6 py-4 font-semibold">Order Number</th>
                   <th className="px-6 py-4 font-semibold">Date</th>
                   <th className="px-6 py-4 font-semibold text-right">Amount</th>
-                  <th className="px-6 py-4 font-semibold text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
@@ -67,11 +66,6 @@ export default function InvoicesSection({ invoices }: InvoicesSectionProps) {
                     <td className="px-6 py-4 text-zinc-600">{invoice.orderNumber}</td>
                     <td className="px-6 py-4 text-zinc-600">{new Date(invoice.date).toLocaleDateString()}</td>
                     <td className="px-6 py-4 text-zinc-900 font-medium text-right">₹{invoice.amount.toLocaleString()}</td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="inline-flex items-center gap-1.5 text-[#D04636] hover:underline font-medium">
-                        <Download size={16} /> PDF
-                      </button>
-                    </td>
                   </tr>
                 ))}
               </tbody>
