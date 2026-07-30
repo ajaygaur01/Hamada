@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import prisma from "@/lib/prisma";
 import {
-  generateSampleOrderNumber,
+  generateNextSampleOrderNumber,
   isSampleSize,
   sanitizeSampleOrderInput,
   validateSampleOrderInput,
@@ -74,6 +74,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid sample amount for this variant." }, { status: 400 });
     }
 
+    const nextOrderNumber = await generateNextSampleOrderNumber();
+
     const razorpay = new Razorpay({
       key_id: razorpayKeyId,
       key_secret: razorpayKeySecret,
@@ -83,7 +85,7 @@ export async function POST(request: Request) {
     const razorpayOrder = await razorpay.orders.create({
       amount: amountInPaise,
       currency: "INR",
-      receipt: generateSampleOrderNumber(),
+      receipt: nextOrderNumber,
       notes: {
         variantId: variant.id,
         productId: variant.product.id,
@@ -92,7 +94,7 @@ export async function POST(request: Request) {
 
     const createdOrder = await prisma.sampleOrder.create({
       data: {
-        order_number: generateSampleOrderNumber(),
+        order_number: nextOrderNumber,
         customer_name: input.customerName,
         business_name: input.businessName,
         email: input.email,

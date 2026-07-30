@@ -13,6 +13,9 @@ const PROTECTED_PATHS = [
 ];
 
 function isProtectedPath(pathname: string) {
+  if (pathname === "/account/reset-password" || pathname.startsWith("/account/reset-password/")) {
+    return false;
+  }
   return PROTECTED_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
 

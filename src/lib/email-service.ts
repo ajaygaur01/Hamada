@@ -320,3 +320,81 @@ export async function sendOrderNotificationEmail(orderId: string, type: "sample"
     console.error("[EmailService] Exception while processing order notification email:", err);
   }
 }
+
+/**
+ * Sends a password reset email to the specified user containing a secure link.
+ */
+export async function sendPasswordResetEmail(email: string, resetLink: string) {
+  try {
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "auth@chirantea.in";
+    const subject = "Reset Your Password - Hamada Matcha";
+    const htmlContent = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e4e4e7; border-radius: 12px; background-color: #fcfbf7;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="color: #4e3d33; font-family: Georgia, serif; margin: 0;">Hamada Matcha</h1>
+          <p style="color: #71717a; font-size: 14px; margin-top: 5px;">Premium Japanese Tea</p>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid #e4e4e7; margin: 20px 0;" />
+        
+        <h2 style="color: #D04636; font-size: 20px; font-weight: 600; margin-top: 0;">Reset Your Password</h2>
+        <p style="color: #18181b; font-size: 15px; line-height: 1.6;">We received a request to reset your password. Click the button below to choose a new password:</p>
+        
+        <div style="margin: 30px 0; text-align: center;">
+          <a href="${resetLink}" style="background-color: #D04636; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 15px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(208, 70, 54, 0.2);">
+            Reset Password
+          </a>
+        </div>
+        
+        <p style="color: #71717a; font-size: 13px; line-height: 1.5;">This link is only valid for <strong>1 hour</strong>. If you did not request a password reset, you can safely ignore this email.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #e4e4e7; margin: 20px 0;" />
+        
+        <p style="color: #71717a; font-size: 12px; margin-bottom: 5px;">If the button above does not work, copy and paste this URL into your browser:</p>
+        <p style="word-break: break-all; font-size: 12px; color: #D04636; margin-top: 0;">
+          <a href="${resetLink}" style="color: #D04636; text-decoration: underline;">${resetLink}</a>
+        </p>
+      </div>
+    `;
+
+    // 1. Send via SMTP if credentials exist
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      try {
+        const transporter = getTransporter();
+        await transporter.sendMail({
+          from: `"Hamada Matcha" <${process.env.SMTP_USER}>`,
+          to: email,
+          subject,
+          html: htmlContent,
+        });
+        console.log(`[EmailService] Password reset email successfully sent via SMTP to ${email}`);
+        return;
+      } catch (smtpError) {
+        console.error(`[EmailService] Failed to send password reset email via SMTP to ${email}:`, smtpError);
+        // Fallback to Resend
+      }
+    }
+
+    // 2. Send via Resend if API key exists
+    if (!process.env.RESEND_API_KEY) {
+      console.warn("[EmailService] Neither SMTP credentials nor RESEND_API_KEY are defined. Logging reset link to console.");
+      console.log(`\n========================================\n[DEV ONLY] Password Reset Email to: ${email}\nReset Link: ${resetLink}\n========================================\n`);
+      return;
+    }
+
+    const { error } = await getResend().emails.send({
+      from: fromEmail,
+      to: email,
+      subject,
+      html: htmlContent,
+    });
+
+    if (error) {
+      console.error(`[EmailService] Failed to send password reset email via Resend to ${email}:`, error);
+    } else {
+      console.log(`[EmailService] Password reset email successfully sent via Resend to ${email}`);
+    }
+  } catch (err) {
+    console.error("[EmailService] Exception while processing password reset email:", err);
+  }
+}

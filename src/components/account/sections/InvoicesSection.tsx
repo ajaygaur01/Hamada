@@ -1,19 +1,38 @@
 import { useState } from "react";
-import { Search, FileText, Calendar } from "lucide-react";
-
-import type { Invoice } from "../AccountPageClient";
+import { Search, FileText, Calendar, FileDown, Loader2 } from "lucide-react";
+import type { Invoice, BulkOrder } from "../AccountPageClient";
+import { generateOrderInvoice } from "@/lib/admin/invoice-generator";
 
 interface InvoicesSectionProps {
   invoices: Invoice[];
+  bulkOrders: BulkOrder[];
 }
 
-export default function InvoicesSection({ invoices }: InvoicesSectionProps) {
+export default function InvoicesSection({ invoices, bulkOrders }: InvoicesSectionProps) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
 
   const filteredInvoices = invoices.filter(inv => 
     inv.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
     inv.orderNumber.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleDownloadInvoice = async (invoice: Invoice) => {
+    const matchingOrder = bulkOrders.find(o => o.orderNumber === invoice.orderNumber);
+    if (!matchingOrder) {
+      alert("Order details not found for this invoice.");
+      return;
+    }
+    
+    setGeneratingId(invoice.id);
+    try {
+      await generateOrderInvoice(matchingOrder);
+    } catch (error) {
+      console.error("Failed to generate invoice:", error);
+    } finally {
+      setGeneratingId(null);
+    }
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -57,6 +76,7 @@ export default function InvoicesSection({ invoices }: InvoicesSectionProps) {
                   <th className="px-6 py-4 font-semibold">Order Number</th>
                   <th className="px-6 py-4 font-semibold">Date</th>
                   <th className="px-6 py-4 font-semibold text-right">Amount</th>
+                  <th className="px-6 py-4 font-semibold text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
@@ -66,6 +86,25 @@ export default function InvoicesSection({ invoices }: InvoicesSectionProps) {
                     <td className="px-6 py-4 text-zinc-600">{invoice.orderNumber}</td>
                     <td className="px-6 py-4 text-zinc-600">{new Date(invoice.date).toLocaleDateString()}</td>
                     <td className="px-6 py-4 text-zinc-900 font-medium text-right">₹{invoice.amount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => handleDownloadInvoice(invoice)}
+                        disabled={generatingId !== null}
+                        className="text-[#D04636] hover:text-[#B83C2D] font-medium transition-colors flex items-center gap-1.5 ml-auto disabled:opacity-50"
+                      >
+                        {generatingId === invoice.id ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin text-[#D04636]" />
+                            <span className="text-xs">Generating...</span>
+                          </>
+                        ) : (
+                          <>
+                            <FileDown size={16} />
+                            <span>Download</span>
+                          </>
+                        )}
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -3,6 +3,29 @@ import { getServerAuthUser } from "@/lib/auth/server-session";
 import prisma from "@/lib/prisma";
 import Razorpay from "razorpay";
 
+async function generateNextBulkOrderNumber() {
+  const latestOrder = await prisma.bulkOrder.findFirst({
+    orderBy: { created_at: "desc" },
+    select: { order_number: true },
+  });
+
+  if (!latestOrder) {
+    return "BLK-1";
+  }
+
+  const match = latestOrder.order_number.match(/^BLK-(\d+)$/);
+  if (match) {
+    const num = parseInt(match[1], 10);
+    // If it's a small sequential number, increment it.
+    // If it's a large timestamp, restart the sequence at 1.
+    if (num < 10000000) {
+      return `BLK-${num + 1}`;
+    }
+  }
+
+  return "BLK-1";
+}
+
 export async function POST(request: Request) {
   try {
     const user = await getServerAuthUser();
@@ -79,7 +102,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const orderNumber = `BLK-${Date.now()}`;
+    const orderNumber = await generateNextBulkOrderNumber();
 
     const order = await prisma.bulkOrder.create({
       data: {

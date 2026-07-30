@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { isSampleSize as isSampleSizeByGrams } from "@/lib/tea-size";
+import prisma from "@/lib/prisma";
 
 export type SampleOrderInput = {
   customerName?: string;
@@ -69,10 +70,28 @@ export function sanitizeSampleOrderInput(input: SampleOrderInput) {
   };
 }
 
-export function generateSampleOrderNumber() {
-  const timestampPart = Date.now().toString().slice(-8);
-  const randomPart = crypto.randomInt(1000, 9999);
-  return `SMP-${timestampPart}-${randomPart}`;
+export async function generateNextSampleOrderNumber() {
+  const latestOrder = await prisma.sampleOrder.findFirst({
+    orderBy: { created_at: "desc" },
+    select: { order_number: true },
+  });
+
+  if (!latestOrder) {
+    return "SMP-1";
+  }
+
+  const match = latestOrder.order_number.match(/^SMP-(\d+)$/);
+  if (match) {
+    const num = parseInt(match[1], 10);
+    // If it's a small sequential number, increment it.
+    // If it's a large timestamp/random number, restart the sequence at 1.
+    if (num < 10000000) {
+      return `SMP-${num + 1}`;
+    }
+  }
+
+  // Fallback for older formats like SMP-33609603-8483
+  return "SMP-1";
 }
 
 export function verifyRazorpaySignature(payload: {

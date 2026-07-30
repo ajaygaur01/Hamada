@@ -19,6 +19,7 @@ import ProfileSection from "./sections/ProfileSection";
 import AddressesSection from "./sections/AddressesSection";
 import InvoicesSection from "./sections/InvoicesSection";
 import WishlistSection from "./sections/WishlistSection";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export type UserProfile = {
   username: string;
@@ -87,6 +88,7 @@ export type WishlistItem = {
 type ActiveSection = "overview" | "orders" | "profile" | "wishlist" | "addresses" | "invoices";
 
 export default function AccountPageClient({ initialUser }: { initialUser: UserProfile }) {
+  const { refreshUser } = useAuth();
   const [activeSection, setActiveSection] = useState<ActiveSection>("overview");
   
   const [profile, setProfile] = useState<UserProfile>(initialUser);
@@ -156,6 +158,7 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
         return;
       }
       setMessage("Profile updated successfully.");
+      await refreshUser();
     } catch {
       setError("Could not save profile.");
     } finally {
@@ -302,7 +305,7 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
             )}
             
             {activeSection === "invoices" && (
-              <InvoicesSection invoices={invoices} />
+              <InvoicesSection invoices={invoices} bulkOrders={bulkOrders} />
             )}
             
           </div>

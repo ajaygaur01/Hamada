@@ -37,12 +37,18 @@ export async function POST(request: Request) {
     });
 
     if (!user?.password_hash) {
-      return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
+      return NextResponse.json(
+        { error: "Incorrect email, phone number, or password." },
+        { status: 401 },
+      );
     }
 
     const isPasswordValid = await verifyPassword(validated.password, user.password_hash);
     if (!isPasswordValid) {
-      return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
+      return NextResponse.json(
+        { error: "Incorrect email, phone number, or password." },
+        { status: 401 },
+      );
     }
 
     const token = await createAuthToken({

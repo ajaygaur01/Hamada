@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { CheckCircle2, Building2, ShieldCheck, Loader2 } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 // Regex for 15-digit GSTIN
 const GSTIN_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
@@ -12,6 +13,7 @@ function VerifyGstinInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("returnTo") || "/products";
+  const { refreshUser } = useAuth();
 
   const [gstin, setGstin] = useState("");
   const [loading, setLoading] = useState(false);
@@ -81,6 +83,7 @@ function VerifyGstinInner() {
       }
 
       // Redirect back to where the user came from (e.g. checkout page)
+      await refreshUser();
       router.push(returnTo);
       router.refresh();
     } catch {

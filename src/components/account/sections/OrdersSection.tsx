@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
-import { PackageOpen, Truck } from "lucide-react";
+import { PackageOpen, Truck, FileText, Loader2 } from "lucide-react";
 import type { SampleOrder, BulkOrder } from "../AccountPageClient";
+import { generateOrderInvoice } from "@/lib/admin/invoice-generator";
 
 interface OrdersSectionProps {
   sampleOrders: SampleOrder[];
@@ -13,7 +14,19 @@ type TabType = "all" | "bulk" | "sample";
 export default function OrdersSection({ sampleOrders, bulkOrders }: OrdersSectionProps) {
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
   const itemsPerPage = 10;
+
+  const handleDownloadInvoice = async (order: any) => {
+    setGeneratingId(order.id);
+    try {
+      await generateOrderInvoice(order);
+    } catch (error) {
+      console.error("Failed to generate invoice:", error);
+    } finally {
+      setGeneratingId(null);
+    }
+  };
 
   // Combine and map orders to a common format for display
   const allOrders = [
@@ -110,6 +123,23 @@ export default function OrdersSection({ sampleOrders, bulkOrders }: OrdersSectio
                           <Truck size={16} /> Track
                         </button>
                       )}
+                      <button
+                        onClick={() => handleDownloadInvoice(order)}
+                        disabled={generatingId !== null}
+                        className="px-4 py-1.5 bg-white border border-zinc-300 text-zinc-700 rounded-md text-sm font-medium hover:bg-zinc-50 hover:text-zinc-900 disabled:opacity-50 transition-colors flex items-center gap-1.5 font-sans"
+                      >
+                        {generatingId === order.id ? (
+                          <>
+                            <Loader2 size={14} className="animate-spin text-[#D04636]" />
+                            <span>Generating...</span>
+                          </>
+                        ) : (
+                          <>
+                            <FileText size={14} className="text-[#D04636]" />
+                            <span>Invoice</span>
+                          </>
+                        )}
+                      </button>
                       <Link href={isBulk ? "/bulk-order/cart" : `/products/${(order as SampleOrder).productSlug}`} className="px-4 py-1.5 bg-brand-cream text-[#D04636] rounded-md text-sm font-medium hover:bg-[#d8ccaa] transition-colors">
                         Reorder
                       </Link>
