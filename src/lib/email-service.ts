@@ -155,15 +155,20 @@ export async function sendOrderNotificationEmail(orderId: string, type: "sample"
       `;
     } else {
       const addr = order.address;
-      const itemsHtml = order.items.map((item: any) => `
+      const itemsHtml = order.items.map((item: any) => {
+        const rate = Number(item.gst_rate || 5);
+        const taxableUnitPrice = Number(item.unit_price) / (1 + rate / 100);
+        const taxableTotalPrice = Number(item.total_price) / (1 + rate / 100);
+        return `
         <tr>
           <td style="padding: 8px; border-bottom: 1px solid #e4e4e7;">${item.product_name}</td>
           <td style="padding: 8px; border-bottom: 1px solid #e4e4e7;">${item.variant_size}</td>
           <td style="padding: 8px; border-bottom: 1px solid #e4e4e7; text-align: center;">${item.quantity}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #e4e4e7; text-align: right;">₹${Number(item.unit_price)}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #e4e4e7; text-align: right;">₹${Number(item.total_price)}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #e4e4e7; text-align: right;">₹${taxableUnitPrice.toFixed(2)}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #e4e4e7; text-align: right;">₹${taxableTotalPrice.toFixed(2)}</td>
         </tr>
-      `).join("");
+        `;
+      }).join("");
 
       htmlContent = `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e4e4e7; rounded: 12px;">

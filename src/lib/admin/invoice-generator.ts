@@ -205,10 +205,13 @@ export const generateOrderInvoice = async (order: any) => {
   if (isBulk) {
     order.items.forEach((item: any) => {
       const qty = Number(item.quantity);
-      const price = Number(item.unitPrice || item.unit_price || 0);
-      const total = Number(item.totalPrice || item.total_price || (qty * price));
+      const inclusivePrice = Number(item.unitPrice || item.unit_price || 0);
+      const inclusiveTotal = Number(item.totalPrice || item.total_price || (qty * inclusivePrice));
       const hsn = item.hsnCode || item.hsn_code || "09021020";
       const rate = Number(item.gstRate || item.gst_rate || 5);
+      
+      const taxablePrice = inclusivePrice / (1 + rate / 100);
+      const taxableTotal = inclusiveTotal / (1 + rate / 100);
       
       const taxString = isLocal
         ? `CGST ${(rate / 2).toFixed(1)}%, SGST ${(rate / 2).toFixed(1)}%`
@@ -218,18 +221,19 @@ export const generateOrderInvoice = async (order: any) => {
         item.productName || item.product_name,
         hsn,
         `${qty.toFixed(2)} Units`,
-        `Rs. ${price.toFixed(2)}`,
+        `Rs. ${taxablePrice.toFixed(2)}`,
         taxString,
-        `Rs. ${total.toFixed(2)}`
+        `Rs. ${taxableTotal.toFixed(2)}`
       ]);
     });
   } else {
     // Sample order
     const qty = 1;
-    const price = Number(order.variantPrice || order.amount || 250);
-    const total = price;
-    const hsn = "09021020";
+    const inclusivePrice = Number(order.variantPrice || order.amount || 250);
     const rate = 5;
+    const taxablePrice = inclusivePrice / (1 + rate / 100);
+    const taxableTotal = taxablePrice;
+    const hsn = "09021020";
     const taxString = isLocal
       ? "CGST 2.5%, SGST 2.5%"
       : "IGST 5.0%";
@@ -238,9 +242,9 @@ export const generateOrderInvoice = async (order: any) => {
       `[SAMPLE] ${order.productName || "Matcha Sample"} (${order.variantSize || "Sample Size"})`,
       hsn,
       "1.00 Units",
-      `Rs. ${price.toFixed(2)}`,
+      `Rs. ${taxablePrice.toFixed(2)}`,
       taxString,
-      `Rs. ${total.toFixed(2)}`
+      `Rs. ${taxableTotal.toFixed(2)}`
     ]);
   }
 
