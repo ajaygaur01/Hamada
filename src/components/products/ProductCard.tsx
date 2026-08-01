@@ -11,7 +11,7 @@ interface Variant {
   id: string;
   size: string;
   samplePrice: number;
-  bulkPrice: number;
+  bulkPrice: number | null;
 }
 
 interface ProductCardProps {
@@ -37,9 +37,8 @@ export default function ProductCard({
   const pathname = usePathname();
   const isVerifiedBuyer = user?.gstin_verified === true;
 
-  // Separate variants
   const sampleVariants = (variants || []).filter((v) => isSampleSize(v.size));
-  const bulkVariants = (variants || []).filter((v) => isBulkSize(v.size));
+  const bulkVariants = (variants || []).filter((v) => v.bulkPrice !== null && v.bulkPrice !== undefined && v.bulkPrice > 0);
   const primarySampleVariant = sampleVariants[0] || (variants || [])[0];
 
   const isFlagship = slug === "ceremonial-matcha-a";
@@ -193,47 +192,49 @@ export default function ProductCard({
           </div>
 
           {/* Wholesale Lock/Verified CTA */}
-          {!isVerifiedBuyer ? (
-            <div className="space-y-1.5 pt-2 border-t border-dashed border-[#ede4d0]">
-              <div className="flex items-start gap-1 text-[8px] text-[#D04636] font-semibold leading-tight">
-                <Lock className="w-2.5 h-2.5 shrink-0" />
-                <span>{user ? "*GST details required to unlock wholesale pricing." : "*GST details required to login as a verified buyer."}</span>
+          {bulkVariants.length > 0 && (
+            !isVerifiedBuyer ? (
+              <div className="space-y-1.5 pt-2 border-t border-dashed border-[#ede4d0]">
+                <div className="flex items-start gap-1 text-[8px] text-[#D04636] font-semibold leading-tight">
+                  <Lock className="w-2.5 h-2.5 shrink-0" />
+                  <span>{user ? "*GST details required to unlock wholesale pricing." : "*GST details required to login as a verified buyer."}</span>
+                </div>
+                {user ? (
+                  <Link
+                    href={`/bulk-order/verify-gstin?returnTo=${encodeURIComponent(pathname || "/products")}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
+                  >
+                    <Lock className="w-2.5 h-2.5" />
+                    Verify GST for Wholesale
+                  </Link>
+                ) : (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      openAuthModal("login");
+                    }}
+                    className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
+                  >
+                    <Lock className="w-2.5 h-2.5" />
+                    Login to See Wholesale Pricing
+                  </button>
+                )}
               </div>
-              {user ? (
+            ) : (
+              <div className="pt-2 border-t border-dashed border-[#ede4d0]">
                 <Link
-                  href={`/bulk-order/verify-gstin?returnTo=${encodeURIComponent(pathname || "/products")}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
+                  href={`/products/${slug}`}
+                  className="w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all flex items-center justify-center gap-1"
                 >
-                  <Lock className="w-2.5 h-2.5" />
-                  Verify GST for Wholesale
+                  Place Bulk Order
+                  <ArrowRight className="w-2.5 h-2.5" />
                 </Link>
-              ) : (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    openAuthModal("login");
-                  }}
-                  className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
-                >
-                  <Lock className="w-2.5 h-2.5" />
-                  Login to See Wholesale Pricing
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="pt-2 border-t border-dashed border-[#ede4d0]">
-              <Link
-                href={`/products/${slug}`}
-                className="w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all flex items-center justify-center gap-1"
-              >
-                Place Bulk Order
-                <ArrowRight className="w-2.5 h-2.5" />
-              </Link>
-            </div>
+              </div>
+            )
           )}
         </div>
 

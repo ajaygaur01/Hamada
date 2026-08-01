@@ -8,7 +8,7 @@ interface VariantData {
   id: string;
   size: string;
   samplePrice: number;
-  bulkPrice: number;
+  bulkPrice: number | null;
 }
 
 interface ProductData {

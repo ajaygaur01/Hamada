@@ -33,13 +33,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { cart, address } = await request.json();
+    const { cart, address, state } = await request.json();
     if (!cart || cart.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
     // Recalculate totals on server
-    let subtotal = 0;
+    let totalAmount = 0;
     const orderItemsData = [];
 
     for (const item of cart) {
@@ -48,11 +48,11 @@ export async function POST(request: Request) {
         include: { product: true }
       });
 
-      if (!variant) continue;
+      if (!variant || !variant.bulk_price || Number(variant.bulk_price) <= 0) continue;
 
       const price = Number(variant.bulk_price);
       const itemTotal = price * item.quantity;
-      subtotal += itemTotal;
+      totalAmount += itemTotal;
 
       orderItemsData.push({
         product_id: variant.product_id,
@@ -67,8 +67,8 @@ export async function POST(request: Request) {
       });
     }
 
-    const gstAmount = subtotal * 0.05;
-    const totalAmount = subtotal + gstAmount;
+    const subtotal = totalAmount / 1.05;
+    const gstAmount = totalAmount - subtotal;
 
     // Create Razorpay Order
     const razorpay = new Razorpay({
@@ -96,10 +96,24 @@ export async function POST(request: Request) {
           phone: user.phone || "0000000000",
           address_line1: address,
           city: "Unknown", // Assuming full address parsing later
-          state: "Unknown",
+          state: state || "Unknown",
           pincode: "000000",
         }
       });
+    }
+
+    const orderState = state || dbAddress?.state || "";
+    const isLocal = orderState.toLowerCase().includes("haryana") || address.toLowerCase().includes("haryana");
+
+    let cgstAmount = 0;
+    let sgstAmount = 0;
+    let igstAmount = 0;
+
+    if (isLocal) {
+      cgstAmount = gstAmount / 2;
+      sgstAmount = gstAmount / 2;
+    } else {
+      igstAmount = gstAmount;
     }
 
     const orderNumber = await generateNextBulkOrderNumber();
@@ -110,9 +124,9 @@ export async function POST(request: Request) {
         user_id: user.id,
         address_id: dbAddress.id,
         subtotal: subtotal,
-        cgst_amount: gstAmount / 2, // simple split for mock
-        sgst_amount: gstAmount / 2,
-        igst_amount: 0,
+        cgst_amount: cgstAmount,
+        sgst_amount: sgstAmount,
+        igst_amount: igstAmount,
         total_amount: totalAmount,
         payment_method: "razorpay",
         razorpay_order_id: rzpOrder.id,

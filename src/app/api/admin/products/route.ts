@@ -115,7 +115,8 @@ export async function POST(req: NextRequest) {
         variants: variants?.length ? {
           create: variants.map((v: any) => ({
             size: v.size, unit: v.unit || "grams",
-            sample_price: v.samplePrice || 0, bulk_price: v.bulkPrice || 0,
+            sample_price: v.samplePrice || 0,
+            bulk_price: (v.bulkPrice !== null && v.bulkPrice !== undefined) ? v.bulkPrice : null,
             stock_quantity: v.stock || 0, min_bulk_quantity: v.minBulkQuantity || 1,
             is_active: v.isActive ?? true,
           })),
@@ -211,7 +212,7 @@ export async function PATCH(req: NextRequest) {
             size: v.size || "Standard",
             unit: v.unit || "grams",
             sample_price: v.samplePrice ?? 0,
-            bulk_price: v.bulkPrice ?? 0,
+            bulk_price: (v.bulkPrice !== null && v.bulkPrice !== undefined) ? v.bulkPrice : null,
             stock_quantity: v.stock ?? 0,
             min_bulk_quantity: v.minBulkQuantity ?? 1,
             is_active: v.isActive ?? true,

@@ -30,13 +30,13 @@ export default async function BulkOrderCartPage() {
 
   // Filter out products that don't have bulk variants
   const productsWithBulkVariants = products.filter(
-    (p) => p.variants.some((v) => ["100g", "500g", "1kg"].includes(v.size))
+    (p) => p.variants.some((v) => v.bulk_price !== null && Number(v.bulk_price) > 0)
   ).map((p) => ({
     id: p.id,
     name: p.name,
     image: pickHeroImageUrl(p.images) || "/placeholder-tea.jpg",
     variants: p.variants
-      .filter((v) => ["100g", "500g", "1kg"].includes(v.size))
+      .filter((v) => v.bulk_price !== null && Number(v.bulk_price) > 0)
       .map((v) => ({
         id: v.id,
         size: v.size,

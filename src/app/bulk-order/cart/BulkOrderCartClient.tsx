@@ -62,10 +62,10 @@ export default function BulkOrderCartClient({
     });
   };
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const gstRate = 0.05; // 5% GST for tea
-  const gstAmount = subtotal * gstRate;
-  const total = subtotal + gstAmount;
+  const subtotal = total / (1 + gstRate);
+  const gstAmount = total - subtotal;
 
   const handleCheckout = async () => {
     if (cart.length === 0) return;

@@ -58,7 +58,7 @@ export default async function ProductsPage() {
         id: v.id,
         size: v.size,
         samplePrice: Number(v.sample_price),
-        bulkPrice: Number(v.bulk_price),
+        bulkPrice: v.bulk_price !== null && v.bulk_price !== undefined ? Number(v.bulk_price) : null,
       })),
     };
   });

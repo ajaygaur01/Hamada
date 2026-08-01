@@ -274,13 +274,13 @@ export const generateOrderInvoice = async (order: any) => {
 
   // 8. Calculations for Totals Block
   const finalY = doc.lastAutoTable.finalY + 8;
-  const totalAmount = Number(order.totalAmount || order.amount || 0);
+  const totalAmount = Number(order.totalAmount || order.total_amount || order.amount || 0);
   let untaxedAmount = Number(order.subtotal || 0);
-  let cgst = Number(order.cgstAmount || 0);
-  let sgst = Number(order.sgstAmount || 0);
-  let igst = Number(order.igstAmount || 0);
+  let cgst = Number(order.cgstAmount || order.cgst_amount || 0);
+  let sgst = Number(order.sgstAmount || order.sgst_amount || 0);
+  let igst = Number(order.igstAmount || order.igst_amount || 0);
 
-  if (!untaxedAmount) {
+  if (cgst === 0 && sgst === 0 && igst === 0 && totalAmount > 0) {
     // If not supplied, back-calculate tax assuming standard 5% tax rate
     const rate = 5;
     untaxedAmount = totalAmount / (1 + rate / 100);

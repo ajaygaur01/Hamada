@@ -31,7 +31,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     variants: product.variants.map((v) => ({
       ...v,
       sample_price: Number(v.sample_price),
-      bulk_price: Number(v.bulk_price),
+      bulk_price: v.bulk_price !== null && v.bulk_price !== undefined ? Number(v.bulk_price) : null,
     })),
   };
 

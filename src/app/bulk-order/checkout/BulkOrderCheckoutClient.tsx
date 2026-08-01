@@ -86,10 +86,10 @@ export default function BulkOrderCheckoutClient({
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(initialQuantity);
 
-  const subtotal = bulkPrice * quantity;
+  const total = bulkPrice * quantity;
   const gstRate = 0.05;
-  const gstAmount = subtotal * gstRate;
-  const total = subtotal + gstAmount;
+  const subtotal = total / (1 + gstRate);
+  const gstAmount = total - subtotal;
 
   const handleNext = () => {
     setError("");
@@ -147,6 +147,7 @@ export default function BulkOrderCheckoutClient({
         body: JSON.stringify({
           cart: [{ variantId, quantity }],
           address: fullAddress,
+          state: formValues.deliveryState,
         }),
       });
 

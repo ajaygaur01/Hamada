@@ -33,10 +33,11 @@ type VariantType = {
   size: string;
   unit: string;
   samplePrice: number;
-  bulkPrice: number;
+  bulkPrice: number | null;
   stock: number;
   minBulkQuantity: number;
   isActive: boolean;
+  hasBulkPrice?: boolean;
 };
 
 type TabId = "general" | "media" | "pricing" | "details";
@@ -97,25 +98,30 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
 
   const [variants, setVariants] = useState<VariantType[]>(
     (initialData?.variants as Record<string, unknown>[])?.length
-      ? (initialData!.variants as Record<string, unknown>[]).map((v) => ({
-          id: v.id as string | undefined,
-          size: v.size as string,
-          unit: (v.unit as string) || "grams",
-          samplePrice: Number(v.sample_price),
-          bulkPrice: Number(v.bulk_price),
-          stock: v.stock_quantity as number,
-          minBulkQuantity: (v.min_bulk_quantity as number) || 1,
-          isActive: (v.is_active as boolean) ?? true,
-        }))
+      ? (initialData!.variants as Record<string, unknown>[]).map((v) => {
+          const bp = v.bulk_price !== null && v.bulk_price !== undefined ? Number(v.bulk_price) : null;
+          return {
+            id: v.id as string | undefined,
+            size: v.size as string,
+            unit: (v.unit as string) || "grams",
+            samplePrice: Number(v.sample_price),
+            bulkPrice: bp,
+            stock: v.stock_quantity as number,
+            minBulkQuantity: (v.min_bulk_quantity as number) || 1,
+            isActive: (v.is_active as boolean) ?? true,
+            hasBulkPrice: bp !== null && bp > 0,
+          };
+        })
       : [
           {
             size: "50g",
             unit: "grams",
             samplePrice: 0,
-            bulkPrice: 0,
+            bulkPrice: null,
             stock: 0,
             minBulkQuantity: 1,
             isActive: true,
+            hasBulkPrice: false,
           },
         ]
   );
@@ -176,10 +182,11 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
         size: "",
         unit: "grams",
         samplePrice: 0,
-        bulkPrice: 0,
+        bulkPrice: null,
         stock: 0,
         minBulkQuantity: 1,
         isActive: true,
+        hasBulkPrice: true,
       },
     ]);
   };
@@ -192,9 +199,10 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
     setVariants((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const updateVariant = (idx: number, field: keyof VariantType, val: string | number | boolean) => {
+  const updateVariant = (idx: number, field: keyof VariantType, val: string | number | boolean | null) => {
     setVariants((prev) => {
       const copy = [...prev];
+      // @ts-ignore - dynamic assignment of nullable field
       copy[idx] = { ...copy[idx], [field]: val };
       return copy;
     });
@@ -244,7 +252,16 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
           .split(",")
           .map((s) => s.trim())
           .filter(Boolean),
-        variants: validVariants,
+        variants: validVariants.map((v) => ({
+          id: v.id,
+          size: v.size,
+          unit: v.unit,
+          samplePrice: v.samplePrice,
+          bulkPrice: v.hasBulkPrice ? v.bulkPrice : null,
+          stock: v.stock,
+          minBulkQuantity: v.hasBulkPrice ? v.minBulkQuantity : 1,
+          isActive: v.isActive,
+        })),
         images: uploadedImages,
       };
 
@@ -550,18 +567,6 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
                       </div>
                       <div>
                         <label className="mb-1 block text-[10px] font-bold uppercase text-zinc-400">
-                          Min bulk qty
-                        </label>
-                        <input
-                          type="number"
-                          min={1}
-                          value={v.minBulkQuantity}
-                          onChange={(e) => updateVariant(idx, "minBulkQuantity", Number(e.target.value))}
-                          className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-[#D04636]"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-[10px] font-bold uppercase text-zinc-400">
                           Stock quantity
                         </label>
                         <input
@@ -574,7 +579,7 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
                       </div>
                       <div>
                         <label className="mb-1 block text-[10px] font-bold uppercase text-zinc-400">
-                          Sample price (₹)
+                          Sample price (₹) *
                         </label>
                         <input
                           type="number"
@@ -585,29 +590,56 @@ export default function ProductForm({ initialData, categories, isEdit }: Product
                           className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-[#D04636]"
                         />
                       </div>
-                      <div>
-                        <label className="mb-1 block text-[10px] font-bold uppercase text-zinc-400">
-                          Bulk price (₹)
-                        </label>
-                        <input
-                          type="number"
-                          min={0}
-                          step="0.01"
-                          value={v.bulkPrice}
-                          onChange={(e) => updateVariant(idx, "bulkPrice", Number(e.target.value))}
-                          className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-[#D04636]"
-                        />
-                      </div>
+                      {v.hasBulkPrice && (
+                        <>
+                          <div>
+                            <label className="mb-1 block text-[10px] font-bold uppercase text-zinc-400">
+                              Bulk price (₹) *
+                            </label>
+                            <input
+                              type="number"
+                              min={0}
+                              step="0.01"
+                              value={v.bulkPrice ?? ""}
+                              onChange={(e) => updateVariant(idx, "bulkPrice", e.target.value ? Number(e.target.value) : null)}
+                              className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-[#D04636]"
+                            />
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-[10px] font-bold uppercase text-zinc-400">
+                              Min bulk qty *
+                            </label>
+                            <input
+                              type="number"
+                              min={1}
+                              value={v.minBulkQuantity}
+                              onChange={(e) => updateVariant(idx, "minBulkQuantity", Number(e.target.value))}
+                              className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-[#D04636]"
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
-                    <label className="mt-3 flex cursor-pointer items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={v.isActive}
-                        onChange={(e) => updateVariant(idx, "isActive", e.target.checked)}
-                        className="h-4 w-4 rounded accent-[#D04636]"
-                      />
-                      <span className="text-sm text-zinc-600">Variant available for purchase</span>
-                    </label>
+                    <div className="mt-3 flex flex-wrap gap-4 items-center border-t border-zinc-100 pt-3">
+                      <label className="flex cursor-pointer items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={v.hasBulkPrice ?? false}
+                          onChange={(e) => updateVariant(idx, "hasBulkPrice", e.target.checked)}
+                          className="h-4 w-4 rounded accent-[#D04636]"
+                        />
+                        <span className="text-sm font-semibold text-zinc-700">Offer bulk pricing</span>
+                      </label>
+                      <label className="flex cursor-pointer items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={v.isActive}
+                          onChange={(e) => updateVariant(idx, "isActive", e.target.checked)}
+                          className="h-4 w-4 rounded accent-[#D04636]"
+                        />
+                        <span className="text-sm text-zinc-600">Available for purchase</span>
+                      </label>
+                    </div>
                   </div>
                 ))}
               </div>

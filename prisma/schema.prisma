@@ -169,7 +169,7 @@ model ProductVariant {
   size              String   @db.VarChar
   unit              String   @db.VarChar
   sample_price      Decimal  @db.Decimal
-  bulk_price        Decimal  @db.Decimal
+  bulk_price        Decimal? @db.Decimal
   stock_quantity    Int
   min_bulk_quantity Int
   is_active         Boolean  @default(true)

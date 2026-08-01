@@ -11,7 +11,7 @@ interface Variant {
   id: string;
   size: string;
   samplePrice: number;
-  bulkPrice: number;
+  bulkPrice: number | null;
   minBulkQuantity: number;
 }
 
@@ -27,7 +27,7 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
 
   // Separate variants into sample and bulk categories
   const sampleVariants = variants.filter((v) => isSampleSize(v.size));
-  const bulkVariants = variants.filter((v) => isBulkSize(v.size));
+  const bulkVariants = variants.filter((v) => v.bulkPrice !== null && v.bulkPrice !== undefined && v.bulkPrice > 0);
 
   // State for active choices
   const [selectedBulkIdx, setSelectedBulkIdx] = useState(0);
@@ -108,26 +108,40 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
     <div className="bg-white border border-zinc-200/80 rounded-2xl p-6 md:p-8 space-y-8 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
       
       {/* Sticky Sidebar Header */}
-      <div className="space-y-1">
-        <span className="text-[10px] font-bold tracking-[0.2em] text-[#4C632E] uppercase">
-          Wholesale Only
-        </span>
-        <h2 className="font-serif text-3xl font-bold text-zinc-800 leading-tight">
-          MOQ {bulkVariants[0]?.size || "500g"}
-        </h2>
-        {isVerifiedBuyer && selectedBulkVariant ? (
-          <p className="text-2xl font-bold text-[#4C632E] mt-1">
-            ₹{selectedBulkVariant.bulkPrice}
-            <span className="text-xs font-normal text-zinc-500 italic ml-1">
-              per pack
-            </span>
-          </p>
-        ) : (
+      {bulkVariants.length > 0 ? (
+        <div className="space-y-1">
+          <span className="text-[10px] font-bold tracking-[0.2em] text-[#4C632E] uppercase">
+            Wholesale Only
+          </span>
+          <h2 className="font-serif text-3xl font-bold text-zinc-800 leading-tight">
+            MOQ {bulkVariants[0]?.size || "500g"}
+          </h2>
+          {isVerifiedBuyer && selectedBulkVariant ? (
+            <p className="text-2xl font-bold text-[#4C632E] mt-1">
+              ₹{selectedBulkVariant.bulkPrice}
+              <span className="text-xs font-normal text-zinc-500 italic ml-1">
+                per pack
+              </span>
+            </p>
+          ) : (
+            <p className="text-sm text-zinc-500 font-medium italic mt-1">
+              {!isVerifiedBuyer ? "*GST required to view wholesale pricing" : "Pricing available on request"}
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-1">
+          <span className="text-[10px] font-bold tracking-[0.2em] text-[#D04636] uppercase">
+            Samples Available
+          </span>
+          <h2 className="font-serif text-3xl font-bold text-zinc-800 leading-tight">
+            Order Sample Kit
+          </h2>
           <p className="text-sm text-zinc-500 font-medium italic mt-1">
-            {!isVerifiedBuyer ? "*GST required to view wholesale pricing" : "Pricing available on request"}
+            Evaluate quality before you scale
           </p>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* SELECT FORMAT (Bulk variants) */}
       {bulkVariants.length > 0 && (
@@ -245,77 +259,79 @@ export default function OrderForm({ variants, productSlug }: OrderFormProps) {
         </Link>
 
         {/* Wholesale pricing action */}
-        {!isVerifiedBuyer ? (
-          user ? (
-            <Link
-              href={`/bulk-order/verify-gstin?returnTo=${encodeURIComponent(pathname || "/products")}`}
-              className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
-            >
-              <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
-                <Lock className="w-4 h-4 text-[#2C3E1A]" />
-                <span>Verify GST to Get Bulk Pricing</span>
-              </div>
-              <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
-                Unlock volume-based pricing
-              </span>
-            </Link>
+        {bulkVariants.length > 0 && (
+          !isVerifiedBuyer ? (
+            user ? (
+              <Link
+                href={`/bulk-order/verify-gstin?returnTo=${encodeURIComponent(pathname || "/products")}`}
+                className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
+              >
+                <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
+                  <Lock className="w-4 h-4 text-[#2C3E1A]" />
+                  <span>Verify GST to Get Bulk Pricing</span>
+                </div>
+                <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
+                  Unlock volume-based pricing
+                </span>
+              </Link>
+            ) : (
+              <button
+                onClick={() => openAuthModal("login")}
+                className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
+              >
+                <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
+                  <Lock className="w-4 h-4 text-[#2C3E1A]" />
+                  <span>Get Bulk Pricing</span>
+                </div>
+                <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
+                  Volume-based pricing
+                </span>
+              </button>
+            )
           ) : (
-            <button
-              onClick={() => openAuthModal("login")}
-              className="flex flex-col items-center justify-center w-full bg-transparent border-[1.5px] border-[#2C3E1A] hover:bg-[#2C3E1A]/5 text-[#2C3E1A] py-3.5 rounded-xl transition-all text-center group cursor-pointer"
-            >
-              <div className="flex items-center justify-center gap-2 font-medium text-sm leading-none">
-                <Lock className="w-4 h-4 text-[#2C3E1A]" />
-                <span>Get Bulk Pricing</span>
+            <div className="space-y-2">
+              {/* Quantity Selector */}
+              <div className="flex items-center justify-between border border-zinc-200 rounded-xl px-4 py-2.5 bg-[#FAF8F5]">
+                <span className="text-xs font-semibold text-zinc-600">Bulk Quantity</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev - 1))}
+                    disabled={currentBulkQty <= minBulkQty}
+                    className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min={minBulkQty}
+                    value={currentBulkQty}
+                    onChange={(e) => setBulkQty(Math.max(minBulkQty, parseInt(e.target.value) || minBulkQty))}
+                    className="w-14 text-center rounded-lg border border-zinc-300 py-1 text-xs font-semibold text-zinc-900 focus:border-[#D04636] focus:ring-1 focus:ring-[#D04636] bg-white outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev + 1))}
+                    className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 select-none cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
-              <span className="text-[12px] text-zinc-500 font-normal mt-1 leading-none">
-                Volume-based pricing
-              </span>
-            </button>
-          )
-        ) : (
-          <div className="space-y-2">
-            {/* Quantity Selector */}
-            <div className="flex items-center justify-between border border-zinc-200 rounded-xl px-4 py-2.5 bg-[#FAF8F5]">
-              <span className="text-xs font-semibold text-zinc-600">Bulk Quantity</span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev - 1))}
-                  disabled={currentBulkQty <= minBulkQty}
-                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer"
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  min={minBulkQty}
-                  value={currentBulkQty}
-                  onChange={(e) => setBulkQty(Math.max(minBulkQty, parseInt(e.target.value) || minBulkQty))}
-                  className="w-14 text-center rounded-lg border border-zinc-300 py-1 text-xs font-semibold text-zinc-900 focus:border-[#D04636] focus:ring-1 focus:ring-[#D04636] bg-white outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setBulkQty((prev) => Math.max(minBulkQty, prev + 1))}
-                  className="w-8 h-8 rounded-lg border border-zinc-300 flex items-center justify-center font-bold text-zinc-600 bg-white hover:bg-zinc-50 active:bg-zinc-100 select-none cursor-pointer"
-                >
-                  +
-                </button>
-              </div>
-            </div>
 
-            <Link
-              href={bulkCheckoutUrl}
-              className="flex flex-col items-center justify-center w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-3.5 rounded-xl transition-all text-center group shadow-md cursor-pointer"
-            >
-              <div className="font-bold text-sm leading-none flex items-center gap-1.5">
-                <span>Place Bulk Order</span>
-              </div>
-              <span className="text-[10px] text-white/80 font-medium mt-1 leading-none">
-                Proceed to Checkout ({currentBulkQty} {currentBulkQty === 1 ? "pack" : "packs"})
-              </span>
-            </Link>
-          </div>
+              <Link
+                href={bulkCheckoutUrl}
+                className="flex flex-col items-center justify-center w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-3.5 rounded-xl transition-all text-center group shadow-md cursor-pointer"
+              >
+                <div className="font-bold text-sm leading-none flex items-center gap-1.5">
+                  <span>Place Bulk Order</span>
+                </div>
+                <span className="text-[10px] text-white/80 font-medium mt-1 leading-none">
+                  Proceed to Checkout ({currentBulkQty} {currentBulkQty === 1 ? "pack" : "packs"})
+                </span>
+              </Link>
+            </div>
+          )
         )}
 
         {/* Chat on WhatsApp Button */}

@@ -43,7 +43,7 @@ export default async function BulkOrderCheckoutPage({ searchParams }: Props) {
     include: { product: true },
   });
 
-  if (!variant || !variant.is_active) {
+  if (!variant || !variant.is_active || variant.bulk_price === null || Number(variant.bulk_price) <= 0) {
     notFound();
   }
 

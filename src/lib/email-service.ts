@@ -224,8 +224,8 @@ export async function sendOrderNotificationEmail(orderId: string, type: "sample"
                 <td style="padding: 8px; text-align: right; font-weight: bold;">₹${Number(order.subtotal)}</td>
               </tr>
               <tr>
-                <td colspan="4" style="padding: 8px; text-align: right; font-weight: bold;">GST (CGST+SGST):</td>
-                <td style="padding: 8px; text-align: right; font-weight: bold;">₹${Number(order.cgst_amount) + Number(order.sgst_amount)}</td>
+                <td colspan="4" style="padding: 8px; text-align: right; font-weight: bold;">GST (${Number(order.igst_amount || 0) > 0 ? "IGST" : "CGST+SGST"}):</td>
+                <td style="padding: 8px; text-align: right; font-weight: bold;">₹${Number(order.igst_amount || 0) > 0 ? Number(order.igst_amount).toFixed(2) : (Number(order.cgst_amount || 0) + Number(order.sgst_amount || 0)).toFixed(2)}</td>
               </tr>
               <tr>
                 <td colspan="4" style="padding: 8px; text-align: right; font-weight: bold;">Total Amount:</td>
