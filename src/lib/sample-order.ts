@@ -151,11 +151,12 @@ export async function syncRazorpayPaymentIfNeeded(order: any, type: "sample" | "
             variant: { select: { size: true, unit: true } },
           }
         });
-        import("./email-service").then(({ sendOrderNotificationEmail }) => {
-          sendOrderNotificationEmail(order.id, "sample").catch((err) => {
-            console.error("[syncRazorpay] Error sending sample order notification email:", err);
-          });
-        });
+        try {
+          const { sendOrderNotificationEmail } = await import("./email-service");
+          await sendOrderNotificationEmail(order.id, "sample");
+        } catch (err) {
+          console.error("[syncRazorpay] Error sending sample order notification email:", err);
+        }
         return updated;
       } else {
         const invoiceNumber = order.invoice_number || `INV-${Date.now()}`;
@@ -168,16 +169,49 @@ export async function syncRazorpayPaymentIfNeeded(order: any, type: "sample" | "
             invoice_number: invoiceNumber,
           },
           include: {
-            user: { select: { full_name: true, email: true, phone: true, company_name: true, gstin: true } },
+            user: { select: { full_name: true, email: true, phone: true, company_name: true, gstin: true, company_address: true } },
             address: true,
             items: true,
           }
         });
-        import("./email-service").then(({ sendOrderNotificationEmail }) => {
-          sendOrderNotificationEmail(order.id, "bulk").catch((err) => {
-            console.error("[syncRazorpay] Error sending bulk order notification email:", err);
-          });
+
+        // Ensure Invoice record doesn't exist already to avoid unique constraint violations
+        const existingInvoice = await prisma.invoice.findUnique({
+          where: { bulk_order_id: order.id }
         });
+
+        if (!existingInvoice) {
+          const buyerAddress = updated.user.company_address || 
+            `${updated.address.address_line1}${updated.address.address_line2 ? `, ${updated.address.address_line2}` : ""}, ${updated.address.city}, ${updated.address.state} - ${updated.address.pincode}`;
+
+          await prisma.invoice.create({
+            data: {
+              invoice_number: invoiceNumber,
+              bulk_order_id: order.id,
+              user_id: updated.user_id,
+              buyer_name: updated.user.full_name || "Walk-in Customer",
+              buyer_company: updated.user.company_name || "",
+              buyer_gstin: updated.user.gstin || "",
+              buyer_address: buyerAddress,
+              seller_name: "Hamada Global Trading",
+              seller_gstin: "06AAGCH4681R1ZV",
+              seller_address: "B1, HOUSE NO 2 P, SECTOR 31, Gurugram 122001, Haryana, India",
+              subtotal: updated.subtotal,
+              cgst_amount: updated.cgst_amount,
+              sgst_amount: updated.sgst_amount,
+              igst_amount: updated.igst_amount,
+              total_amount: updated.total_amount,
+              invoice_date: new Date(),
+            }
+          });
+        }
+
+        try {
+          const { sendOrderNotificationEmail } = await import("./email-service");
+          await sendOrderNotificationEmail(order.id, "bulk");
+        } catch (err) {
+          console.error("[syncRazorpay] Error sending bulk order notification email:", err);
+        }
         return updated;
       }
     }

@@ -35,22 +35,58 @@ export async function POST(request: Request) {
     const invoiceNumber = `INV-${Date.now()}`;
 
     // Update order status
-    await prisma.bulkOrder.update({
+    const updatedOrder = await prisma.bulkOrder.update({
       where: { id: orderId },
       data: {
         payment_status: "paid",
         order_status: "confirmed",
         razorpay_payment_id: razorpayPaymentId,
         invoice_number: invoiceNumber,
+      },
+      include: {
+        user: { select: { full_name: true, company_name: true, gstin: true, company_address: true } },
+        address: true,
       }
     });
 
-    // Trigger notification email to operations@chirantea.in (non-blocking)
-    import("@/lib/email-service").then(({ sendOrderNotificationEmail }) => {
-      sendOrderNotificationEmail(orderId, "bulk").catch((err) => {
-        console.error("[bulk-verify] Error sending bulk order notification email:", err);
-      });
+    // Ensure Invoice record doesn't exist already to avoid unique constraint violations
+    const existingInvoice = await prisma.invoice.findUnique({
+      where: { bulk_order_id: orderId }
     });
+
+    if (!existingInvoice) {
+      const buyerAddress = updatedOrder.user.company_address || 
+        `${updatedOrder.address.address_line1}${updatedOrder.address.address_line2 ? `, ${updatedOrder.address.address_line2}` : ""}, ${updatedOrder.address.city}, ${updatedOrder.address.state} - ${updatedOrder.address.pincode}`;
+
+      await prisma.invoice.create({
+        data: {
+          invoice_number: invoiceNumber,
+          bulk_order_id: orderId,
+          user_id: user.id,
+          buyer_name: updatedOrder.user.full_name || "Walk-in Customer",
+          buyer_company: updatedOrder.user.company_name || "",
+          buyer_gstin: updatedOrder.user.gstin || "",
+          buyer_address: buyerAddress,
+          seller_name: "Hamada Global Trading",
+          seller_gstin: "06AAGCH4681R1ZV",
+          seller_address: "B1, HOUSE NO 2 P, SECTOR 31, Gurugram 122001, Haryana, India",
+          subtotal: updatedOrder.subtotal,
+          cgst_amount: updatedOrder.cgst_amount,
+          sgst_amount: updatedOrder.sgst_amount,
+          igst_amount: updatedOrder.igst_amount,
+          total_amount: updatedOrder.total_amount,
+          invoice_date: new Date(),
+        }
+      });
+    }
+
+    // Trigger notification email to operations@chirantea.in (blocking to ensure it completes in serverless environments)
+    try {
+      const { sendOrderNotificationEmail } = await import("@/lib/email-service");
+      await sendOrderNotificationEmail(orderId, "bulk");
+    } catch (err) {
+      console.error("[bulk-verify] Error sending bulk order notification email:", err);
+    }
 
     return NextResponse.json({ success: true, orderId });
   } catch (error) {

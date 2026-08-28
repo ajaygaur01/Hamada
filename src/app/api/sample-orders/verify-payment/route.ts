@@ -64,10 +64,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Order not found for this payment." }, { status: 404 });
     }
 
-    // Trigger notification email to operations@chirantea.in (non-blocking, logged in background)
-    sendOrderNotificationEmail(updatedOrder.id, "sample").catch((err) => {
+    // Trigger notification email to operations@chirantea.in (blocking to ensure it completes in serverless environments)
+    try {
+      await sendOrderNotificationEmail(updatedOrder.id, "sample");
+    } catch (err) {
       console.error("[verify-payment] Error sending order notification email:", err);
-    });
+    }
 
     return NextResponse.json({
       success: true,
