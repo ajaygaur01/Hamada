@@ -6,9 +6,10 @@ import { generateOrderInvoice } from "@/lib/admin/invoice-generator";
 interface InvoicesSectionProps {
   invoices: Invoice[];
   bulkOrders: BulkOrder[];
+  sampleOrders?: any[];
 }
 
-export default function InvoicesSection({ invoices, bulkOrders }: InvoicesSectionProps) {
+export default function InvoicesSection({ invoices, bulkOrders, sampleOrders }: InvoicesSectionProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [generatingId, setGeneratingId] = useState<string | null>(null);
 
@@ -18,15 +19,21 @@ export default function InvoicesSection({ invoices, bulkOrders }: InvoicesSectio
   );
 
   const handleDownloadInvoice = async (invoice: Invoice) => {
-    const matchingOrder = bulkOrders.find(o => o.orderNumber === invoice.orderNumber);
-    if (!matchingOrder) {
-      alert("Order details not found for this invoice.");
-      return;
-    }
+    const matchingOrder =
+      bulkOrders.find((o) => o.orderNumber === invoice.orderNumber) ||
+      sampleOrders?.find((o: any) => o.orderNumber === invoice.orderNumber);
+
+    const orderToUse = matchingOrder || {
+      orderNumber: invoice.orderNumber,
+      invoiceNumber: invoice.invoiceNumber,
+      totalAmount: invoice.amount,
+      amount: invoice.amount,
+      createdAt: invoice.date,
+    };
     
     setGeneratingId(invoice.id);
     try {
-      await generateOrderInvoice(matchingOrder);
+      await generateOrderInvoice(orderToUse);
     } catch (error) {
       console.error("Failed to generate invoice:", error);
     } finally {

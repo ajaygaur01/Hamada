@@ -12,7 +12,7 @@ export default function CTASection() {
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link 
-            href="/products" 
+            href="/sample-order" 
             className="w-full sm:w-auto bg-[#D04636] text-white font-medium px-8 py-3 rounded text-sm hover:bg-[#B83C2D] transition-colors"
           >
             Order a Sample

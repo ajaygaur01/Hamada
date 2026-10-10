@@ -4,26 +4,36 @@ import prisma from "@/lib/prisma";
 import Razorpay from "razorpay";
 
 async function generateNextBulkOrderNumber() {
-  const latestOrder = await prisma.bulkOrder.findFirst({
-    orderBy: { created_at: "desc" },
+  const existingOrders = await prisma.bulkOrder.findMany({
+    where: {
+      order_number: { startsWith: "BLK-" },
+    },
     select: { order_number: true },
   });
 
-  if (!latestOrder) {
-    return "BLK-1";
-  }
-
-  const match = latestOrder.order_number.match(/^BLK-(\d+)$/);
-  if (match) {
-    const num = parseInt(match[1], 10);
-    // If it's a small sequential number, increment it.
-    // If it's a large timestamp, restart the sequence at 1.
-    if (num < 10000000) {
-      return `BLK-${num + 1}`;
+  let maxNum = 0;
+  for (const o of existingOrders) {
+    const match = o.order_number.match(/^BLK-(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num < 10000000 && num > maxNum) {
+        maxNum = num;
+      }
     }
   }
 
-  return "BLK-1";
+  let nextNum = maxNum + 1;
+  while (true) {
+    const candidate = `BLK-${nextNum}`;
+    const exists = await prisma.bulkOrder.findUnique({
+      where: { order_number: candidate },
+      select: { id: true },
+    });
+    if (!exists) {
+      return candidate;
+    }
+    nextNum++;
+  }
 }
 
 export async function POST(request: Request) {

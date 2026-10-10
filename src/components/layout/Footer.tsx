@@ -64,7 +64,7 @@ export default function Footer() {
               </li>
               <li className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Email</span>
-                <a href="mailto:sales@chirantea.in" className="hover:text-zinc-900">sales@chirantea.in</a>
+                <a href="mailto:info@chirantea.in" className="hover:text-zinc-900">info@chirantea.in</a>
               </li>
               <li className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Registered Office</span>

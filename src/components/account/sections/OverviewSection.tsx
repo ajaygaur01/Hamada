@@ -124,7 +124,7 @@ export default function OverviewSection({
                         {order.orderStatus}
                       </span>
                       {isBulk && (
-                        <Link href="/bulk-order/cart" className="text-sm font-medium text-brand-green hover:underline">
+                        <Link href="/sample-order" className="text-sm font-medium text-brand-green hover:underline">
                           Reorder
                         </Link>
                       )}

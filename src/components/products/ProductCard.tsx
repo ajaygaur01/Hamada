@@ -136,30 +136,6 @@ export default function ProductCard({
           ))}
         </div>
 
-        {/* Bulk Tiers List */}
-        {bulkVariants.length > 0 && (
-          <div className="mb-2.5 border-t border-[#ede4d0] pt-2.5">
-            <p className="text-[8px] font-bold tracking-wider text-zinc-400 uppercase mb-1.5">
-              Wholesale Bulk Tiers
-            </p>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
-              {bulkVariants.slice(0, 4).map((v) => (
-                <div key={v.id} className="flex items-center justify-between py-0.5 border-b border-zinc-100/50">
-                  <span className="text-zinc-500 font-medium">{v.size}</span>
-                  {isVerifiedBuyer ? (
-                    <span className="font-bold text-[#3e4f25]">₹{v.bulkPrice}</span>
-                  ) : (
-                    <span className="flex items-center gap-0.5 text-[#D04636]" title="GST required to view pricing">
-                      <Lock className="w-2.5 h-2.5 shrink-0" />
-                      <span className="blur-[2px] select-none text-zinc-400">₹999</span>
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Bottom Row - Price + CTA */}
         <div className="mt-auto pt-2.5 border-t border-[#ede4d0] space-y-2.5">
           <div className="flex items-center justify-between">
@@ -185,57 +161,11 @@ export default function ProductCard({
 
             <Link
               href={`/sample-order?product=${slug}${primarySampleVariant ? `&variant=${primarySampleVariant.id}` : ""}`}
-              className="bg-white border border-zinc-300 hover:border-[#D04636] hover:text-[#D04636] text-zinc-700 py-1 px-2.5 rounded-full text-center text-[10px] font-bold transition-all shadow-xs"
+              className="bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs"
             >
               Order Sample
             </Link>
           </div>
-
-          {/* Wholesale Lock/Verified CTA */}
-          {bulkVariants.length > 0 && (
-            !isVerifiedBuyer ? (
-              <div className="space-y-1.5 pt-2 border-t border-dashed border-[#ede4d0]">
-                <div className="flex items-start gap-1 text-[8px] text-[#D04636] font-semibold leading-tight">
-                  <Lock className="w-2.5 h-2.5 shrink-0" />
-                  <span>{user ? "*GST details required to unlock wholesale pricing." : "*GST details required to login as a verified buyer."}</span>
-                </div>
-                {user ? (
-                  <Link
-                    href={`/bulk-order/verify-gstin?returnTo=${encodeURIComponent(pathname || "/products")}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
-                  >
-                    <Lock className="w-2.5 h-2.5" />
-                    Verify GST for Wholesale
-                  </Link>
-                ) : (
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      openAuthModal("login");
-                    }}
-                    className="w-full bg-[#D04636] hover:bg-[#B83C2D] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all shadow-xs flex items-center justify-center gap-1"
-                  >
-                    <Lock className="w-2.5 h-2.5" />
-                    Login to See Wholesale Pricing
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="pt-2 border-t border-dashed border-[#ede4d0]">
-                <Link
-                  href={`/products/${slug}`}
-                  className="w-full bg-[#3e4f25] hover:bg-[#4c632e] text-white py-1.5 px-3 rounded-lg text-center text-[10px] font-bold transition-all flex items-center justify-center gap-1"
-                >
-                  Place Bulk Order
-                  <ArrowRight className="w-2.5 h-2.5" />
-                </Link>
-              </div>
-            )
-          )}
         </div>
 
       </div>

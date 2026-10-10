@@ -1,16 +1,18 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-// Helper to convert images to base64 synchronously or asynchronously for jsPDF
-const loadImg = (url: string): Promise<string> => {
+// Helper to convert images to base64 synchronously or asynchronously for jsPDF with a safety timeout
+const loadImg = (url: string, timeoutMs = 1500): Promise<string> => {
   return new Promise((resolve) => {
     if (typeof window === "undefined") {
       resolve("");
       return;
     }
+    const timer = setTimeout(() => resolve(""), timeoutMs);
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.onload = () => {
+      clearTimeout(timer);
       try {
         const canvas = document.createElement("canvas");
         canvas.width = img.width;
@@ -23,6 +25,7 @@ const loadImg = (url: string): Promise<string> => {
       }
     };
     img.onerror = () => {
+      clearTimeout(timer);
       resolve("");
     };
     img.src = url;
@@ -121,14 +124,50 @@ export const generateOrderInvoice = async (order: any) => {
   doc.text("GSTIN: 06AAGCH4681R1ZV", 196, 41, { align: "right" });
 
   // 4. Draw Middle Left Customer Details
-  const buyerName = order.user?.companyName || order.businessName || order.customerName || order.user?.fullName || "Walk-in Customer";
-  const address1 = order.address?.addressLine1 || order.addressLine1 || "";
-  const address2 = order.address?.addressLine2 || order.addressLine2 || "";
-  const city = order.address?.city || order.deliveryCity || "";
-  const state = order.address?.state || order.deliveryState || "";
-  const pincode = order.address?.pincode || order.pincode || "";
-  const country = order.address?.country || order.country || "India";
-  const buyerGstin = order.user?.gstin || "";
+  const buyerName =
+    order.user?.companyName ||
+    order.user?.company_name ||
+    order.businessName ||
+    order.business_name ||
+    order.customerName ||
+    order.customer_name ||
+    order.user?.fullName ||
+    order.user?.full_name ||
+    "Walk-in Customer";
+  const address1 =
+    order.address?.addressLine1 ||
+    order.address?.address_line1 ||
+    order.addressLine1 ||
+    order.address_line1 ||
+    "";
+  const address2 =
+    order.address?.addressLine2 ||
+    order.address?.address_line2 ||
+    order.addressLine2 ||
+    order.address_line2 ||
+    "";
+  const city =
+    order.address?.city ||
+    order.deliveryCity ||
+    order.delivery_city ||
+    "";
+  const state =
+    order.address?.state ||
+    order.deliveryState ||
+    order.delivery_state ||
+    "";
+  const pincode =
+    order.address?.pincode ||
+    order.pincode ||
+    "";
+  const country =
+    order.address?.country ||
+    order.country ||
+    "India";
+  const buyerGstin =
+    order.user?.gstin ||
+    order.gstin ||
+    "";
 
   let buyerY = 52;
   doc.setFont("helvetica", "bold");
@@ -148,10 +187,14 @@ export const generateOrderInvoice = async (order: any) => {
     doc.text(address2, 14, buyerY);
     buyerY += 4.5;
   }
-  doc.text(`${city} ${pincode}`, 14, buyerY);
-  buyerY += 4.5;
-  doc.text(`${state} ${country}`, 14, buyerY);
-  buyerY += 4.5;
+  if (city || pincode) {
+    doc.text(`${city} ${pincode}`.trim(), 14, buyerY);
+    buyerY += 4.5;
+  }
+  if (state || country) {
+    doc.text(`${state} ${country}`.trim(), 14, buyerY);
+    buyerY += 4.5;
+  }
 
   if (buyerGstin) {
     doc.setFont("helvetica", "bold");
@@ -162,13 +205,14 @@ export const generateOrderInvoice = async (order: any) => {
   doc.text(`Place of supply: ${state || "Haryana"}`, 14, buyerY);
 
   // 5. Draw Tax Invoice Title (Red)
-  const isBulk = order.items && order.items.length > 0;
+  const isBulk = Boolean(order.items && order.items.length > 0);
   const isLocal = (state || "").toLowerCase().includes("haryana");
   
-  const rawOrderNumber = order.orderNumber || "00000";
+  const rawOrderNumber = String(order.orderNumber || order.order_number || "");
   const cleanOrderNumber = rawOrderNumber.replace(/\D/g, "");
   const suffix = cleanOrderNumber.padStart(4, "0").slice(-4) || "0000";
-  const invoiceNo = order.invoiceNumber || `INV/26-27/${suffix}`;
+  const invoiceNo = String(order.invoiceNumber || order.invoice_number || (rawOrderNumber ? `INV/26-27/${suffix}` : `INV/26-27/${Date.now().toString().slice(-4)}`));
+  const displayOrderNo = rawOrderNumber || invoiceNo;
   
   doc.setFont("times", "bold");
   doc.setFontSize(18);
@@ -184,7 +228,7 @@ export const generateOrderInvoice = async (order: any) => {
   doc.text("Source", 95, 98);
   doc.text("Reference", 135, 98);
 
-  const formattedDate = new Date(order.createdAt || Date.now()).toLocaleDateString("en-IN", {
+  const formattedDate = new Date(order.createdAt || order.created_at || order.invoiceDate || order.invoice_date || Date.now()).toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -195,8 +239,8 @@ export const generateOrderInvoice = async (order: any) => {
   doc.setTextColor(24, 24, 27);
   doc.text(formattedDate, 14, 103);
   doc.text(formattedDate, 55, 103);
-  doc.text(order.orderNumber, 95, 103);
-  doc.text(order.orderNumber, 135, 103);
+  doc.text(displayOrderNo, 95, 103);
+  doc.text(displayOrderNo, 135, 103);
 
   // 7. Generate Items Table
   const tableColumn = ["Description", "HSN/SAC", "Quantity", "Unit Price", "Taxes", "Amount"];
@@ -229,7 +273,7 @@ export const generateOrderInvoice = async (order: any) => {
   } else {
     // Sample order
     const qty = 1;
-    const inclusivePrice = Number(order.variantPrice || order.amount || 250);
+    const inclusivePrice = Number(order.variantPrice || order.amount || (order.variant ? order.variant.sample_price : 0) || 250);
     const rate = 5;
     const taxablePrice = inclusivePrice / (1 + rate / 100);
     const taxableTotal = taxablePrice;
@@ -238,8 +282,11 @@ export const generateOrderInvoice = async (order: any) => {
       ? "CGST 2.5%, SGST 2.5%"
       : "IGST 5.0%";
 
+    const sampleProdName = order.productName || order.product?.name || "Matcha Sample";
+    const sampleSizeName = order.variantSize || order.sample_size || (order.variant ? `${order.variant.size} ${order.variant.unit || ""}`.trim() : "") || "Sample Size";
+
     tableRows.push([
-      `[SAMPLE] ${order.productName || "Matcha Sample"} (${order.variantSize || "Sample Size"})`,
+      `[SAMPLE] ${sampleProdName} (${sampleSizeName})`,
       hsn,
       "1.00 Units",
       `Rs. ${taxablePrice.toFixed(2)}`,
@@ -266,18 +313,18 @@ export const generateOrderInvoice = async (order: any) => {
       cellPadding: 4,
     },
     columnStyles: {
-      0: { cellWidth: 70 }, // Description
-      1: { cellWidth: 25 }, // HSN/SAC
+      0: { cellWidth: 67 }, // Description
+      1: { cellWidth: 23 }, // HSN/SAC
       2: { cellWidth: 20, halign: "center" }, // Quantity
-      3: { cellWidth: 25, halign: "right" }, // Unit Price
-      4: { cellWidth: 25, halign: "center" }, // Taxes
-      5: { cellWidth: 25, halign: "right" }, // Amount
+      3: { cellWidth: 24, halign: "right" }, // Unit Price
+      4: { cellWidth: 24, halign: "center" }, // Taxes
+      5: { cellWidth: 24, halign: "right" }, // Amount
     },
     margin: { left: 14, right: 14 }
   });
 
   // 8. Calculations for Totals Block
-  const finalY = doc.lastAutoTable.finalY + 8;
+  const finalY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : 110) + 8;
   const totalAmount = Number(order.totalAmount || order.total_amount || order.amount || 0);
   let untaxedAmount = Number(order.subtotal || 0);
   let cgst = Number(order.cgstAmount || order.cgst_amount || 0);
@@ -438,8 +485,11 @@ export const generateOrderInvoice = async (order: any) => {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
   doc.setTextColor(113, 113, 122);
-  doc.text("+919354262542 | shuhei@chirantea.in | 06AAGCH4681R1ZV https://www.hamadaglobaltrading.com/      Page 1 / 1", 105, 285, { align: "center" });
+  doc.text("+919354262542 | info@chirantea.in | 06AAGCH4681R1ZV https://www.hamadaglobaltrading.com/      Page 1 / 1", 105, 285, { align: "center" });
 
   // 14. Save PDF in browser
-  doc.save(`Invoice_${invoiceNo.replace(/\//g, "-")}.pdf`);
+  if (typeof window !== "undefined") {
+    doc.save(`Invoice_${invoiceNo.replace(/\//g, "-")}.pdf`);
+  }
+  return doc;
 };

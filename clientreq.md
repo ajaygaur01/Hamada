@@ -154,7 +154,7 @@ grounded.
 One or two strong photographs. 
 Minimal text, maximum feeling.
 Contact Page 
-WhatsApp link as the primary contact method. Email: sales@chirantea.in. 
+WhatsApp link as the primary contact method. Email: info@chirantea.in. 
 Phone: 9899923445. 
 A short inquiry form for large or custom orders with fields for name, business name, email, 
 message, and optional monthly requirement estimate.

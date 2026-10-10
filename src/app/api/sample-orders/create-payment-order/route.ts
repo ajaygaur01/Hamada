@@ -127,7 +127,8 @@ export async function POST(request: Request) {
       razorpayKeyId,
       amountInPaise,
     });
-  } catch {
+  } catch (error) {
+    console.error("Failed to create sample payment order:", error);
     return NextResponse.json({ error: "Failed to create payment order." }, { status: 500 });
   }
 }

@@ -59,7 +59,7 @@ export default function ConnectInfo() {
         </div>
         <div>
           <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-1">EMAIL</p>
-          <a href="mailto:sales@chirantea.in" className="text-sm font-semibold text-zinc-800 hover:text-[#D04636] transition-colors">sales@chirantea.in</a>
+          <a href="mailto:info@chirantea.in" className="text-sm font-semibold text-zinc-800 hover:text-[#D04636] transition-colors">info@chirantea.in</a>
           <p className="text-[10px] text-zinc-400 mt-1">For wholesale, menu R&amp;D &amp; supply partnerships</p>
         </div>
       </div>

@@ -58,7 +58,7 @@ export default async function Teas() {
             Start with a sample set
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-zinc-500 sm:text-base">
-            Test our teas with your team and menu before committing to bulk. No account required.
+            Test our authentic Japanese teas with your team and menu. No account required.
           </p>
           <div className="mx-auto mt-4 h-0.5 w-16 bg-brand-red opacity-35" />
         </div>

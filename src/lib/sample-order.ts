@@ -71,27 +71,36 @@ export function sanitizeSampleOrderInput(input: SampleOrderInput) {
 }
 
 export async function generateNextSampleOrderNumber() {
-  const latestOrder = await prisma.sampleOrder.findFirst({
-    orderBy: { created_at: "desc" },
+  const existingOrders = await prisma.sampleOrder.findMany({
+    where: {
+      order_number: { startsWith: "SMP-" },
+    },
     select: { order_number: true },
   });
 
-  if (!latestOrder) {
-    return "SMP-1";
-  }
-
-  const match = latestOrder.order_number.match(/^SMP-(\d+)$/);
-  if (match) {
-    const num = parseInt(match[1], 10);
-    // If it's a small sequential number, increment it.
-    // If it's a large timestamp/random number, restart the sequence at 1.
-    if (num < 10000000) {
-      return `SMP-${num + 1}`;
+  let maxNum = 0;
+  for (const o of existingOrders) {
+    const match = o.order_number.match(/^SMP-(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num < 10000000 && num > maxNum) {
+        maxNum = num;
+      }
     }
   }
 
-  // Fallback for older formats like SMP-33609603-8483
-  return "SMP-1";
+  let nextNum = maxNum + 1;
+  while (true) {
+    const candidate = `SMP-${nextNum}`;
+    const exists = await prisma.sampleOrder.findUnique({
+      where: { order_number: candidate },
+      select: { id: true },
+    });
+    if (!exists) {
+      return candidate;
+    }
+    nextNum++;
+  }
 }
 
 export function verifyRazorpaySignature(payload: {

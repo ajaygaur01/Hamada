@@ -30,7 +30,6 @@ const SLIDES: Slide[] = [
     description: 'For 50 years, Hamada Tea has been a pioneer in manufacturing and exporting Japanese teas to the world.',
     ctas: [
       { text: 'Order a Sample', href: '/sample-order', style: 'primary' },
-      { text: 'Place a Bulk Order', href: '/bulk-order', style: 'secondary' },
     ],
     image: '/banner2.avif',
     overlayClass: 'bg-black/45',

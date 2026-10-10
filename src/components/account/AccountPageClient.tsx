@@ -305,7 +305,7 @@ export default function AccountPageClient({ initialUser }: { initialUser: UserPr
             )}
             
             {activeSection === "invoices" && (
-              <InvoicesSection invoices={invoices} bulkOrders={bulkOrders} />
+              <InvoicesSection invoices={invoices} bulkOrders={bulkOrders} sampleOrders={sampleOrders} />
             )}
             
           </div>

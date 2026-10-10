@@ -140,7 +140,7 @@ export default function OrdersSection({ sampleOrders, bulkOrders }: OrdersSectio
                           </>
                         )}
                       </button>
-                      <Link href={isBulk ? "/bulk-order/cart" : `/products/${(order as SampleOrder).productSlug}`} className="px-4 py-1.5 bg-brand-cream text-[#D04636] rounded-md text-sm font-medium hover:bg-[#d8ccaa] transition-colors">
+                      <Link href={isBulk ? "/sample-order" : `/sample-order?product=${(order as SampleOrder).productSlug}`} className="px-4 py-1.5 bg-brand-cream text-[#D04636] rounded-md text-sm font-medium hover:bg-[#d8ccaa] transition-colors">
                         Reorder
                       </Link>
                     </div>
